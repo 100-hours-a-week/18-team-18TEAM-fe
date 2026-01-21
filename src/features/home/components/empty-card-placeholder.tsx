@@ -1,37 +1,78 @@
 "use client"
 
 import * as React from "react"
-import { PlusIcon } from "lucide-react"
+import { FolderOpenIcon } from "lucide-react"
 import { cn } from "@/lib/utils"
+import {
+  Empty,
+  EmptyContent,
+  EmptyDescription,
+  EmptyHeader,
+  EmptyMedia,
+  EmptyTitle,
+} from "@/components/ui/empty"
+import { Button } from "@/components/ui/button"
 
-interface EmptyCardPlaceholderProps
-  extends React.HTMLAttributes<HTMLDivElement> {
+interface EmptyCardPlaceholderProps extends React.HTMLAttributes<HTMLDivElement> {
+  onCreate?: () => void
+  onImport?: () => void
+  /** @deprecated onCreate로 대체 */
   onAdd?: () => void
+  title?: string
+  description?: string
 }
 
 function EmptyCardPlaceholder({
+  onCreate,
+  onImport,
   onAdd,
+  title = "내 명함이 없습니다",
+  description = "새 명함을 만들거나 불러와 시작해 보세요.",
   className,
   ...props
 }: EmptyCardPlaceholderProps) {
+  const handleCreate = onCreate || onAdd
+
   return (
-    <div
+    <Empty
       data-slot="empty-card-placeholder"
       className={cn(
-        "flex flex-col items-center justify-center w-full h-[110px] rounded-[10px] border-2 border-dashed border-border bg-muted/30",
+        "w-full rounded-[14px] border border-dashed border-border/70 bg-muted/30 px-6 py-8",
+        "shadow-inner",
         className
       )}
       {...props}
     >
-      <button
-        type="button"
-        onClick={onAdd}
-        className="flex items-center justify-center size-10 rounded-full bg-primary text-primary-foreground hover:bg-primary/90 transition-colors"
-        aria-label="명함 추가"
-      >
-        <PlusIcon className="size-5" />
-      </button>
-    </div>
+      <EmptyHeader className="gap-3">
+        <EmptyMedia variant="icon" className="bg-muted text-muted-foreground">
+          <FolderOpenIcon className="size-6" />
+        </EmptyMedia>
+        <EmptyTitle className="text-base font-semibold text-foreground">
+          {title}
+        </EmptyTitle>
+        <EmptyDescription className="text-sm text-muted-foreground">
+          {description}
+        </EmptyDescription>
+      </EmptyHeader>
+
+      <EmptyContent className="flex w-full flex-col gap-3 sm:flex-row sm:justify-center">
+        {handleCreate && (
+          <Button size="lg" className="w-full sm:w-auto" onClick={handleCreate}>
+            명함 만들기
+          </Button>
+        )}
+        {onImport && (
+          <Button
+            size="lg"
+            variant="outline"
+            className="w-full sm:w-auto"
+            onClick={onImport}
+          >
+            명함 불러오기
+          </Button>
+        )}
+      </EmptyContent>
+    </Empty>
   )
 }
 

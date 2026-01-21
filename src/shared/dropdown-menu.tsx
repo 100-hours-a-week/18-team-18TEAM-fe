@@ -44,7 +44,11 @@ function DropdownMenu({
     menuItems.map((item) => (
       <DropdownMenuItem
         key={item.id}
-        onClick={item.onClick}
+        onSelect={(event) => {
+          event.stopPropagation()
+          item.onClick?.()
+        }}
+        onPointerDown={(event) => event.stopPropagation()}
         disabled={item.disabled}
         className={cn(item.destructive && "text-destructive focus:text-destructive")}
       >
@@ -56,7 +60,12 @@ function DropdownMenu({
   return (
     <ShadcnDropdownMenu>
       <DropdownMenuTrigger asChild>{trigger}</DropdownMenuTrigger>
-      <DropdownMenuContent align={align} side={side}>
+      <DropdownMenuContent
+        align={align}
+        side={side}
+        onPointerDown={(event) => event.stopPropagation()}
+        onClick={(event) => event.stopPropagation()}
+      >
         {items && renderItems(items)}
         {groups &&
           groups.map((group, index) => (
