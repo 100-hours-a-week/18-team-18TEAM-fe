@@ -9,3 +9,6 @@ out/
 node_modules/
 
 .env*
+
+# 확인 후 삭제 필요
+src/lib/utils.ts
