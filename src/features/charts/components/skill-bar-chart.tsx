@@ -1,7 +1,7 @@
-"use client"
+'use client'
 
-import * as React from "react"
-import { cn } from "@/lib/utils"
+import * as React from 'react'
+import { cn } from '@/lib/utils'
 
 interface SkillBarData {
   label: string
@@ -13,28 +13,33 @@ interface SkillBarChartProps extends React.HTMLAttributes<HTMLDivElement> {
   onBarClick?: (item: SkillBarData) => void
 }
 
-function SkillBarChart({ data, onBarClick, className, ...props }: SkillBarChartProps) {
+function SkillBarChart({
+  data,
+  onBarClick,
+  className,
+  ...props
+}: SkillBarChartProps) {
   return (
     <div
       data-slot="skill-bar-chart"
-      className={cn("space-y-4", className)}
+      className={cn('space-y-4', className)}
       {...props}
     >
       {data.map((item, index) => (
         <div
           key={index}
-          className={cn("space-y-2", onBarClick && "cursor-pointer")}
+          className={cn('space-y-2', onBarClick && 'cursor-pointer')}
           onClick={() => onBarClick?.(item)}
         >
-          <div className="flex justify-between items-center">
-            <span className="text-sm font-medium text-foreground">
+          <div className="flex items-center justify-between">
+            <span className="text-foreground text-sm font-medium">
               {item.label}
             </span>
-            <span className="text-sm text-muted-foreground">{item.value}%</span>
+            <span className="text-muted-foreground text-sm">{item.value}%</span>
           </div>
-          <div className="h-4 w-full rounded-full bg-muted overflow-hidden">
+          <div className="bg-muted h-4 w-full overflow-hidden rounded-full">
             <div
-              className="h-full rounded-full bg-primary transition-all duration-500 ease-out"
+              className="bg-primary h-full rounded-full transition-all duration-500 ease-out"
               style={{ width: `${item.value}%` }}
             />
           </div>

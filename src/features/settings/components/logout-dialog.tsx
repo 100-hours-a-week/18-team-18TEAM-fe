@@ -1,6 +1,6 @@
-"use client"
+'use client'
 
-import * as React from "react"
+import * as React from 'react'
 import {
   Dialog,
   DialogContent,
@@ -8,8 +8,8 @@ import {
   DialogTitle,
   DialogDescription,
   DialogFooter,
-} from "@/components/ui/dialog"
-import { Button } from "@/components/ui/button"
+} from '@/components/ui/dialog'
+import { Button } from '@/components/ui/button'
 
 interface LogoutDialogProps {
   open: boolean
@@ -39,12 +39,8 @@ function LogoutDialog({
           >
             취소
           </Button>
-          <Button
-            type="button"
-            onClick={onConfirm}
-            disabled={isLoading}
-          >
-            {isLoading ? "로그아웃 중..." : "로그아웃"}
+          <Button type="button" onClick={onConfirm} disabled={isLoading}>
+            {isLoading ? '로그아웃 중...' : '로그아웃'}
           </Button>
         </DialogFooter>
       </DialogContent>

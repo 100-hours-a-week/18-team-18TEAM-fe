@@ -1,9 +1,9 @@
-"use client"
+'use client'
 
-import * as React from "react"
-import { XCircleIcon } from "lucide-react"
-import { cn } from "@/lib/utils"
-import { Button } from "@/components/ui/button"
+import * as React from 'react'
+import { XCircleIcon } from 'lucide-react'
+import { cn } from '@/lib/utils'
+import { Button } from '@/components/ui/button'
 
 interface ScanFailedStateProps extends React.HTMLAttributes<HTMLDivElement> {
   message?: string
@@ -11,7 +11,7 @@ interface ScanFailedStateProps extends React.HTMLAttributes<HTMLDivElement> {
 }
 
 function ScanFailedState({
-  message = "QR 코드를 인식하지 못했습니다.",
+  message = 'QR 코드를 인식하지 못했습니다.',
   onRetry,
   className,
   ...props
@@ -20,20 +20,18 @@ function ScanFailedState({
     <div
       data-slot="scan-failed-state"
       className={cn(
-        "flex flex-col items-center justify-center py-12 text-center",
+        'flex flex-col items-center justify-center py-12 text-center',
         className
       )}
       {...props}
     >
-      <div className="flex size-16 items-center justify-center rounded-full bg-destructive/10 text-destructive mb-4">
+      <div className="bg-destructive/10 text-destructive mb-4 flex size-16 items-center justify-center rounded-full">
         <XCircleIcon className="size-8" />
       </div>
 
-      <h3 className="text-lg font-semibold text-foreground mb-2">
-        인식 실패
-      </h3>
+      <h3 className="text-foreground mb-2 text-lg font-semibold">인식 실패</h3>
 
-      <p className="text-sm text-muted-foreground mb-6">{message}</p>
+      <p className="text-muted-foreground mb-6 text-sm">{message}</p>
 
       {onRetry && (
         <Button type="button" onClick={onRetry}>

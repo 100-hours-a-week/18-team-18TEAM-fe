@@ -1,8 +1,8 @@
-"use client"
+'use client'
 
-import * as React from "react"
-import { cn } from "@/lib/utils"
-import { InfoCard } from "@/shared"
+import * as React from 'react'
+import { cn } from '@/lib/utils'
+import { InfoCard } from '@/shared'
 
 interface ProjectItem {
   id: string
@@ -26,7 +26,7 @@ function ProjectsList({
 }: ProjectsListProps) {
   if (items.length === 0) {
     return (
-      <div className={cn("text-center py-8 text-muted-foreground", className)}>
+      <div className={cn('text-muted-foreground py-8 text-center', className)}>
         등록된 프로젝트가 없습니다.
       </div>
     )
@@ -35,7 +35,7 @@ function ProjectsList({
   return (
     <div
       data-slot="projects-list"
-      className={cn("space-y-3", className)}
+      className={cn('space-y-3', className)}
       {...props}
     >
       {items.map((item) => (
@@ -48,7 +48,7 @@ function ProjectsList({
           <div className="space-y-1">
             <p className="text-muted-foreground text-xs">{item.period}</p>
             {item.description && (
-              <p className="mt-2 text-muted-foreground line-clamp-4">
+              <p className="text-muted-foreground mt-2 line-clamp-4">
                 {item.description}
               </p>
             )}

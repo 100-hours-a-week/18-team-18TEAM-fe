@@ -1,10 +1,10 @@
-"use client"
+'use client'
 
-import * as React from "react"
-import { XIcon, MoreHorizontalIcon } from "lucide-react"
-import { cn } from "@/lib/utils"
-import { IconButton } from "./icon-button"
-import { DropdownMenu, type MenuItem } from "./dropdown-menu"
+import * as React from 'react'
+import { XIcon, MoreHorizontalIcon } from 'lucide-react'
+import { cn } from '@/lib/utils'
+import { IconButton } from './icon-button'
+import { DropdownMenu, type MenuItem } from './dropdown-menu'
 
 interface HeaderProps extends React.HTMLAttributes<HTMLElement> {
   title?: string
@@ -38,7 +38,7 @@ function Header({
     <header
       data-slot="header"
       className={cn(
-        "sticky top-0 z-40 flex h-14 items-center justify-between px-4 bg-background",
+        'bg-background sticky top-0 z-40 flex h-14 items-center justify-between px-4',
         className
       )}
       {...props}
@@ -56,7 +56,7 @@ function Header({
         )}
         {leftContent}
         {title && (
-          <h1 className="text-lg font-semibold text-foreground">{title}</h1>
+          <h1 className="text-foreground text-lg font-semibold">{title}</h1>
         )}
       </div>
 

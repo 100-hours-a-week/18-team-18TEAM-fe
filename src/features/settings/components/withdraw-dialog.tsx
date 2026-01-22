@@ -1,6 +1,6 @@
-"use client"
+'use client'
 
-import * as React from "react"
+import * as React from 'react'
 import {
   Dialog,
   DialogContent,
@@ -8,8 +8,8 @@ import {
   DialogTitle,
   DialogDescription,
   DialogFooter,
-} from "@/components/ui/dialog"
-import { Button } from "@/components/ui/button"
+} from '@/components/ui/dialog'
+import { Button } from '@/components/ui/button'
 
 interface WithdrawDialogProps {
   open: boolean
@@ -48,7 +48,7 @@ function WithdrawDialog({
             onClick={onConfirm}
             disabled={isLoading}
           >
-            {isLoading ? "처리 중..." : "탈퇴하기"}
+            {isLoading ? '처리 중...' : '탈퇴하기'}
           </Button>
         </DialogFooter>
       </DialogContent>

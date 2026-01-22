@@ -1,16 +1,23 @@
-"use client"
+'use client'
 
-import * as React from "react"
-import { Button as ShadcnButton, buttonVariants } from "@/components/ui/button"
-import { cn } from "@/lib/utils"
-import type { VariantProps } from "class-variance-authority"
+import * as React from 'react'
+import { Button as ShadcnButton, buttonVariants } from '@/components/ui/button'
+import { cn } from '@/lib/utils'
+import type { VariantProps } from 'class-variance-authority'
 
-type ButtonVariant = "primary" | "secondary" | "outline" | "ghost" | "destructive" | "link"
-type ButtonSize = "sm" | "md" | "lg" | "icon"
+type ButtonVariant =
+  | 'primary'
+  | 'secondary'
+  | 'outline'
+  | 'ghost'
+  | 'destructive'
+  | 'link'
+type ButtonSize = 'sm' | 'md' | 'lg' | 'icon'
 
 interface ButtonProps
-  extends Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, "size">,
-  Omit<VariantProps<typeof buttonVariants>, "variant" | "size"> {
+  extends
+    Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, 'size'>,
+    Omit<VariantProps<typeof buttonVariants>, 'variant' | 'size'> {
   variant?: ButtonVariant
   size?: ButtonSize
   fullWidth?: boolean
@@ -20,25 +27,29 @@ interface ButtonProps
   asChild?: boolean
 }
 
-const variantMap: Record<ButtonVariant, VariantProps<typeof buttonVariants>["variant"]> = {
-  primary: "default",
-  secondary: "secondary",
-  outline: "outline",
-  ghost: "ghost",
-  destructive: "destructive",
-  link: "link",
+const variantMap: Record<
+  ButtonVariant,
+  VariantProps<typeof buttonVariants>['variant']
+> = {
+  primary: 'default',
+  secondary: 'secondary',
+  outline: 'outline',
+  ghost: 'ghost',
+  destructive: 'destructive',
+  link: 'link',
 }
 
-const sizeMap: Record<ButtonSize, VariantProps<typeof buttonVariants>["size"]> = {
-  sm: "sm",
-  md: "default",
-  lg: "lg",
-  icon: "icon",
-}
+const sizeMap: Record<ButtonSize, VariantProps<typeof buttonVariants>['size']> =
+  {
+    sm: 'sm',
+    md: 'default',
+    lg: 'lg',
+    icon: 'icon',
+  }
 
 function Button({
-  variant = "primary",
-  size = "md",
+  variant = 'primary',
+  size = 'md',
   fullWidth = false,
   loading = false,
   leftIcon,
@@ -53,7 +64,7 @@ function Button({
       variant={variantMap[variant]}
       size={sizeMap[size]}
       disabled={disabled || loading}
-      className={cn(fullWidth && "w-full", className)}
+      className={cn(fullWidth && 'w-full', className)}
       {...props}
     >
       {loading ? (

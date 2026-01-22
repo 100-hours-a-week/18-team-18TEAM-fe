@@ -1,9 +1,9 @@
-"use client"
+'use client'
 
-import * as React from "react"
-import { cn } from "@/lib/utils"
+import * as React from 'react'
+import { cn } from '@/lib/utils'
 
-type TabId = "career" | "skills" | "links" | "projects" | "activities"
+type TabId = 'career' | 'skills' | 'links' | 'projects' | 'activities'
 
 interface Tab {
   id: TabId
@@ -11,11 +11,11 @@ interface Tab {
 }
 
 const tabs: Tab[] = [
-  { id: "career", label: "경력" },
-  { id: "skills", label: "기술" },
-  { id: "links", label: "링크" },
-  { id: "projects", label: "프로젝트" },
-  { id: "activities", label: "활동" },
+  { id: 'career', label: '경력' },
+  { id: 'skills', label: '기술' },
+  { id: 'links', label: '링크' },
+  { id: 'projects', label: '프로젝트' },
+  { id: 'activities', label: '활동' },
 ]
 
 interface DetailTabsProps {
@@ -29,7 +29,10 @@ function DetailTabs({ activeTab, onTabChange, className }: DetailTabsProps) {
     <div
       data-slot="detail-tabs"
       role="tablist"
-      className={cn("flex gap-1 overflow-x-auto scrollbar-hide border-b border-border", className)}
+      className={cn(
+        'scrollbar-hide border-border flex gap-1 overflow-x-auto border-b',
+        className
+      )}
     >
       {tabs.map((tab) => (
         <button
@@ -37,10 +40,10 @@ function DetailTabs({ activeTab, onTabChange, className }: DetailTabsProps) {
           type="button"
           onClick={() => onTabChange(tab.id)}
           className={cn(
-            "px-4 py-2 text-sm font-medium whitespace-nowrap transition-colors border-b-2 -mb-px",
+            '-mb-px border-b-2 px-4 py-2 text-sm font-medium whitespace-nowrap transition-colors',
             activeTab === tab.id
-              ? "border-primary text-foreground"
-              : "border-transparent text-muted-foreground hover:text-foreground"
+              ? 'border-primary text-foreground'
+              : 'text-muted-foreground hover:text-foreground border-transparent'
           )}
           aria-selected={activeTab === tab.id}
           role="tab"

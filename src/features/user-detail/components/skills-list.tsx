@@ -1,8 +1,8 @@
-"use client"
+'use client'
 
-import * as React from "react"
-import { cn } from "@/lib/utils"
-import { InfoCard } from "@/shared"
+import * as React from 'react'
+import { cn } from '@/lib/utils'
+import { InfoCard } from '@/shared'
 
 interface SkillsListProps extends React.HTMLAttributes<HTMLDivElement> {
   items: string[]
@@ -19,7 +19,7 @@ function SkillsList({
 }: SkillsListProps) {
   if (items.length === 0) {
     return (
-      <div className={cn("text-center py-8 text-muted-foreground", className)}>
+      <div className={cn('text-muted-foreground py-8 text-center', className)}>
         등록된 기술이 없습니다.
       </div>
     )
@@ -28,7 +28,7 @@ function SkillsList({
   return (
     <div
       data-slot="skills-list"
-      className={cn("space-y-3", className)}
+      className={cn('space-y-3', className)}
       {...props}
     >
       {items.map((item) => (

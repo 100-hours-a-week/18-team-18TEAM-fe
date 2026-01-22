@@ -1,9 +1,9 @@
-"use client"
+'use client'
 
-import * as React from "react"
-import { PhoneIcon, MailIcon, MessageSquareIcon } from "lucide-react"
-import { cn } from "@/lib/utils"
-import { IconButton } from "@/shared"
+import * as React from 'react'
+import { PhoneIcon, MailIcon, MessageSquareIcon } from 'lucide-react'
+import { cn } from '@/lib/utils'
+import { IconButton } from '@/shared'
 
 interface ActionIconsProps extends React.HTMLAttributes<HTMLDivElement> {
   onPhone?: () => void
@@ -21,7 +21,7 @@ function ActionIcons({
   return (
     <div
       data-slot="action-icons"
-      className={cn("flex items-center gap-4", className)}
+      className={cn('flex items-center gap-4', className)}
       {...props}
     >
       <IconButton

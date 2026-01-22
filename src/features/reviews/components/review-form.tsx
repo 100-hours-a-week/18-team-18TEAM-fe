@@ -1,10 +1,10 @@
-"use client"
+'use client'
 
-import * as React from "react"
-import { cn } from "@/lib/utils"
-import { Button } from "@/components/ui/button"
-import { StarRating } from "./star-rating"
-import { TagButton } from "./tag-button"
+import * as React from 'react'
+import { cn } from '@/lib/utils'
+import { Button } from '@/components/ui/button'
+import { StarRating } from './star-rating'
+import { TagButton } from './tag-button'
 
 interface ReviewFormData {
   rating: number
@@ -12,7 +12,10 @@ interface ReviewFormData {
   tags: string[]
 }
 
-interface ReviewFormProps extends Omit<React.HTMLAttributes<HTMLFormElement>, "onSubmit"> {
+interface ReviewFormProps extends Omit<
+  React.HTMLAttributes<HTMLFormElement>,
+  'onSubmit'
+> {
   onSubmit: (data: ReviewFormData) => void
   isLoading?: boolean
 }
@@ -24,16 +27,16 @@ function ReviewForm({
   ...props
 }: ReviewFormProps) {
   const [rating, setRating] = React.useState(0)
-  const [content, setContent] = React.useState("")
+  const [content, setContent] = React.useState('')
   const [selectedTags, setSelectedTags] = React.useState<string[]>([])
 
   const tagOptions = [
-    "협업을 잘한다.",
-    "말을 잘한다.",
-    "문서화를 잘한다.",
-    "기술 역량이 뛰어나다.",
-    "일정을 잘 지킨다.",
-    "다음에 같이 일하고 싶지 않다.",
+    '협업을 잘한다.',
+    '말을 잘한다.',
+    '문서화를 잘한다.',
+    '기술 역량이 뛰어나다.',
+    '일정을 잘 지킨다.',
+    '다음에 같이 일하고 싶지 않다.',
   ]
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -52,16 +55,16 @@ function ReviewForm({
     <form
       data-slot="review-form"
       onSubmit={handleSubmit}
-      className={cn("space-y-6", className)}
+      className={cn('space-y-6', className)}
       {...props}
     >
       <div className="space-y-2">
-        <label className="text-sm font-medium text-foreground">평점</label>
+        <label className="text-foreground text-sm font-medium">평점</label>
         <StarRating value={rating} onChange={setRating} size="lg" />
       </div>
 
       <div className="space-y-3">
-        <p className="text-sm font-medium text-foreground">태그 선택</p>
+        <p className="text-foreground text-sm font-medium">태그 선택</p>
         <div className="grid grid-cols-2 gap-2">
           {tagOptions.map((tag) => (
             <TagButton
@@ -78,7 +81,7 @@ function ReviewForm({
       <div className="space-y-2">
         <label
           htmlFor="review-content"
-          className="text-sm font-medium text-foreground"
+          className="text-foreground text-sm font-medium"
         >
           리뷰 내용
         </label>
@@ -89,9 +92,9 @@ function ReviewForm({
           placeholder="리뷰를 작성해주세요"
           rows={4}
           className={cn(
-            "w-full px-3 py-2 rounded-lg bg-muted/50 border border-border text-sm text-foreground placeholder:text-muted-foreground",
-            "focus:outline-none focus:ring-2 focus:ring-ring focus:border-transparent",
-            "resize-none"
+            'bg-muted/50 border-border text-foreground placeholder:text-muted-foreground w-full rounded-lg border px-3 py-2 text-sm',
+            'focus:ring-ring focus:border-transparent focus:ring-2 focus:outline-none',
+            'resize-none'
           )}
         />
       </div>
@@ -101,7 +104,7 @@ function ReviewForm({
         disabled={rating === 0 || isLoading}
         className="w-full"
       >
-        {isLoading ? "제출 중..." : "리뷰 작성"}
+        {isLoading ? '제출 중...' : '리뷰 작성'}
       </Button>
     </form>
   )

@@ -1,17 +1,17 @@
-"use client"
+'use client'
 
-import * as React from "react"
-import { CalendarIcon } from "lucide-react"
-import { Label } from "@/components/ui/label"
-import { Button } from "@/components/ui/button"
+import * as React from 'react'
+import { CalendarIcon } from 'lucide-react'
+import { Label } from '@/components/ui/label'
+import { Button } from '@/components/ui/button'
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
   DialogFooter,
-} from "@/components/ui/dialog"
-import { cn } from "@/lib/utils"
+} from '@/components/ui/dialog'
+import { cn } from '@/lib/utils'
 
 interface DatePickerProps {
   label?: string
@@ -30,7 +30,7 @@ function DatePicker({
   label,
   value,
   onChange,
-  placeholder = "날짜 선택",
+  placeholder = '날짜 선택',
   required,
   error,
   disabled,
@@ -39,7 +39,7 @@ function DatePicker({
   className,
 }: DatePickerProps) {
   const [open, setOpen] = React.useState(false)
-  const [tempValue, setTempValue] = React.useState(value || "")
+  const [tempValue, setTempValue] = React.useState(value || '')
   const inputId = React.useId()
 
   const handleConfirm = () => {
@@ -48,17 +48,17 @@ function DatePicker({
   }
 
   const formatDisplayDate = (dateString: string) => {
-    if (!dateString) return ""
+    if (!dateString) return ''
     const date = new Date(dateString)
-    return date.toLocaleDateString("ko-KR", {
-      year: "numeric",
-      month: "long",
-      day: "numeric",
+    return date.toLocaleDateString('ko-KR', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
     })
   }
 
   return (
-    <div className={cn("space-y-2", className)}>
+    <div className={cn('space-y-2', className)}>
       {label && (
         <Label htmlFor={inputId} className="text-sm font-medium">
           {label}
@@ -72,18 +72,18 @@ function DatePicker({
         onClick={() => !disabled && setOpen(true)}
         disabled={disabled}
         className={cn(
-          "flex h-10 w-full items-center justify-between rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background",
-          "focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2",
-          "disabled:cursor-not-allowed disabled:opacity-50",
-          error && "border-destructive",
-          !value && "text-muted-foreground"
+          'border-input bg-background ring-offset-background flex h-10 w-full items-center justify-between rounded-md border px-3 py-2 text-sm',
+          'focus:ring-ring focus:ring-2 focus:ring-offset-2 focus:outline-none',
+          'disabled:cursor-not-allowed disabled:opacity-50',
+          error && 'border-destructive',
+          !value && 'text-muted-foreground'
         )}
       >
         <span>{value ? formatDisplayDate(value) : placeholder}</span>
-        <CalendarIcon className="size-4 text-muted-foreground" />
+        <CalendarIcon className="text-muted-foreground size-4" />
       </button>
 
-      {error && <p className="text-xs text-destructive">{error}</p>}
+      {error && <p className="text-destructive text-xs">{error}</p>}
 
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent className="sm:max-w-[320px]">
@@ -97,7 +97,7 @@ function DatePicker({
               onChange={(e) => setTempValue(e.target.value)}
               min={minDate}
               max={maxDate}
-              className="w-full px-3 py-2 rounded-md border border-input bg-background text-sm"
+              className="border-input bg-background w-full rounded-md border px-3 py-2 text-sm"
             />
           </div>
           <DialogFooter>

@@ -1,8 +1,8 @@
-"use client"
+'use client'
 
-import * as React from "react"
-import { FolderOpenIcon } from "lucide-react"
-import { cn } from "@/lib/utils"
+import * as React from 'react'
+import { FolderOpenIcon } from 'lucide-react'
+import { cn } from '@/lib/utils'
 import {
   Empty,
   EmptyContent,
@@ -10,8 +10,8 @@ import {
   EmptyHeader,
   EmptyMedia,
   EmptyTitle,
-} from "@/components/ui/empty"
-import { Button } from "@/components/ui/button"
+} from '@/components/ui/empty'
+import { Button } from '@/components/ui/button'
 
 interface EmptyCardPlaceholderProps extends React.HTMLAttributes<HTMLDivElement> {
   onCreate?: () => void
@@ -26,8 +26,8 @@ function EmptyCardPlaceholder({
   onCreate,
   onImport,
   onAdd,
-  title = "내 명함이 없습니다",
-  description = "새 명함을 만들거나 불러와 시작해 보세요.",
+  title = '내 명함이 없습니다',
+  description = '새 명함을 만들거나 불러와 시작해 보세요.',
   className,
   ...props
 }: EmptyCardPlaceholderProps) {
@@ -37,8 +37,8 @@ function EmptyCardPlaceholder({
     <Empty
       data-slot="empty-card-placeholder"
       className={cn(
-        "w-full rounded-[14px] border border-dashed border-border/70 bg-muted/30 px-6 py-8",
-        "shadow-inner",
+        'border-border/70 bg-muted/30 w-full rounded-[14px] border border-dashed px-6 py-8',
+        'shadow-inner',
         className
       )}
       {...props}
@@ -47,10 +47,10 @@ function EmptyCardPlaceholder({
         <EmptyMedia variant="icon" className="bg-muted text-muted-foreground">
           <FolderOpenIcon className="size-6" />
         </EmptyMedia>
-        <EmptyTitle className="text-base font-semibold text-foreground">
+        <EmptyTitle className="text-foreground text-base font-semibold">
           {title}
         </EmptyTitle>
-        <EmptyDescription className="text-sm text-muted-foreground">
+        <EmptyDescription className="text-muted-foreground text-sm">
           {description}
         </EmptyDescription>
       </EmptyHeader>

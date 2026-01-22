@@ -1,8 +1,8 @@
-"use client"
+'use client'
 
-import * as React from "react"
-import { QrCodeIcon, ShareIcon } from "lucide-react"
-import { cn } from "@/lib/utils"
+import * as React from 'react'
+import { QrCodeIcon, ShareIcon } from 'lucide-react'
+import { cn } from '@/lib/utils'
 
 interface FABMenuItem {
   id: string
@@ -21,15 +21,15 @@ interface FABMenuProps {
 function FABMenu({ open, onClose, onShareCard, onScanQR }: FABMenuProps) {
   const menuItems: FABMenuItem[] = [
     {
-      id: "share",
+      id: 'share',
       icon: <ShareIcon className="size-5" />,
-      label: "내 명함 공유",
+      label: '내 명함 공유',
       onClick: onShareCard,
     },
     {
-      id: "scan",
+      id: 'scan',
       icon: <QrCodeIcon className="size-5" />,
-      label: "QR 코드 스캔",
+      label: 'QR 코드 스캔',
       onClick: onScanQR,
     },
   ]
@@ -40,8 +40,8 @@ function FABMenu({ open, onClose, onShareCard, onScanQR }: FABMenuProps) {
     <div
       data-slot="fab-menu"
       className={cn(
-        "fixed right-6 bottom-40 z-50 flex flex-col gap-3",
-        "animate-in slide-in-from-bottom-2 fade-in-0"
+        'fixed right-6 bottom-40 z-50 flex flex-col gap-3',
+        'animate-in slide-in-from-bottom-2 fade-in-0'
       )}
     >
       {menuItems.map((item) => (
@@ -53,9 +53,9 @@ function FABMenu({ open, onClose, onShareCard, onScanQR }: FABMenuProps) {
             onClose()
           }}
           className={cn(
-            "flex items-center gap-3 px-4 py-3 rounded-full bg-card text-foreground shadow-lg",
-            "hover:bg-muted transition-colors",
-            "focus:outline-none focus:ring-2 focus:ring-ring"
+            'bg-card text-foreground flex items-center gap-3 rounded-full px-4 py-3 shadow-lg',
+            'hover:bg-muted transition-colors',
+            'focus:ring-ring focus:ring-2 focus:outline-none'
           )}
         >
           {item.icon}

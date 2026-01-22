@@ -1,8 +1,8 @@
-"use client"
+'use client'
 
-import * as React from "react"
-import { ChevronRightIcon } from "lucide-react"
-import { cn } from "@/lib/utils"
+import * as React from 'react'
+import { ChevronRightIcon } from 'lucide-react'
+import { cn } from '@/lib/utils'
 
 interface SettingsMenuItem {
   id: string
@@ -19,7 +19,7 @@ function SettingsMenu({ items, className, ...props }: SettingsMenuProps) {
   return (
     <div
       data-slot="settings-menu"
-      className={cn("divide-y divide-border rounded-lg bg-card", className)}
+      className={cn('divide-border bg-card divide-y rounded-lg', className)}
       {...props}
     >
       {items.map((item) => (
@@ -28,13 +28,13 @@ function SettingsMenu({ items, className, ...props }: SettingsMenuProps) {
           type="button"
           onClick={item.onClick}
           className={cn(
-            "flex w-full items-center justify-between px-4 py-3 text-left transition-colors hover:bg-muted",
-            "first:rounded-t-lg last:rounded-b-lg",
-            item.danger && "text-destructive"
+            'hover:bg-muted flex w-full items-center justify-between px-4 py-3 text-left transition-colors',
+            'first:rounded-t-lg last:rounded-b-lg',
+            item.danger && 'text-destructive'
           )}
         >
           <span className="text-sm font-medium">{item.label}</span>
-          <ChevronRightIcon className="size-4 text-muted-foreground" />
+          <ChevronRightIcon className="text-muted-foreground size-4" />
         </button>
       ))}
     </div>

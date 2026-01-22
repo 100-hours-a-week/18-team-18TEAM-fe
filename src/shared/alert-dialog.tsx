@@ -1,6 +1,6 @@
-"use client"
+'use client'
 
-import * as React from "react"
+import * as React from 'react'
 import {
   AlertDialog as ShadcnAlertDialog,
   AlertDialogAction,
@@ -11,9 +11,9 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger,
-} from "@/components/ui/alert-dialog"
+} from '@/components/ui/alert-dialog'
 
-type AlertType = "confirm" | "destructive"
+type AlertType = 'confirm' | 'destructive'
 
 interface AlertDialogProps {
   open?: boolean
@@ -35,9 +35,9 @@ function AlertDialog({
   trigger,
   title,
   description,
-  type = "confirm",
-  confirmText = "확인",
-  cancelText = "취소",
+  type = 'confirm',
+  confirmText = '확인',
+  cancelText = '취소',
   onConfirm,
   onCancel,
   loading = false,
@@ -69,12 +69,12 @@ function AlertDialog({
             onClick={handleConfirm}
             disabled={loading}
             className={
-              type === "destructive"
-                ? "bg-destructive text-destructive-foreground hover:bg-destructive/90"
+              type === 'destructive'
+                ? 'bg-destructive text-destructive-foreground hover:bg-destructive/90'
                 : undefined
             }
           >
-            {loading ? "처리 중..." : confirmText}
+            {loading ? '처리 중...' : confirmText}
           </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>

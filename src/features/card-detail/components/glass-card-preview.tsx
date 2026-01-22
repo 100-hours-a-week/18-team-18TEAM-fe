@@ -1,9 +1,9 @@
-"use client"
+'use client'
 
-import * as React from "react"
-import { cn } from "@/lib/utils"
-import { type ProfileData } from "@/shared"
-import { Switch } from "@/components/ui/switch"
+import * as React from 'react'
+import { cn } from '@/lib/utils'
+import { type ProfileData } from '@/shared'
+import { Switch } from '@/components/ui/switch'
 
 interface GlassCardPreviewProps extends React.HTMLAttributes<HTMLDivElement> {
   data: ProfileData
@@ -23,21 +23,21 @@ function GlassCardPreview({
   const displayData = data
   const showDescription = isFlip
   const descriptionText =
-    aiDescription?.trim() || "AI가 당신의 직무를 분석하고 있어요"
+    aiDescription?.trim() || 'AI가 당신의 직무를 분석하고 있어요'
 
   return (
     <div
       data-slot="glass-card-preview"
       className={cn(
-        "relative w-full rounded-[10px] bg-surface/20 backdrop-blur-md border border-white/20 p-6 shadow-lg",
+        'bg-surface/20 relative w-full rounded-[10px] border border-white/20 p-6 shadow-lg backdrop-blur-md',
         className
       )}
       {...props}
     >
       <div className="flex gap-4">
-        <div className="flex flex-col justify-center flex-1 space-y-1">
+        <div className="flex flex-1 flex-col justify-center space-y-1">
           <div className="flex items-center justify-between">
-            <h3 className="text-lg font-semibold text-foreground">
+            <h3 className="text-foreground text-lg font-semibold">
               {displayData.name}
             </h3>
             {onFlipChange && (
@@ -49,31 +49,31 @@ function GlassCardPreview({
             )}
           </div>
           {displayData.department && (
-            <p className="text-sm text-muted-foreground">
+            <p className="text-muted-foreground text-sm">
               {displayData.department}
               {displayData.position && ` / ${displayData.position}`}
             </p>
           )}
           {displayData.company && (
-            <p className="text-sm text-muted-foreground">
+            <p className="text-muted-foreground text-sm">
               {displayData.company}
             </p>
           )}
         </div>
       </div>
 
-      <div className="mt-4 pt-4 border-t border-white/10 space-y-1">
+      <div className="mt-4 space-y-1 border-t border-white/10 pt-4">
         {showDescription ? (
-          <p className="text-sm text-foreground whitespace-pre-line">
+          <p className="text-foreground text-sm whitespace-pre-line">
             {descriptionText}
           </p>
         ) : (
           <>
             {displayData.phone && (
-              <p className="text-sm text-foreground">M: {displayData.phone}</p>
+              <p className="text-foreground text-sm">M: {displayData.phone}</p>
             )}
             {displayData.email && (
-              <p className="text-sm text-foreground">E: {displayData.email}</p>
+              <p className="text-foreground text-sm">E: {displayData.email}</p>
             )}
           </>
         )}

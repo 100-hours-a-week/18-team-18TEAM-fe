@@ -1,8 +1,8 @@
-"use client"
+'use client'
 
-import { toast as sonnerToast, Toaster as SonnerToaster } from "sonner"
+import { toast as sonnerToast, Toaster as SonnerToaster } from 'sonner'
 
-type ToastType = "success" | "error" | "info" | "warning"
+type ToastType = 'success' | 'error' | 'info' | 'warning'
 
 interface ToastOptions {
   description?: string
@@ -88,11 +88,11 @@ function Toaster() {
       position="top-center"
       toastOptions={{
         classNames: {
-          toast: "bg-background border-border",
-          title: "text-foreground",
-          description: "text-muted-foreground",
-          actionButton: "bg-primary text-primary-foreground",
-          cancelButton: "bg-muted text-muted-foreground",
+          toast: 'bg-background border-border',
+          title: 'text-foreground',
+          description: 'text-muted-foreground',
+          actionButton: 'bg-primary text-primary-foreground',
+          cancelButton: 'bg-muted text-muted-foreground',
         },
       }}
     />

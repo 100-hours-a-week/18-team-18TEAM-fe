@@ -1,5 +1,5 @@
-@import "tailwindcss";
-@import "tw-animate-css";
+@import 'tailwindcss';
+@import 'tw-animate-css';
 
 @custom-variant dark (&:is(.dark *));
 
@@ -73,105 +73,105 @@
   --radius: 0.625rem;
 
   /* CARO Design System Colors */
-  --background: #FFFFFF;
-  --foreground: #0F172A;
+  --background: #ffffff;
+  --foreground: #0f172a;
 
-  --card: #FFFFFF;
-  --card-foreground: #0F172A;
+  --card: #ffffff;
+  --card-foreground: #0f172a;
 
-  --popover: #FFFFFF;
-  --popover-foreground: #0F172A;
+  --popover: #ffffff;
+  --popover-foreground: #0f172a;
 
   --primary: #022840;
-  --primary-foreground: #FFFFFF;
+  --primary-foreground: #ffffff;
 
-  --secondary: #8C7D70;
-  --secondary-foreground: #FFFFFF;
+  --secondary: #8c7d70;
+  --secondary-foreground: #ffffff;
 
-  --surface: #8C7D70;
-  --surface-foreground: #FFFFFF;
+  --surface: #8c7d70;
+  --surface-foreground: #ffffff;
 
-  --muted: #F1F5F9;
-  --muted-foreground: #64748B;
+  --muted: #f1f5f9;
+  --muted-foreground: #64748b;
 
-  --accent: #1B6C8C;
-  --accent-foreground: #FFFFFF;
+  --accent: #1b6c8c;
+  --accent-foreground: #ffffff;
 
-  --destructive: #EF4444;
-  --destructive-foreground: #FFFFFF;
+  --destructive: #ef4444;
+  --destructive-foreground: #ffffff;
 
-  --border: #E2E8F0;
-  --input: #E2E8F0;
+  --border: #e2e8f0;
+  --input: #e2e8f0;
   --ring: #022840;
 
   /* Chart Colors */
-  --chart-1: #496CBA;
-  --chart-2: #2BB6F6;
-  --chart-3: #8096D0;
-  --chart-4: #64748B;
-  --chart-5: #E2E8F0;
-  --chart-6: #0F172A;
+  --chart-1: #496cba;
+  --chart-2: #2bb6f6;
+  --chart-3: #8096d0;
+  --chart-4: #64748b;
+  --chart-5: #e2e8f0;
+  --chart-6: #0f172a;
 
   /* Sidebar */
-  --sidebar: #FFFFFF;
-  --sidebar-foreground: #0F172A;
-  --sidebar-primary: #496CBA;
-  --sidebar-primary-foreground: #FFFFFF;
-  --sidebar-accent: #2BB6F6;
-  --sidebar-accent-foreground: #FFFFFF;
-  --sidebar-border: #E2E8F0;
-  --sidebar-ring: #496CBA;
+  --sidebar: #ffffff;
+  --sidebar-foreground: #0f172a;
+  --sidebar-primary: #496cba;
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-accent: #2bb6f6;
+  --sidebar-accent-foreground: #ffffff;
+  --sidebar-border: #e2e8f0;
+  --sidebar-ring: #496cba;
 }
 
 .dark {
-  --background: #0F172A;
-  --foreground: #F8FAFC;
+  --background: #0f172a;
+  --foreground: #f8fafc;
 
-  --card: #1E293B;
-  --card-foreground: #F8FAFC;
+  --card: #1e293b;
+  --card-foreground: #f8fafc;
 
-  --popover: #1E293B;
-  --popover-foreground: #F8FAFC;
+  --popover: #1e293b;
+  --popover-foreground: #f8fafc;
 
-  --primary: #6B8DD6;
-  --primary-foreground: #0F172A;
+  --primary: #6b8dd6;
+  --primary-foreground: #0f172a;
 
-  --secondary: #8096D0;
-  --secondary-foreground: #0F172A;
+  --secondary: #8096d0;
+  --secondary-foreground: #0f172a;
 
   --surface: #334155;
-  --surface-foreground: #F8FAFC;
+  --surface-foreground: #f8fafc;
 
   --muted: #334155;
-  --muted-foreground: #94A3B8;
+  --muted-foreground: #94a3b8;
 
-  --accent: #2BB6F6;
-  --accent-foreground: #0F172A;
+  --accent: #2bb6f6;
+  --accent-foreground: #0f172a;
 
-  --destructive: #F87171;
-  --destructive-foreground: #0F172A;
+  --destructive: #f87171;
+  --destructive-foreground: #0f172a;
 
   --border: #334155;
   --input: #334155;
-  --ring: #6B8DD6;
+  --ring: #6b8dd6;
 
   /* Chart Colors (Dark) */
-  --chart-1: #6B8DD6;
-  --chart-2: #2BB6F6;
-  --chart-3: #8096D0;
-  --chart-4: #94A3B8;
+  --chart-1: #6b8dd6;
+  --chart-2: #2bb6f6;
+  --chart-3: #8096d0;
+  --chart-4: #94a3b8;
   --chart-5: #334155;
-  --chart-6: #F8FAFC;
+  --chart-6: #f8fafc;
 
   /* Sidebar (Dark) */
-  --sidebar: #1E293B;
-  --sidebar-foreground: #F8FAFC;
-  --sidebar-primary: #6B8DD6;
-  --sidebar-primary-foreground: #0F172A;
-  --sidebar-accent: #2BB6F6;
-  --sidebar-accent-foreground: #0F172A;
+  --sidebar: #1e293b;
+  --sidebar-foreground: #f8fafc;
+  --sidebar-primary: #6b8dd6;
+  --sidebar-primary-foreground: #0f172a;
+  --sidebar-accent: #2bb6f6;
+  --sidebar-accent-foreground: #0f172a;
   --sidebar-border: #334155;
-  --sidebar-ring: #6B8DD6;
+  --sidebar-ring: #6b8dd6;
 }
 
 @layer base {

@@ -1,8 +1,8 @@
-"use client"
+'use client'
 
-import * as React from "react"
-import { cn } from "@/lib/utils"
-import { IconButton } from "./icon-button"
+import * as React from 'react'
+import { cn } from '@/lib/utils'
+import { IconButton } from './icon-button'
 
 interface BottomNavItem {
   id: string
@@ -21,7 +21,7 @@ function BottomNav({ items, activeId, className, ...props }: BottomNavProps) {
     <nav
       data-slot="bottom-nav"
       className={cn(
-        "fixed bottom-0 left-0 right-0 z-50 flex h-[67px] items-center justify-center gap-12 bg-background/60 backdrop-blur-md border-t border-border",
+        'bg-background/60 border-border fixed right-0 bottom-0 left-0 z-50 flex h-[67px] items-center justify-center gap-12 border-t backdrop-blur-md',
         className
       )}
       {...props}
@@ -32,18 +32,18 @@ function BottomNav({ items, activeId, className, ...props }: BottomNavProps) {
           type="button"
           onClick={item.onClick}
           className={cn(
-            "flex flex-col items-center justify-center gap-1 p-2 rounded-full transition-colors",
+            'flex flex-col items-center justify-center gap-1 rounded-full p-2 transition-colors',
             activeId === item.id
-              ? "text-primary"
-              : "text-muted-foreground hover:text-foreground"
+              ? 'text-primary'
+              : 'text-muted-foreground hover:text-foreground'
           )}
           aria-label={item.label}
-          aria-current={activeId === item.id ? "page" : undefined}
+          aria-current={activeId === item.id ? 'page' : undefined}
         >
           <div
             className={cn(
-              "flex items-center justify-center size-[45px] rounded-full",
-              activeId === item.id && "bg-surface/30"
+              'flex size-[45px] items-center justify-center rounded-full',
+              activeId === item.id && 'bg-surface/30'
             )}
           >
             {item.icon}

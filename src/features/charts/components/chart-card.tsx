@@ -1,7 +1,7 @@
-"use client"
+'use client'
 
-import * as React from "react"
-import { cn } from "@/lib/utils"
+import * as React from 'react'
+import { cn } from '@/lib/utils'
 
 interface ChartCardProps extends React.HTMLAttributes<HTMLDivElement> {
   title?: string
@@ -9,21 +9,27 @@ interface ChartCardProps extends React.HTMLAttributes<HTMLDivElement> {
   children: React.ReactNode
 }
 
-function ChartCard({ title, description, children, className, ...props }: ChartCardProps) {
+function ChartCard({
+  title,
+  description,
+  children,
+  className,
+  ...props
+}: ChartCardProps) {
   return (
     <div
       data-slot="chart-card"
       className={cn(
-        "rounded-[10px] bg-card border border-border p-4",
+        'bg-card border-border rounded-[10px] border p-4',
         className
       )}
       {...props}
     >
       {title && (
         <div className="mb-3 space-y-1">
-          <h3 className="text-sm font-semibold text-foreground">{title}</h3>
+          <h3 className="text-foreground text-sm font-semibold">{title}</h3>
           {description && (
-            <p className="text-xs text-muted-foreground">{description}</p>
+            <p className="text-muted-foreground text-xs">{description}</p>
           )}
         </div>
       )}

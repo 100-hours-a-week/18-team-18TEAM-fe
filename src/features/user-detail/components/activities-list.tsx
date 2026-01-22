@@ -1,8 +1,8 @@
-"use client"
+'use client'
 
-import * as React from "react"
-import { cn } from "@/lib/utils"
-import { InfoCard } from "@/shared"
+import * as React from 'react'
+import { cn } from '@/lib/utils'
+import { InfoCard } from '@/shared'
 
 interface ActivityItem {
   id: string
@@ -26,7 +26,7 @@ function ActivitiesList({
 }: ActivitiesListProps) {
   if (items.length === 0) {
     return (
-      <div className={cn("text-center py-8 text-muted-foreground", className)}>
+      <div className={cn('text-muted-foreground py-8 text-center', className)}>
         등록된 활동이 없습니다.
       </div>
     )
@@ -35,7 +35,7 @@ function ActivitiesList({
   return (
     <div
       data-slot="activities-list"
-      className={cn("space-y-3", className)}
+      className={cn('space-y-3', className)}
       {...props}
     >
       {items.map((item) => (
@@ -50,7 +50,7 @@ function ActivitiesList({
               <p className="text-muted-foreground text-xs">{item.period}</p>
             )}
             {item.description && (
-              <p className="mt-2 text-muted-foreground">{item.description}</p>
+              <p className="text-muted-foreground mt-2">{item.description}</p>
             )}
           </div>
         </InfoCard>

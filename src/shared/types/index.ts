@@ -1,1 +1,1 @@
-export type { ProfileData } from "./profile"
+export type { ProfileData } from './profile'

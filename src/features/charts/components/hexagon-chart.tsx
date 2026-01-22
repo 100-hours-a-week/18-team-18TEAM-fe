@@ -1,7 +1,7 @@
-"use client"
+'use client'
 
-import * as React from "react"
-import { cn } from "@/lib/utils"
+import * as React from 'react'
+import { cn } from '@/lib/utils'
 
 interface ChartData {
   label: string
@@ -39,23 +39,23 @@ function HexagonChart({
       const point = getPoint(i, 100, r)
       return `${point.x},${point.y}`
     })
-    return `M ${points.join(" L ")} Z`
+    return `M ${points.join(' L ')} Z`
   }
 
   // 데이터 영역 생성
   const dataPath = () => {
-    if (data.length < 6) return ""
+    if (data.length < 6) return ''
     const points = data.slice(0, 6).map((d, i) => {
       const point = getPoint(i, d.value, radius)
       return `${point.x},${point.y}`
     })
-    return `M ${points.join(" L ")} Z`
+    return `M ${points.join(' L ')} Z`
   }
 
   return (
     <div
       data-slot="hexagon-chart"
-      className={cn("relative", className)}
+      className={cn('relative', className)}
       style={{ width: size, height: size }}
       {...props}
     >
@@ -121,7 +121,7 @@ function HexagonChart({
         return (
           <span
             key={i}
-            className="absolute text-xs text-foreground font-medium transform -translate-x-1/2 -translate-y-1/2"
+            className="text-foreground absolute -translate-x-1/2 -translate-y-1/2 transform text-xs font-medium"
             style={{ left: point.x, top: point.y }}
           >
             {d.label}

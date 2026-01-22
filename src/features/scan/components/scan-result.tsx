@@ -1,9 +1,9 @@
-"use client"
+'use client'
 
-import * as React from "react"
-import { CheckCircleIcon, SaveIcon } from "lucide-react"
-import { cn } from "@/lib/utils"
-import { Button } from "@/components/ui/button"
+import * as React from 'react'
+import { CheckCircleIcon, SaveIcon } from 'lucide-react'
+import { cn } from '@/lib/utils'
+import { Button } from '@/components/ui/button'
 
 interface ScanResultProps extends React.HTMLAttributes<HTMLDivElement> {
   cardId: string
@@ -26,20 +26,20 @@ function ScanResult({
     <div
       data-slot="scan-result"
       className={cn(
-        "flex flex-col items-center justify-center py-12 text-center",
+        'flex flex-col items-center justify-center py-12 text-center',
         className
       )}
       {...props}
     >
-      <div className="flex size-16 items-center justify-center rounded-full bg-green-100 text-green-600 mb-4">
+      <div className="mb-4 flex size-16 items-center justify-center rounded-full bg-green-100 text-green-600">
         <CheckCircleIcon className="size-8" />
       </div>
 
-      <h3 className="text-lg font-semibold text-foreground mb-2">
+      <h3 className="text-foreground mb-2 text-lg font-semibold">
         명함을 찾았습니다!
       </h3>
 
-      <p className="text-sm text-muted-foreground mb-6">
+      <p className="text-muted-foreground mb-6 text-sm">
         {name ? (
           <>
             <strong>{name}</strong>님의 명함입니다.
@@ -49,7 +49,7 @@ function ScanResult({
         )}
       </p>
 
-      <div className="flex flex-col gap-2 w-full max-w-xs">
+      <div className="flex w-full max-w-xs flex-col gap-2">
         <Button type="button" onClick={() => onViewCard?.(cardId)}>
           명함 보기
         </Button>
@@ -58,8 +58,7 @@ function ScanResult({
           variant="outline"
           onClick={() => onSaveCard?.(cardId)}
         >
-          <SaveIcon className="mr-2 size-4" />
-          내 명함함에 저장
+          <SaveIcon className="mr-2 size-4" />내 명함함에 저장
         </Button>
         <Button type="button" variant="ghost" onClick={onScanAgain}>
           다시 스캔

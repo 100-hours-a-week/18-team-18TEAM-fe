@@ -1,9 +1,9 @@
-"use client"
+'use client'
 
-import * as React from "react"
-import { MoreHorizontalIcon } from "lucide-react"
-import { cn } from "@/lib/utils"
-import { DropdownMenu, IconButton } from "@/shared"
+import * as React from 'react'
+import { MoreHorizontalIcon } from 'lucide-react'
+import { cn } from '@/lib/utils'
+import { DropdownMenu, IconButton } from '@/shared'
 
 interface BusinessCardItemProps extends React.HTMLAttributes<HTMLDivElement> {
   name: string
@@ -34,10 +34,15 @@ function BusinessCardItem({
   const menuItems = React.useMemo(() => {
     const items = []
     if (onEdit) {
-      items.push({ id: "edit", label: "수정", onClick: onEdit })
+      items.push({ id: 'edit', label: '수정', onClick: onEdit })
     }
     if (onDelete) {
-      items.push({ id: "delete", label: "삭제", onClick: onDelete, destructive: true })
+      items.push({
+        id: 'delete',
+        label: '삭제',
+        onClick: onDelete,
+        destructive: true,
+      })
     }
     return items
   }, [onEdit, onDelete])
@@ -49,21 +54,21 @@ function BusinessCardItem({
       tabIndex={0}
       onClick={onPress}
       onKeyDown={(e) => {
-        if (e.key === "Enter" || e.key === " ") {
+        if (e.key === 'Enter' || e.key === ' ') {
           onPress?.()
         }
       }}
       className={cn(
-        "relative w-full rounded-[10px] bg-card p-4 shadow-sm border border-border cursor-pointer hover:shadow-md transition-shadow",
+        'bg-card border-border relative w-full cursor-pointer rounded-[10px] border p-4 shadow-sm transition-shadow hover:shadow-md',
         className
       )}
       {...props}
     >
-      <div className="flex justify-between items-start mb-4">
-        <h3 className="text-lg font-semibold text-foreground">{name}</h3>
+      <div className="mb-4 flex items-start justify-between">
+        <h3 className="text-foreground text-lg font-semibold">{name}</h3>
         <div className="flex items-center gap-2">
           {cardName && (
-            <span className="text-sm text-muted-foreground">{cardName}</span>
+            <span className="text-muted-foreground text-sm">{cardName}</span>
           )}
           {hasMenu && (
             <DropdownMenu
@@ -83,22 +88,18 @@ function BusinessCardItem({
         </div>
       </div>
 
-      <div className="space-y-0.5 mb-4">
+      <div className="mb-4 space-y-0.5">
         {department && (
-          <p className="text-sm text-muted-foreground">{department}</p>
+          <p className="text-muted-foreground text-sm">{department}</p>
         )}
         {position && (
-          <p className="text-sm text-muted-foreground">{position}</p>
+          <p className="text-muted-foreground text-sm">{position}</p>
         )}
       </div>
 
-      <div className="pt-3 border-t border-border space-y-0.5">
-        {phone && (
-          <p className="text-sm text-foreground">{phone}</p>
-        )}
-        {email && (
-          <p className="text-sm text-foreground">{email}</p>
-        )}
+      <div className="border-border space-y-0.5 border-t pt-3">
+        {phone && <p className="text-foreground text-sm">{phone}</p>}
+        {email && <p className="text-foreground text-sm">{email}</p>}
       </div>
     </div>
   )

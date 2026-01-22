@@ -1,8 +1,8 @@
-"use client"
+'use client'
 
-import * as React from "react"
-import { PencilIcon } from "lucide-react"
-import { cn } from "@/lib/utils"
+import * as React from 'react'
+import { PencilIcon } from 'lucide-react'
+import { cn } from '@/lib/utils'
 
 interface InfoCardProps extends React.HTMLAttributes<HTMLDivElement> {
   title: string
@@ -22,26 +22,23 @@ function InfoCard({
   return (
     <div
       data-slot="info-card"
-      className={cn(
-        "relative rounded-[10px] bg-surface/20 p-4",
-        className
-      )}
+      className={cn('bg-surface/20 relative rounded-[10px] p-4', className)}
       {...props}
     >
-      <div className="flex items-center justify-between mb-2">
-        <h3 className="text-sm font-semibold text-foreground">{title}</h3>
+      <div className="mb-2 flex items-center justify-between">
+        <h3 className="text-foreground text-sm font-semibold">{title}</h3>
         {editable && (
           <button
             type="button"
             onClick={onEdit}
-            className="p-1 rounded-md hover:bg-muted transition-colors"
+            className="hover:bg-muted rounded-md p-1 transition-colors"
             aria-label={`${title} 수정`}
           >
-            <PencilIcon className="size-4 text-muted-foreground" />
+            <PencilIcon className="text-muted-foreground size-4" />
           </button>
         )}
       </div>
-      {children && <div className="text-sm text-foreground">{children}</div>}
+      {children && <div className="text-foreground text-sm">{children}</div>}
     </div>
   )
 }

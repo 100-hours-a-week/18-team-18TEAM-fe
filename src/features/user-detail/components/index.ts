@@ -1,7 +1,24 @@
-export { ProfileHeader, type ProfileHeaderProps } from "./profile-header"
-export { DetailTabs, tabs, type DetailTabsProps, type TabId } from "./detail-tabs"
-export { CareerList, type CareerListProps, type CareerItem } from "./career-list"
-export { SkillsList, type SkillsListProps } from "./skills-list"
-export { LinksList, type LinksListProps, type LinkItem } from "./links-list"
-export { ProjectsList, type ProjectsListProps, type ProjectItem } from "./projects-list"
-export { ActivitiesList, type ActivitiesListProps, type ActivityItem } from "./activities-list"
+export { ProfileHeader, type ProfileHeaderProps } from './profile-header'
+export {
+  DetailTabs,
+  tabs,
+  type DetailTabsProps,
+  type TabId,
+} from './detail-tabs'
+export {
+  CareerList,
+  type CareerListProps,
+  type CareerItem,
+} from './career-list'
+export { SkillsList, type SkillsListProps } from './skills-list'
+export { LinksList, type LinksListProps, type LinkItem } from './links-list'
+export {
+  ProjectsList,
+  type ProjectsListProps,
+  type ProjectItem,
+} from './projects-list'
+export {
+  ActivitiesList,
+  type ActivitiesListProps,
+  type ActivityItem,
+} from './activities-list'

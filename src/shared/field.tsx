@@ -1,9 +1,9 @@
-"use client"
+'use client'
 
-import * as React from "react"
-import { Label } from "@/components/ui/label"
-import { Input } from "@/components/ui/input"
-import { cn } from "@/lib/utils"
+import * as React from 'react'
+import { Label } from '@/components/ui/label'
+import { Input } from '@/components/ui/input'
+import { cn } from '@/lib/utils'
 
 interface FieldProps extends React.InputHTMLAttributes<HTMLInputElement> {
   label?: string
@@ -18,7 +18,7 @@ const Field = React.forwardRef<HTMLInputElement, FieldProps>(
     const inputId = id || generatedId
 
     return (
-      <div className={cn("space-y-2", className)}>
+      <div className={cn('space-y-2', className)}>
         {label && (
           <Label htmlFor={inputId} className="text-sm font-medium">
             {label}
@@ -30,18 +30,27 @@ const Field = React.forwardRef<HTMLInputElement, FieldProps>(
           id={inputId}
           aria-invalid={!!error}
           aria-describedby={
-            error ? `${inputId}-error` : description ? `${inputId}-description` : undefined
+            error
+              ? `${inputId}-error`
+              : description
+                ? `${inputId}-description`
+                : undefined
           }
-          className={cn(error && "border-destructive focus-visible:ring-destructive")}
+          className={cn(
+            error && 'border-destructive focus-visible:ring-destructive'
+          )}
           {...props}
         />
         {description && !error && (
-          <p id={`${inputId}-description`} className="text-xs text-muted-foreground">
+          <p
+            id={`${inputId}-description`}
+            className="text-muted-foreground text-xs"
+          >
             {description}
           </p>
         )}
         {error && (
-          <p id={`${inputId}-error`} className="text-xs text-destructive">
+          <p id={`${inputId}-error`} className="text-destructive text-xs">
             {error}
           </p>
         )}
@@ -50,7 +59,7 @@ const Field = React.forwardRef<HTMLInputElement, FieldProps>(
   }
 )
 
-Field.displayName = "Field"
+Field.displayName = 'Field'
 
 interface TextareaFieldProps extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {
   label?: string
@@ -65,7 +74,7 @@ const TextareaField = React.forwardRef<HTMLTextAreaElement, TextareaFieldProps>(
     const inputId = id || generatedId
 
     return (
-      <div className={cn("space-y-2", className)}>
+      <div className={cn('space-y-2', className)}>
         {label && (
           <Label htmlFor={inputId} className="text-sm font-medium">
             {label}
@@ -77,22 +86,29 @@ const TextareaField = React.forwardRef<HTMLTextAreaElement, TextareaFieldProps>(
           id={inputId}
           aria-invalid={!!error}
           aria-describedby={
-            error ? `${inputId}-error` : description ? `${inputId}-description` : undefined
+            error
+              ? `${inputId}-error`
+              : description
+                ? `${inputId}-description`
+                : undefined
           }
           className={cn(
-            "flex min-h-[80px] w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50",
-            error && "border-destructive focus-visible:ring-destructive",
+            'border-input bg-background ring-offset-background placeholder:text-muted-foreground focus-visible:ring-ring flex min-h-[80px] w-full rounded-md border px-3 py-2 text-sm focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50',
+            error && 'border-destructive focus-visible:ring-destructive',
             className
           )}
           {...props}
         />
         {description && !error && (
-          <p id={`${inputId}-description`} className="text-xs text-muted-foreground">
+          <p
+            id={`${inputId}-description`}
+            className="text-muted-foreground text-xs"
+          >
             {description}
           </p>
         )}
         {error && (
-          <p id={`${inputId}-error`} className="text-xs text-destructive">
+          <p id={`${inputId}-error`} className="text-destructive text-xs">
             {error}
           </p>
         )}
@@ -101,7 +117,7 @@ const TextareaField = React.forwardRef<HTMLTextAreaElement, TextareaFieldProps>(
   }
 )
 
-TextareaField.displayName = "TextareaField"
+TextareaField.displayName = 'TextareaField'
 
 export { Field, TextareaField }
 export type { FieldProps, TextareaFieldProps }

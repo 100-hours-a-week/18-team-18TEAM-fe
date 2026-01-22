@@ -1,9 +1,9 @@
-"use client"
+'use client'
 
-import * as React from "react"
-import { XIcon, PlusIcon } from "lucide-react"
-import { cn } from "@/lib/utils"
-import { Button } from "@/components/ui/button"
+import * as React from 'react'
+import { XIcon, PlusIcon } from 'lucide-react'
+import { cn } from '@/lib/utils'
+import { Button } from '@/components/ui/button'
 
 interface SkillsComboboxProps {
   skills: string[]
@@ -17,24 +17,23 @@ function SkillsCombobox({
   skills,
   onChange,
   suggestions = [],
-  placeholder = "스킬을 입력하세요",
+  placeholder = '스킬을 입력하세요',
   className,
 }: SkillsComboboxProps) {
-  const [inputValue, setInputValue] = React.useState("")
+  const [inputValue, setInputValue] = React.useState('')
   const [showSuggestions, setShowSuggestions] = React.useState(false)
   const inputRef = React.useRef<HTMLInputElement>(null)
 
   const filteredSuggestions = suggestions.filter(
     (s) =>
-      s.toLowerCase().includes(inputValue.toLowerCase()) &&
-      !skills.includes(s)
+      s.toLowerCase().includes(inputValue.toLowerCase()) && !skills.includes(s)
   )
 
   const addSkill = (skill: string) => {
     if (skill.trim() && !skills.includes(skill.trim())) {
       onChange([...skills, skill.trim()])
     }
-    setInputValue("")
+    setInputValue('')
     setShowSuggestions(false)
   }
 
@@ -43,14 +42,14 @@ function SkillsCombobox({
   }
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
-    if (e.key === "Enter") {
+    if (e.key === 'Enter') {
       e.preventDefault()
       addSkill(inputValue)
     }
   }
 
   return (
-    <div data-slot="skills-combobox" className={cn("space-y-3", className)}>
+    <div data-slot="skills-combobox" className={cn('space-y-3', className)}>
       <div className="relative">
         <input
           ref={inputRef}
@@ -64,8 +63,8 @@ function SkillsCombobox({
           onKeyDown={handleKeyDown}
           placeholder={placeholder}
           className={cn(
-            "w-full px-3 py-2 pr-10 rounded-lg bg-muted/50 border border-border text-sm text-foreground placeholder:text-muted-foreground",
-            "focus:outline-none focus:ring-2 focus:ring-ring focus:border-transparent"
+            'bg-muted/50 border-border text-foreground placeholder:text-muted-foreground w-full rounded-lg border px-3 py-2 pr-10 text-sm',
+            'focus:ring-ring focus:border-transparent focus:ring-2 focus:outline-none'
           )}
         />
         <Button
@@ -80,19 +79,19 @@ function SkillsCombobox({
               inputRef.current?.focus()
             }
           }}
-          className="absolute right-1 top-1/2 -translate-y-1/2"
+          className="absolute top-1/2 right-1 -translate-y-1/2"
         >
           <PlusIcon className="size-4" />
         </Button>
 
         {showSuggestions && filteredSuggestions.length > 0 && (
-          <div className="absolute top-full left-0 right-0 z-10 mt-1 max-h-48 overflow-auto rounded-lg border border-border bg-card shadow-lg">
+          <div className="border-border bg-card absolute top-full right-0 left-0 z-10 mt-1 max-h-48 overflow-auto rounded-lg border shadow-lg">
             {filteredSuggestions.map((suggestion) => (
               <button
                 key={suggestion}
                 type="button"
                 onClick={() => addSkill(suggestion)}
-                className="w-full px-3 py-2 text-left text-sm hover:bg-muted"
+                className="hover:bg-muted w-full px-3 py-2 text-left text-sm"
               >
                 {suggestion}
               </button>
@@ -106,7 +105,7 @@ function SkillsCombobox({
           {skills.map((skill) => (
             <span
               key={skill}
-              className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-primary/10 text-primary text-sm"
+              className="bg-primary/10 text-primary inline-flex items-center gap-1 rounded-full px-3 py-1 text-sm"
             >
               {skill}
               <button

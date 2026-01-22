@@ -1,6 +1,6 @@
-"use client"
+'use client'
 
-import * as React from "react"
+import * as React from 'react'
 import {
   DropdownMenu as ShadcnDropdownMenu,
   DropdownMenuContent,
@@ -8,8 +8,8 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
-import { cn } from "@/lib/utils"
+} from '@/components/ui/dropdown-menu'
+import { cn } from '@/lib/utils'
 
 interface MenuItem {
   id: string
@@ -29,16 +29,16 @@ interface DropdownMenuProps {
   trigger: React.ReactNode
   items?: MenuItem[]
   groups?: MenuGroup[]
-  align?: "start" | "center" | "end"
-  side?: "top" | "right" | "bottom" | "left"
+  align?: 'start' | 'center' | 'end'
+  side?: 'top' | 'right' | 'bottom' | 'left'
 }
 
 function DropdownMenu({
   trigger,
   items,
   groups,
-  align = "end",
-  side = "bottom",
+  align = 'end',
+  side = 'bottom',
 }: DropdownMenuProps) {
   const renderItems = (menuItems: MenuItem[]) =>
     menuItems.map((item) => (
@@ -50,7 +50,9 @@ function DropdownMenu({
         }}
         onPointerDown={(event) => event.stopPropagation()}
         disabled={item.disabled}
-        className={cn(item.destructive && "text-destructive focus:text-destructive")}
+        className={cn(
+          item.destructive && 'text-destructive focus:text-destructive'
+        )}
       >
         {item.icon && <span className="mr-2">{item.icon}</span>}
         {item.label}
@@ -71,7 +73,9 @@ function DropdownMenu({
           groups.map((group, index) => (
             <React.Fragment key={group.label || index}>
               {index > 0 && <DropdownMenuSeparator />}
-              {group.label && <DropdownMenuLabel>{group.label}</DropdownMenuLabel>}
+              {group.label && (
+                <DropdownMenuLabel>{group.label}</DropdownMenuLabel>
+              )}
               {renderItems(group.items)}
             </React.Fragment>
           ))}

@@ -1,9 +1,9 @@
-"use client"
+'use client'
 
-import * as React from "react"
-import { ExternalLinkIcon } from "lucide-react"
-import { cn } from "@/lib/utils"
-import { InfoCard } from "@/shared"
+import * as React from 'react'
+import { ExternalLinkIcon } from 'lucide-react'
+import { cn } from '@/lib/utils'
+import { InfoCard } from '@/shared'
 
 interface LinkItem {
   id: string
@@ -27,7 +27,7 @@ function LinksList({
 }: LinksListProps) {
   if (items.length === 0) {
     return (
-      <div className={cn("text-center py-8 text-muted-foreground", className)}>
+      <div className={cn('text-muted-foreground py-8 text-center', className)}>
         등록된 링크가 없습니다.
       </div>
     )
@@ -36,7 +36,7 @@ function LinksList({
   return (
     <div
       data-slot="links-list"
-      className={cn("space-y-3", className)}
+      className={cn('space-y-3', className)}
       {...props}
     >
       {items.map((item) => (
@@ -51,7 +51,7 @@ function LinksList({
               href={item.url}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center gap-1 text-primary hover:underline"
+              className="text-primary flex items-center gap-1 hover:underline"
             >
               {item.url}
               <ExternalLinkIcon className="size-3" />
