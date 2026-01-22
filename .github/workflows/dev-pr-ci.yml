@@ -9,7 +9,7 @@ concurrency:
   cancel-in-progress: true
 
 env:
-  APP_NAME: "CARO-FE"
+  APP_NAME: "BizKit-FE"
   APP_STAGE: "dev"
 
 jobs:
