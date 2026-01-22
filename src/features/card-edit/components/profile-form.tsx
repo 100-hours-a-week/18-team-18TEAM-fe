@@ -15,7 +15,7 @@ interface ProfileFormData {
   avatarSrc?: string | null
 }
 
-interface ProfileFormProps extends React.HTMLAttributes<HTMLFormElement> {
+interface ProfileFormProps extends Omit<React.HTMLAttributes<HTMLFormElement>, "onSubmit"> {
   initialData?: Partial<ProfileFormData>
   onSubmit: (data: ProfileFormData) => void
   isLoading?: boolean

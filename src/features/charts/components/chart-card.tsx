@@ -5,10 +5,11 @@ import { cn } from "@/lib/utils"
 
 interface ChartCardProps extends React.HTMLAttributes<HTMLDivElement> {
   title?: string
+  description?: string
   children: React.ReactNode
 }
 
-function ChartCard({ title, children, className, ...props }: ChartCardProps) {
+function ChartCard({ title, description, children, className, ...props }: ChartCardProps) {
   return (
     <div
       data-slot="chart-card"
@@ -19,7 +20,12 @@ function ChartCard({ title, children, className, ...props }: ChartCardProps) {
       {...props}
     >
       {title && (
-        <h3 className="text-sm font-semibold text-foreground mb-4">{title}</h3>
+        <div className="mb-3 space-y-1">
+          <h3 className="text-sm font-semibold text-foreground">{title}</h3>
+          {description && (
+            <p className="text-xs text-muted-foreground">{description}</p>
+          )}
+        </div>
       )}
       {children}
     </div>

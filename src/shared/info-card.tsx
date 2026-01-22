@@ -8,7 +8,7 @@ interface InfoCardProps extends React.HTMLAttributes<HTMLDivElement> {
   title: string
   editable?: boolean
   onEdit?: () => void
-  children: React.ReactNode
+  children?: React.ReactNode
 }
 
 function InfoCard({
@@ -41,7 +41,7 @@ function InfoCard({
           </button>
         )}
       </div>
-      <div className="text-sm text-foreground">{children}</div>
+      {children && <div className="text-sm text-foreground">{children}</div>}
     </div>
   )
 }

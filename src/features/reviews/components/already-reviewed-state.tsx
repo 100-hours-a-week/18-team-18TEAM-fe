@@ -8,6 +8,7 @@ import { StarRating } from "./star-rating"
 interface AlreadyReviewedStateProps extends React.HTMLAttributes<HTMLDivElement> {
   rating: number
   reviewDate?: string
+  onEdit?: () => void
 }
 
 function AlreadyReviewedState({

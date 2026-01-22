@@ -8,12 +8,12 @@ import { FlexibleDateInput } from "./flexible-date-input"
 interface ProjectFormData {
   name: string
   startDate: string
-  endDate?: string
+  endDate: string
   isCurrent: boolean
   description?: string
 }
 
-interface ProjectFormProps extends React.HTMLAttributes<HTMLFormElement> {
+interface ProjectFormProps extends Omit<React.HTMLAttributes<HTMLFormElement>, "onSubmit"> {
   initialData?: Partial<ProjectFormData>
   onSubmit: (data: ProjectFormData) => void
   isLoading?: boolean
@@ -34,11 +34,13 @@ function ProjectForm({
     description: initialData?.description ?? "",
   })
 
-  const handleChange = (
-    field: keyof ProjectFormData,
-    value: string | boolean
-  ) => {
-    setFormData((prev) => ({ ...prev, [field]: value }))
+  const handleChange = (field: keyof ProjectFormData, value: string | boolean) => {
+    setFormData((prev) => {
+      if (field === "isCurrent" && value === true) {
+        return { ...prev, isCurrent: true, endDate: "" }
+      }
+      return { ...prev, [field]: value }
+    })
   }
 
   const handleSubmit = (e: React.FormEvent) => {

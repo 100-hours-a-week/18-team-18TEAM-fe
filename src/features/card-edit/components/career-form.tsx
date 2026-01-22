@@ -9,12 +9,13 @@ interface CareerFormData {
   company: string
   position: string
   startDate: string
-  endDate?: string
+  endDate: string
   isCurrent: boolean
   description?: string
 }
 
-interface CareerFormProps extends React.HTMLAttributes<HTMLFormElement> {
+interface CareerFormProps
+  extends Omit<React.HTMLAttributes<HTMLFormElement>, "onSubmit"> {
   initialData?: Partial<CareerFormData>
   onSubmit: (data: CareerFormData) => void
   isLoading?: boolean
@@ -40,7 +41,12 @@ function CareerForm({
     field: keyof CareerFormData,
     value: string | boolean
   ) => {
-    setFormData((prev) => ({ ...prev, [field]: value }))
+    setFormData((prev) => {
+      if (field === "isCurrent" && value === true) {
+        return { ...prev, isCurrent: true, endDate: "" }
+      }
+      return { ...prev, [field]: value }
+    })
   }
 
   const handleSubmit = (e: React.FormEvent) => {

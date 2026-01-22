@@ -14,7 +14,8 @@ interface FieldProps extends React.InputHTMLAttributes<HTMLInputElement> {
 
 const Field = React.forwardRef<HTMLInputElement, FieldProps>(
   ({ label, description, error, required, className, id, ...props }, ref) => {
-    const inputId = id || React.useId()
+    const generatedId = React.useId()
+    const inputId = id || generatedId
 
     return (
       <div className={cn("space-y-2", className)}>
@@ -60,7 +61,8 @@ interface TextareaFieldProps extends React.TextareaHTMLAttributes<HTMLTextAreaEl
 
 const TextareaField = React.forwardRef<HTMLTextAreaElement, TextareaFieldProps>(
   ({ label, description, error, required, className, id, ...props }, ref) => {
-    const inputId = id || React.useId()
+    const generatedId = React.useId()
+    const inputId = id || generatedId
 
     return (
       <div className={cn("space-y-2", className)}>

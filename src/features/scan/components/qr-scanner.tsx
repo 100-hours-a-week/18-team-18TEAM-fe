@@ -14,6 +14,14 @@ function QRScanner({
   className,
   ...props
 }: QRScannerProps) {
+  const handleMockScan = () => {
+    const uuid =
+      typeof crypto !== "undefined" && "randomUUID" in crypto
+        ? crypto.randomUUID()
+        : Math.random().toString(36).slice(2, 10)
+    onScan?.(uuid)
+  }
+
   return (
     <div
       data-slot="qr-scanner"
@@ -41,9 +49,18 @@ function QRScanner({
       </div>
 
       {/* 안내 텍스트 */}
-      <p className="absolute bottom-8 text-white text-sm text-center">
-        QR 코드를 프레임 안에 맞춰주세요
-      </p>
+      <div className="absolute bottom-8 flex flex-col items-center gap-2 text-white text-sm text-center">
+        <p>QR 코드를 프레임 안에 맞춰주세요</p>
+        {onScan && (
+          <button
+            type="button"
+            onClick={handleMockScan}
+            className="rounded-full bg-white/20 px-3 py-1 text-xs hover:bg-white/30 transition-colors"
+          >
+            스캔 시뮬레이션
+          </button>
+        )}
+      </div>
     </div>
   )
 }

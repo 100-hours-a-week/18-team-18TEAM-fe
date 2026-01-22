@@ -10,7 +10,8 @@ interface LinkFormData {
   description?: string
 }
 
-interface LinkFormProps extends React.HTMLAttributes<HTMLFormElement> {
+interface LinkFormProps
+  extends Omit<React.FormHTMLAttributes<HTMLFormElement>, "onSubmit"> {
   initialData?: Partial<LinkFormData>
   onSubmit: (data: LinkFormData) => void
   isLoading?: boolean

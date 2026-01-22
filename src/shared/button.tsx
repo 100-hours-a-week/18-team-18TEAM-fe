@@ -10,7 +10,7 @@ type ButtonSize = "sm" | "md" | "lg" | "icon"
 
 interface ButtonProps
   extends Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, "size">,
-    Omit<VariantProps<typeof buttonVariants>, "variant" | "size"> {
+  Omit<VariantProps<typeof buttonVariants>, "variant" | "size"> {
   variant?: ButtonVariant
   size?: ButtonSize
   fullWidth?: boolean

@@ -11,7 +11,8 @@ interface AwardFormData {
   description?: string
 }
 
-interface AwardFormProps extends React.HTMLAttributes<HTMLFormElement> {
+interface AwardFormProps
+  extends Omit<React.FormHTMLAttributes<HTMLFormElement>, "onSubmit"> {
   initialData?: Partial<AwardFormData>
   onSubmit: (data: AwardFormData) => void
   isLoading?: boolean

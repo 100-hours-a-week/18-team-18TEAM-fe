@@ -12,7 +12,7 @@ interface ReviewFormData {
   tags: string[]
 }
 
-interface ReviewFormProps extends React.HTMLAttributes<HTMLFormElement> {
+interface ReviewFormProps extends Omit<React.HTMLAttributes<HTMLFormElement>, "onSubmit"> {
   onSubmit: (data: ReviewFormData) => void
   isLoading?: boolean
 }
