@@ -36,7 +36,7 @@ jobs:
         run: pnpm install --frozen-lockfile --prefer-offline
 
       - name: Lint Check 
-        run: pnpm lint
+        run: pnpm lint && exit 1
 
       - name: Prettier Check
         run: pnpm prettier --check .
