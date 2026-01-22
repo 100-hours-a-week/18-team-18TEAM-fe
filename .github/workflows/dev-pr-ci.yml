@@ -28,9 +28,8 @@ jobs:
           cache: "pnpm"      
 
       - name: Install pnpm
-        uses: pnpm/action-setup@v4
-        with:
-          version: 9
+        run: npm install -g pnpm@9
+
 
       - name: Install Dependencies
         run: pnpm install --frozen-lockfile --prefer-offline
