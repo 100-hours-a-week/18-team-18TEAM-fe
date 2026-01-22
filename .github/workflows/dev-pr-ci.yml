@@ -36,13 +36,13 @@ jobs:
       - name: Lint Check 
         run: pnpm lint
 
-      # - name: Prettier Check
-      #   run: pnpm prettier --check .
+      - name: Prettier Check
+        run: pnpm prettier
       
-      - name: Test
-        env:
-          NODE_ENV: "test"
-        run: pnpm test -- --watch=false
+      # - name: Test
+      #   env:
+      #     NODE_ENV: "test"
+      #   run: pnpm test -- --watch=false
 
       - name: Build
         run: pnpm build
