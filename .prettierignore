@@ -1,0 +1,14 @@
+# GitHub Actions workflows
+.github/workflows/*.yml
+
+pnpm-lock.yaml
+
+.next/
+out/
+
+node_modules/
+
+.env*
+
+# 확인 후 삭제 필요
+src/lib/utils.ts
