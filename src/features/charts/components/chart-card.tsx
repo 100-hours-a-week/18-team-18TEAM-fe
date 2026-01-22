@@ -1,0 +1,30 @@
+"use client"
+
+import * as React from "react"
+import { cn } from "@/lib/utils"
+
+interface ChartCardProps extends React.HTMLAttributes<HTMLDivElement> {
+  title?: string
+  children: React.ReactNode
+}
+
+function ChartCard({ title, children, className, ...props }: ChartCardProps) {
+  return (
+    <div
+      data-slot="chart-card"
+      className={cn(
+        "rounded-[10px] bg-card border border-border p-4",
+        className
+      )}
+      {...props}
+    >
+      {title && (
+        <h3 className="text-sm font-semibold text-foreground mb-4">{title}</h3>
+      )}
+      {children}
+    </div>
+  )
+}
+
+export { ChartCard }
+export type { ChartCardProps }
