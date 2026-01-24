@@ -1,21 +1,21 @@
-name: CI - Dev PR (FE)
+name: CI - PROD PR (FE)
 
 on:
-  pull_request:
-    branches: [ "develop" ]
+    pull_request:
+        branches: [ "main" ]
 
 concurrency:
-  group: fe-dev-pr-${{ github.head_ref || github.ref }}
+  group: fe-prod-pr-${{ github.head_ref || github.ref }}
   cancel-in-progress: true
 
 env:
   APP_NAME: "BizKit-FE"
-  APP_STAGE: "dev"
+  APP_STAGE: "prod"
 
 jobs:
   setup:
     runs-on: ubuntu-latest 
-    timeout-minutes: 15
+    timeout-minutes: 20
 
     steps:
       - name: Checkout
@@ -35,8 +35,6 @@ jobs:
 
       - name: Lint Check 
         run: pnpm lint
-        env:
-          ESLINT_USE_FLAT_CONFIG: "false"
 
       - name: Prettier Check
         run: pnpm prettier
@@ -49,7 +47,7 @@ jobs:
 
       - name: Build
         run: pnpm build
-      
+
       - name: Extract Version from PR
         id: ver 
         shell: bash 
@@ -135,6 +133,7 @@ jobs:
 
           aws s3 cp "$OUT_ARCHIVE" "s3://${{ secrets.S3_BUCKET }}/${S3_KEY_BASE}/${OUT_ARCHIVE}"
           aws s3 cp "manifest.json" "s3://${{ secrets.S3_BUCKET }}/${S3_KEY_BASE}/manifest.json"
+
 
       - name: Notify Discord on failure
         if: failure()
