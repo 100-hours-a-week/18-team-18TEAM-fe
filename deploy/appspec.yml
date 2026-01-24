@@ -1,0 +1,40 @@
+version: 0.0
+os: linux
+
+files:
+  - source: deploy-fe.sh
+    destination: /home/ubuntu
+    overwrite: true
+
+  - source: deploy/fe
+    destination: /home/ubuntu/deploy/fe
+    overwrite: true
+
+permissions:
+  - object: /home/ubuntu/deploy-fe.sh
+    pattern: "**"
+    owner: ubuntu
+    group: ubuntu
+    mode: 755
+
+  - object: /home/ubuntu/deploy/fe
+    pattern: "**"
+    owner: ubuntu
+    group: ubuntu
+    mode: 755
+
+hooks:
+  ApplicationStop:
+    - location: deploy/stop.sh
+      timeout: 60
+      runas: root
+
+  ApplicationStart:
+    - location: deploy/start.sh
+      timeout: 300
+      runas: root
+
+  ValidateService:
+    - location: deploy/validate.sh
+      timeout: 60
+      runas: root

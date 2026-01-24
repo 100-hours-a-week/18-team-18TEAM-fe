@@ -1,11 +1,11 @@
-name: CI - PROD PR (FE)
+name: CI - PROD (FE)
 
 on:
-    pull_request:
-        branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
 
 concurrency:
-  group: fe-prod-pr-${{ github.head_ref || github.ref }}
+  group: fe-prod-ci-${{ github.head_ref || github.ref }}
   cancel-in-progress: true
 
 env:

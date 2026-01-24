@@ -1,0 +1,72 @@
+name: CI - Dev (FE)
+
+on:
+  pull_request:
+    branches: [ "develop" ]
+
+concurrency:
+  group: fe-dev-ci-${{ github.head_ref || github.ref }}
+  cancel-in-progress: true
+
+env:
+  APP_NAME: "BizKit-FE"
+  APP_STAGE: "dev"
+
+jobs:
+  setup:
+    runs-on: ubuntu-latest 
+    timeout-minutes: 15
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set Up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+
+      - name: Install pnpm
+        run: npm install -g pnpm@9
+
+
+      - name: Install Dependencies
+        run: pnpm install --frozen-lockfile --prefer-offline
+
+      - name: Lint Check 
+        run: pnpm lint
+        env:
+          ESLINT_USE_FLAT_CONFIG: "false"
+
+      - name: Prettier Check
+        run: pnpm prettier
+      
+      - name: Test
+        if: false
+        env:
+          NODE_ENV: "test"
+        run: pnpm test -- --watch=false
+
+      - name: Build
+        run: pnpm build
+      
+      - name: Notify Discord on failure
+        if: failure()
+        env:
+          DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+        run: |
+          MESSAGE="FE Dev PR CI 실패
+          Repo: \`${{ github.repository }}\`
+          Branch: \`${{ github.head_ref || github.ref_name }}\`
+          Workflow: \`${{ github.workflow }}\`
+          Job: \`${{ github.job }}\`
+          Author: \`${{ github.actor }}\`
+          Stage: \`${APP_STAGE}\`
+          링크: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+
+          JSON_MESSAGE=$(printf '%s\n' "$MESSAGE" | python3 -c 'import json,sys; print(json.dumps({"content": sys.stdin.read()}))')
+
+          curl -X POST \
+            -H "Content-Type: application/json" \
+            -d "$JSON_MESSAGE" \
+            "$DISCORD_WEBHOOK_URL"
