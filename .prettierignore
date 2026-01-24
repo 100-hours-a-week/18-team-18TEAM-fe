@@ -1,5 +1,5 @@
 # GitHub Actions workflows
-.github/workflows/*.yml
+.github/workflows/*
 
 pnpm-lock.yaml
 
