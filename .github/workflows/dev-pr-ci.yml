@@ -35,6 +35,8 @@ jobs:
 
       - name: Lint Check 
         run: pnpm lint
+        env:
+          ESLINT_USE_FLAT_CONFIG: "false"
 
       - name: Prettier Check
         run: pnpm prettier
