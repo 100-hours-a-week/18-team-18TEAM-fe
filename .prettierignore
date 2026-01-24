@@ -1,7 +1,8 @@
 # GitHub Actions workflows
-.github/workflows/*
+.github/*
 
 pnpm-lock.yaml
+.eslintrc.json
 
 .next/
 out/
