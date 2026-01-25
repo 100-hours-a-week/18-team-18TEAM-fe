@@ -8,8 +8,8 @@ echo "[start-fe] HOOK_DIR=${HOOK_DIR}"
 echo "[start-fe] REV_DIR=${REV_DIR}"
 ls -al "${REV_DIR}/deploy/fe" || true
 
-if [[ -f "${REV_DIR}/deploy/fe/env.sh" ]]; then
-  source "${REV_DIR}/deploy/fe/env.sh"
+if [[ -f "${REV_DIR}/deploy/env.sh" ]]; then
+  source "${REV_DIR}/deploy/env.sh"
 fi
 
 : "${RELEASE_ID:?RELEASE_ID is required}"
