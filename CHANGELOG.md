@@ -1,3 +1,9 @@
+## [1.0.0-dev.11](https://github.com/100-hours-a-week/18-team-18TEAM-fe/compare/v1.0.0-dev.10...v1.0.0-dev.11) (2026-01-25)
+
+### Bug Fixes
+
+* 로그 추가 ([1468a97](https://github.com/100-hours-a-week/18-team-18TEAM-fe/commit/1468a97b1a1bdf14cbb6a5725183c160358ee92b))
+
 ## [1.0.0-dev.10](https://github.com/100-hours-a-week/18-team-18TEAM-fe/compare/v1.0.0-dev.9...v1.0.0-dev.10) (2026-01-25)
 
 ### Bug Fixes
