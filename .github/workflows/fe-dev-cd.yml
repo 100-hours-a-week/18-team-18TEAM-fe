@@ -51,8 +51,13 @@ jobs:
 
       - name: Read version from package.json
         id: ver
-        run: echo "value=$(node -p \"require('./package.json').version\")" >> $GITHUB_OUTPUT
-    
+        shell: bash
+        run: |
+          set -euo pipefail
+          
+          VERSION=$(node -p "require('./package.json').version")
+          echo "value=$VERSION" >> "$GITHUB_OUTPUT"
+
       - name: Configure AWS Credentials (Access Key)
         uses: aws-actions/configure-aws-credentials@v4
         with:
@@ -124,7 +129,7 @@ jobs:
           ARCHIVE_URL="$(aws s3 presign "s3://$BUCKET/$RELEASE_KEY" --expires-in 3600)"
           ESCAPED_URL=$(printf "%s" "$ARCHIVE_URL" | sed "s/'/'\\\\''/g")
 
-          cat > bundle/codedeploy/fe/env.sh <<EOF
+          cat > bundle/deploy/env.sh <<EOF
           RELEASE_ID='${VERSION}'
           ARCHIVE_URL='${ESCAPED_URL}'
           EOF

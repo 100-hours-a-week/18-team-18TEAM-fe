@@ -20,6 +20,7 @@ TAR_PATH="${ARTIFACT_DIR}/bizkit-fe-${RELEASE_ID}.tar.gz"
 HEALTH_URL="${HEALTH_URL:-http://127.0.0.1:3000/}"
 
 
+# backup
 if [[ -z "${RELEASE_ID}" ]]; then
   echo "[deploy-fe] missing RELEASE_ID. usage: deploy-fe.sh <version>" >&2
   exit 2
