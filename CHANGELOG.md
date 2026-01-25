@@ -1,3 +1,13 @@
+## [1.0.0-dev.14](https://github.com/100-hours-a-week/18-team-18TEAM-fe/compare/v1.0.0-dev.13...v1.0.0-dev.14) (2026-01-25)
+
+### Features
+
+* prod cd 파이프라인 추가 ([f29af15](https://github.com/100-hours-a-week/18-team-18TEAM-fe/commit/f29af1585fdbc8c56a24bf8b0eaff1870f36b65e))
+
+### Bug Fixes
+
+* 버저닝 자동 쓰기 변경 추가 ([c0e5fa9](https://github.com/100-hours-a-week/18-team-18TEAM-fe/commit/c0e5fa9a71ce0111dbde04876a897efd1933d8f4))
+
 ## [1.0.0-dev.13](https://github.com/100-hours-a-week/18-team-18TEAM-fe/compare/v1.0.0-dev.12...v1.0.0-dev.13) (2026-01-25)
 
 ### Features
