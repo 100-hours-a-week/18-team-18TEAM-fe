@@ -88,6 +88,10 @@ jobs:
                     exit 1 
                 }
             
+            echo "OUT_ARCHIVE=$OUT_ARCHIVE"
+            ls -al
+            ls -al "$OUT_ARCHIVE"
+            
             echo "OUT_ARCHIVE=$OUT_ARCHIVE" >> "$GITHUB_ENV"
 
       
@@ -100,85 +104,85 @@ jobs:
 
           RELEASE_KEY="${{secrets.S3_PREFIX}}/${APP_STAGE}/releases/${VERSION}/bizkit-fe-${VERSION}.tar.gz"
 
-          aws s3 cp "$OUT_ARCHIVE" "s3://$BUCKET/${RELEASE_KEY}" --cache-control no-cache --metadata-directive REPLACE
+          aws s3 cp "$OUT_ARCHIVE" "s3://$BUCKET/${RELEASE_KEY}" --cache-control no-cache
           
           echo "BUCKET=$BUCKET" >> "$GITHUB_ENV"
           echo "RELEASE_KEY=${RELEASE_KEY}" >> "$GITHUB_ENV"
 
 
-      - name: Build CodeDeploy bundle (FE)
-        shell: bash
-        run: |
-          set -euo pipefail
+      # - name: Build CodeDeploy bundle (FE)
+      #   shell: bash
+      #   run: |
+      #     set -euo pipefail
 
-          VERSION=${{ steps.ver.outputs.value }}
-          BUCKET="$BUCKET"
-          RELEASE_KEY="$RELEASE_KEY"
+      #     VERSION=${{ steps.ver.outputs.value }}
+      #     BUCKET="$BUCKET"
+      #     RELEASE_KEY="$RELEASE_KEY"
 
-          rm -rf bundle && mkdir -p bundle/deploy
+      #     rm -rf bundle && mkdir -p bundle/deploy
 
-          # appspec + hooks + deploy script 포함
-          cp deploy/appspec.yml bundle/appspec.yml
-          cp deploy/deploy-fe.sh bundle/deploy-fe.sh
-          cp deploy/start.sh bundle/deploy/start.sh
-          cp deploy/stop.sh bundle/deploy/stop.sh
-          cp deploy/validate.sh bundle/deploy/validate.sh
+      #     # appspec + hooks + deploy script 포함
+      #     cp deploy/appspec.yml bundle/appspec.yml
+      #     cp deploy/deploy-fe.sh bundle/deploy-fe.sh
+      #     cp deploy/start.sh bundle/deploy/start.sh
+      #     cp deploy/stop.sh bundle/deploy/stop.sh
+      #     cp deploy/validate.sh bundle/deploy/validate.sh
 
-          ARCHIVE_URL="$(aws s3 presign "s3://$BUCKET/$RELEASE_KEY" --expires-in 3600)"
-          ESCAPED_URL=$(printf "%s" "$ARCHIVE_URL" | sed "s/'/'\\\\''/g")
+      #     ARCHIVE_URL="$(aws s3 presign "s3://$BUCKET/$RELEASE_KEY" --expires-in 3600)"
+      #     ESCAPED_URL=$(printf "%s" "$ARCHIVE_URL" | sed "s/'/'\\\\''/g")
 
-          cat > bundle/deploy/env.sh <<EOF
-          RELEASE_ID='${VERSION}'
-          ARCHIVE_URL='${ESCAPED_URL}'
-          EOF
+      #     cat > bundle/deploy/env.sh <<EOF
+      #     RELEASE_ID='${VERSION}'
+      #     ARCHIVE_URL='${ESCAPED_URL}'
+      #     EOF
 
-          (cd bundle && zip -r ../bundle.zip .)
-          unzip -l bundle.zip
+      #     (cd bundle && zip -r ../bundle.zip .)
+      #     unzip -l bundle.zip
 
-      - name: Upload bundle.zip to S3
-        shell: bash
-        run: |
-          set -euo pipefail
-          VERSION=${{ steps.ver.outputs.value }}
-          BUCKET="$BUCKET"
-          BUNDLE_KEY="${{ secrets.S3_PREFIX }}/${APP_STAGE}/codedeploy/fe/${VERSION}/bundle-${{ github.run_id }}.zip"
+      # - name: Upload bundle.zip to S3
+      #   shell: bash
+      #   run: |
+      #     set -euo pipefail
+      #     VERSION=${{ steps.ver.outputs.value }}
+      #     BUCKET="$BUCKET"
+      #     BUNDLE_KEY="${{ secrets.S3_PREFIX }}/${APP_STAGE}/codedeploy/fe/${VERSION}/bundle-${{ github.run_id }}.zip"
           
-          aws s3 cp bundle.zip "s3://$BUCKET/$BUNDLE_KEY"
-          echo "BUNDLE_KEY=$BUNDLE_KEY" >> "$GITHUB_ENV"
+      #     aws s3 cp bundle.zip "s3://$BUCKET/$BUNDLE_KEY"
+      #     echo "BUNDLE_KEY=$BUNDLE_KEY" >> "$GITHUB_ENV"
 
-      - name: Create CodeDeploy deployment & wait
-        shell: bash
-        run: |
-          set -euo pipefail
+      # - name: Create CodeDeploy deployment & wait
+      #   shell: bash
+      #   run: |
+      #     set -euo pipefail
 
-          APP="${{ secrets.CODEDEPLOY_APP_FE_DEV }}"
-          DG="${{ secrets.CODEDEPLOY_DG_FE_DEV }}"
+      #     APP="${{ secrets.CODEDEPLOY_APP_FE_DEV }}"
+      #     DG="${{ secrets.CODEDEPLOY_DG_FE_DEV }}"
 
-          DEPLOY_ID="$(aws deploy create-deployment \
-            --application-name "$APP" \
-            --deployment-group-name "$DG" \
-            --s3-location bucket="$BUCKET",key="$BUNDLE_KEY",bundleType=zip \
-            --file-exists-behavior OVERWRITE \
-            --query "deploymentId" --output text)"
+      #     DEPLOY_ID="$(aws deploy create-deployment \
+      #       --application-name "$APP" \
+      #       --deployment-group-name "$DG" \
+      #       --s3-location bucket="$BUCKET",key="$BUNDLE_KEY",bundleType=zip \
+      #       --file-exists-behavior OVERWRITE \
+      #       --query "deploymentId" --output text)"
 
-          echo "deploymentId=$DEPLOY_ID"
-          aws deploy wait deployment-successful --deployment-id "$DEPLOY_ID"
-          echo "CodeDeploy SUCCESS"
+      #     echo "deploymentId=$DEPLOY_ID"
+      #     aws deploy wait deployment-successful --deployment-id "$DEPLOY_ID"
+      #     echo "CodeDeploy SUCCESS"
 
-      - name: Notify Discord on failure
-        if: failure()
-        env:
-          DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
-        run: |
-          MESSAGE="FE Dev CD실패
-          Repo: \`${{ github.repository }}\`
-          Branch: \`${{ github.head_ref || github.ref_name }}\`
-          Workflow: \`${{ github.workflow }}\`
-          Job: \`${{ github.job }}\`
-          Author: \`${{ github.actor }}\`
-          Stage: \`${APP_STAGE}\`
-          링크: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+      # - name: Notify Discord on failure
+      #   if: failure()
+      #   env:
+      #     DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+      #   run: |
+      #     MESSAGE="FE Dev CD실패
+      #     Repo: \`${{ github.repository }}\`
+      #     Branch: \`${{ github.head_ref || github.ref_name }}\`
+      #     Workflow: \`${{ github.workflow }}\`
+      #     Job: \`${{ github.job }}\`
+      #     Author: \`${{ github.actor }}\`
+      #     Stage: \`${APP_STAGE}\`
+      #     링크: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
 
-          JSON_MESSAGE=$(printf '%s\n' "$MESSAGE" | python3 -c 'import json,sys; print(json.dumps({"content": sys.stdin.read()}))')
+      #     JSON_MESSAGE=$(printf '%s\n' "$MESSAGE" | python3 -c 'import json,sys; print(json.dumps({"content": sys.stdin.read()}))')
 
-          curl -X POST \
+      #     curl -X POST \
