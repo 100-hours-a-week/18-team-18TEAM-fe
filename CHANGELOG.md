@@ -1,3 +1,9 @@
+## [1.0.0-dev.12](https://github.com/100-hours-a-week/18-team-18TEAM-fe/compare/v1.0.0-dev.11...v1.0.0-dev.12) (2026-01-25)
+
+### Bug Fixes
+
+* standalone 제거 ([85fa05f](https://github.com/100-hours-a-week/18-team-18TEAM-fe/commit/85fa05f11acf73269258b84ec2bd12f345b05001))
+
 ## [1.0.0-dev.11](https://github.com/100-hours-a-week/18-team-18TEAM-fe/compare/v1.0.0-dev.10...v1.0.0-dev.11) (2026-01-25)
 
 ### Bug Fixes
