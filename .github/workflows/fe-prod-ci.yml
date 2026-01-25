@@ -1,0 +1,157 @@
+name: CI - PROD (FE)
+
+on:
+  pull_request:
+    branches: [ "main" ]
+
+concurrency:
+  group: fe-prod-ci-${{ github.head_ref || github.ref }}
+  cancel-in-progress: true
+
+env:
+  APP_NAME: "BizKit-FE"
+  APP_STAGE: "prod"
+
+jobs:
+  setup:
+    runs-on: ubuntu-latest 
+    timeout-minutes: 20
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set Up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+
+      - name: Install pnpm
+        run: npm install -g pnpm@9
+
+
+      - name: Install Dependencies
+        run: pnpm install --frozen-lockfile --prefer-offline
+
+      - name: Lint Check 
+        run: pnpm lint
+
+      - name: Prettier Check
+        run: pnpm prettier
+      
+      - name: Test
+        if: false
+        env:
+          NODE_ENV: "test"
+        run: pnpm test -- --watch=false
+
+      - name: Build
+        run: pnpm build
+
+      - name: Extract Version from PR
+        id: ver 
+        shell: bash 
+        run: |
+          set -euo pipefail 
+
+          BODY="${{ github.event.pull_request.body }}"
+
+          VERSION="$(echo "$BODY" | sed -nE 's/.*Release[[:space:]]*:[[:space:]]*([A-Za-z0-9._-]+).*/\1/ip' | head -n1 || true)"
+          VERSION="$(echo "$VERSION" | tr -cd 'A-Za-z0-9._-')"
+
+          if [[ -z "$VERSION" ]]; then
+            exit 1
+          fi
+
+          echo "VERSION=$VERSION" >> "$GITHUB_ENV"
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+
+      - name: Configure AWS Credentials (Access Key)
+        if: ${{ github.event.pull_request.head.repo.fork == false }}
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_REGION }}
+            
+      - name: Upload Build Artifact to S3
+        if: ${{ github.event.pull_request.head.repo.fork == false }}
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          BUCKET="${{ secrets.S3_BUCKET }}"
+
+          BUILD_DIR=".next"
+          if [[ ! -d "$BUILD_DIR" ]]; then
+            echo "Next.js build output not found in $BUILD_DIR" >&2
+            ls -al
+            exit 1
+          fi
+
+          OUT_ARCHIVE="caro-fe-${VERSION}.tar.gz"
+        
+          tar \
+            --exclude='.git' \
+            --exclude='node_modules' \
+            -czf "$OUT_ARCHIVE" \
+            .next/standalone \
+            .next/static \
+            public \
+            package.json \
+            pnpm-lock.yaml \
+            next.config.* || {
+              echo "Failed to create archive" >&2
+              exit 1
+            }
+
+        
+          SHORT_SHA="${{ github.event.pull_request.head.sha }}"
+          SHORT_SHA="${SHORT_SHA:0:7}"
+          
+          S3_KEY_BASE="${{secrets.S3_PREFIX}}/${APP_STAGE}/premerge/${VERSION}/${SHORT_SHA}"
+          ARCHIVE_KEY="${S3_KEY_BASE}/${OUT_ARCHIVE}"
+          MANIFEST_KEY="${S3_KEY_BASE}/manifest.json"
+          
+          PR_NO="${{ github.event.pull_request.number }}"
+          echo "PR_NO=$PR_NO" >> "$GITHUB_ENV"
+
+          if aws s3api head-object --bucket "$BUCKET" --key "$ARCHIVE_KEY" >/dev/null 2>&1; then
+            echo "S3 already has $ARCHIVE_KEY -> skip upload"
+            exit 0
+          fi
+
+          cat > manifest.json <<EOF
+          {
+            "component": "frontend",
+            "stage": "${APP_STAGE}",
+            "version": "${VERSION}",
+            "prNumber": ${PR_NO},
+            "commit": "${{ github.event.pull_request.head.sha }}"
+          }
+          EOF
+
+          aws s3 cp "$OUT_ARCHIVE" "s3://${{ secrets.S3_BUCKET }}/${S3_KEY_BASE}/${OUT_ARCHIVE}"
+          aws s3 cp "manifest.json" "s3://${{ secrets.S3_BUCKET }}/${S3_KEY_BASE}/manifest.json"
+
+
+      - name: Notify Discord on failure
+        if: failure()
+        env:
+          DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+        run: |
+          MESSAGE="FE Dev PR CI 실패
+          Repo: \`${{ github.repository }}\`
+          Branch: \`${{ github.head_ref || github.ref_name }}\`
+          Workflow: \`${{ github.workflow }}\`
+          Job: \`${{ github.job }}\`
+          Author: \`${{ github.actor }}\`
+          Stage: \`${APP_STAGE}\`
+          링크: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+
+          JSON_MESSAGE=$(printf '%s\n' "$MESSAGE" | python3 -c 'import json,sys; print(json.dumps({"content": sys.stdin.read()}))')
+
+          curl -X POST \
+            -H "Content-Type: application/json" \
+            -d "$JSON_MESSAGE" \
+            "$DISCORD_WEBHOOK_URL"

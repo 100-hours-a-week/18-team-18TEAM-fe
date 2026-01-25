@@ -1,7 +1,11 @@
 # GitHub Actions workflows
-.github/workflows/*.yml
+.github/*
 
 pnpm-lock.yaml
+.eslintrc.json
+release.config.cjs
+
+deploy/
 
 .next/
 out/
