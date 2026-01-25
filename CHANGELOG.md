@@ -1,3 +1,10 @@
+## [1.0.0-dev.6](https://github.com/100-hours-a-week/18-team-18TEAM-fe/compare/v1.0.0-dev.5...v1.0.0-dev.6) (2026-01-25)
+
+### Bug Fixes
+
+* merge conflict ([1f584c0](https://github.com/100-hours-a-week/18-team-18TEAM-fe/commit/1f584c03c01204dc3d4e1bd91f283ef014791ac0))
+* 조건문 수정 ([05c6287](https://github.com/100-hours-a-week/18-team-18TEAM-fe/commit/05c628712b83b2555ccee9f3b5b272f433c41ee1))
+
 ## [1.0.0-dev.5](https://github.com/100-hours-a-week/18-team-18TEAM-fe/compare/v1.0.0-dev.4...v1.0.0-dev.5) (2026-01-25)
 
 ### Bug Fixes
