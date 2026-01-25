@@ -1,3 +1,14 @@
+## [1.0.0-dev.13](https://github.com/100-hours-a-week/18-team-18TEAM-fe/compare/v1.0.0-dev.12...v1.0.0-dev.13) (2026-01-25)
+
+### Features
+
+* httpOnly 쿠키 기반 인증 API Route 추가 ([e3e18d6](https://github.com/100-hours-a-week/18-team-18TEAM-fe/commit/e3e18d655168e7b35267f0bc22c0abc2227ea595))
+* TanStack Query 기반 인증 상태 관리 추가 ([3f244ba](https://github.com/100-hours-a-week/18-team-18TEAM-fe/commit/3f244ba3a18b66fb57eeb29b9a0e388467824974))
+* 인증 미들웨어 및 공통 API 클라이언트 추가 ([15e5dc2](https://github.com/100-hours-a-week/18-team-18TEAM-fe/commit/15e5dc21899b5a1d8fceda311189d8e0a3afdca8))
+* 카카오 로그인 콜백 페이지 및 인증 모델 추가 ([f4e2650](https://github.com/100-hours-a-week/18-team-18TEAM-fe/commit/f4e2650992601e9647573b7e89828d5a7b056ac8))
+* 카카오 로그인 페이지 추가 ([0717aab](https://github.com/100-hours-a-week/18-team-18TEAM-fe/commit/0717aabf50a82ff1c649870e1b3f1aefb20061b0))
+* 홈 페이지 추가 ([5fc5a01](https://github.com/100-hours-a-week/18-team-18TEAM-fe/commit/5fc5a01caec0aa18f4f374d2093ab34f61d15fe9))
+
 ## [1.0.0-dev.12](https://github.com/100-hours-a-week/18-team-18TEAM-fe/compare/v1.0.0-dev.11...v1.0.0-dev.12) (2026-01-25)
 
 ### Bug Fixes
