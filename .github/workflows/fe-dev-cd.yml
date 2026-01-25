@@ -100,7 +100,7 @@ jobs:
 
           RELEASE_KEY="${{secrets.S3_PREFIX}}/${APP_STAGE}/releases/${VERSION}/bizkit-fe-${VERSION}.tar.gz"
 
-          aws s3 cp "$OUT_ARCHIVE" "s3://$BUCKET/${RELEASE_KEY}"
+          aws s3 cp "$OUT_ARCHIVE" "s3://$BUCKET/${RELEASE_KEY}" --cache-control no-cache --metadata-directive REPLACE
           
           echo "BUCKET=$BUCKET" >> "$GITHUB_ENV"
           echo "RELEASE_KEY=${RELEASE_KEY}" >> "$GITHUB_ENV"
@@ -120,7 +120,9 @@ jobs:
           # appspec + hooks + deploy script 포함
           cp deploy/appspec.yml bundle/appspec.yml
           cp deploy/deploy-fe.sh bundle/deploy-fe.sh
-          cp deploy/start.sh deploy/stop.sh deploy/validate.sh bundle/deploy/
+          cp deploy/start.sh bundle/deploy/start.sh
+          cp deploy/stop.sh bundle/deploy/stop.sh
+          cp deploy/validate.sh bundle/deploy/validate.sh
 
           ARCHIVE_URL="$(aws s3 presign "s3://$BUCKET/$RELEASE_KEY" --expires-in 3600)"
           ESCAPED_URL=$(printf "%s" "$ARCHIVE_URL" | sed "s/'/'\\\\''/g")
@@ -180,32 +182,3 @@ jobs:
           JSON_MESSAGE=$(printf '%s\n' "$MESSAGE" | python3 -c 'import json,sys; print(json.dumps({"content": sys.stdin.read()}))')
 
           curl -X POST \
-      - name: Build CodeDeploy bundle (FE)
-        shell: bash
-        run: |
-          set -euo pipefail
-
-          VERSION=${{ steps.ver.outputs.value }}
-          BUCKET="$BUCKET"
-          RELEASE_KEY="$RELEASE_KEY"
-
-          rm -rf bundle && mkdir -p bundle/deploy
-
-          # appspec + hooks + deploy script 포함
-          cp deploy/appspec.yml bundle/appspec.yml
-          cp deploy/deploy-fe.sh bundle/deploy-fe.sh
-          cp deploy/start.sh deploy/stop.sh deploy/validate.sh bundle/deploy/
-
-          ARCHIVE_URL="$(aws s3 presign "s3://$BUCKET/$RELEASE_KEY" --expires-in 3600)"
-          ESCAPED_URL=$(printf "%s" "$ARCHIVE_URL" | sed "s/'/'\\\\''/g")
-
-          cat > bundle/deploy/env.sh <<EOF
-          RELEASE_ID='${VERSION}'
-          ARCHIVE_URL='${ESCAPED_URL}'
-          EOF
-
-          (cd bundle && zip -r ../bundle.zip .)
-          unzip -l bundle.zip
-            -H "Content-Type: application/json" \
-            -d "$JSON_MESSAGE" \
-            "$DISCORD_WEBHOOK_URL"
