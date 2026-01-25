@@ -1,3 +1,9 @@
+## [1.0.0-dev.7](https://github.com/100-hours-a-week/18-team-18TEAM-fe/compare/v1.0.0-dev.6...v1.0.0-dev.7) (2026-01-25)
+
+### Bug Fixes
+
+* 헬스체크 임시 변경 ([522cf23](https://github.com/100-hours-a-week/18-team-18TEAM-fe/commit/522cf235d59af286f5df1b6f21fc2bcc4a83af57))
+
 ## [1.0.0-dev.6](https://github.com/100-hours-a-week/18-team-18TEAM-fe/compare/v1.0.0-dev.5...v1.0.0-dev.6) (2026-01-25)
 
 ### Bug Fixes
