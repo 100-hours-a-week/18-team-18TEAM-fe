@@ -76,11 +76,11 @@ jobs:
         
             tar \
                 --exclude='.git' \
-                --exclude='node_modules' \
                 -czf "$OUT_ARCHIVE" \
                 .next/standalone \
                 .next/static \
                 public \
+                node_modules \
                 package.json \
                 pnpm-lock.yaml \
                 next.config.* || {
