@@ -6,8 +6,8 @@ files:
     destination: /home/ubuntu
     overwrite: true
 
-  - source: deploy/fe
-    destination: /home/ubuntu/deploy/fe
+  - source: deploy
+    destination: /home/ubuntu/deploy
     overwrite: true
 
 permissions:
@@ -17,7 +17,7 @@ permissions:
     group: ubuntu
     mode: 755
 
-  - object: /home/ubuntu/deploy/fe
+  - object: /home/ubuntu/deploy
     pattern: "**"
     owner: ubuntu
     group: ubuntu
