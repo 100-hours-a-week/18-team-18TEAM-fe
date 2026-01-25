@@ -161,7 +161,7 @@ jobs:
           DEPLOY_ID="$(aws deploy create-deployment \
             --application-name "$APP" \
             --deployment-group-name "$DG" \
-            --s3-location bucket="$BUCKET",key="$BUNDLE_KEY",bundleType=zip \
+            --s3-location bucket="$BUCKET",key="$BUCKET/$BUNDLE_KEY",bundleType=zip \
             --file-exists-behavior OVERWRITE \
             --query "deploymentId" --output text)"
 
