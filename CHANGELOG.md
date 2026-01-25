@@ -1,3 +1,9 @@
+## [1.0.0-dev.8](https://github.com/100-hours-a-week/18-team-18TEAM-fe/compare/v1.0.0-dev.7...v1.0.0-dev.8) (2026-01-25)
+
+### Bug Fixes
+
+* s3 새버전 overwrite으로 수정 ([32c3b56](https://github.com/100-hours-a-week/18-team-18TEAM-fe/commit/32c3b5649ef1318efb7766cb17c292f3499a77d9))
+
 ## [1.0.0-dev.7](https://github.com/100-hours-a-week/18-team-18TEAM-fe/compare/v1.0.0-dev.6...v1.0.0-dev.7) (2026-01-25)
 
 ### Bug Fixes
