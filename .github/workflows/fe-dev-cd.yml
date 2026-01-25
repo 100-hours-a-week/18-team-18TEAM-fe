@@ -77,8 +77,7 @@ jobs:
             tar \
                 --exclude='.git' \
                 -czf "$OUT_ARCHIVE" \
-                .next/standalone \
-                .next/static \
+                .next \
                 public \
                 node_modules \
                 package.json \
