@@ -1,3 +1,9 @@
+## [1.0.0-dev.5](https://github.com/100-hours-a-week/18-team-18TEAM-fe/compare/v1.0.0-dev.4...v1.0.0-dev.5) (2026-01-25)
+
+### Bug Fixes
+
+* 경로 수정 ([f90f489](https://github.com/100-hours-a-week/18-team-18TEAM-fe/commit/f90f48939aa4a518f8e162b5d2bf91d1c117b5d7))
+
 ## [1.0.0-dev.4](https://github.com/100-hours-a-week/18-team-18TEAM-fe/compare/v1.0.0-dev.3...v1.0.0-dev.4) (2026-01-25)
 
 ### Bug Fixes
