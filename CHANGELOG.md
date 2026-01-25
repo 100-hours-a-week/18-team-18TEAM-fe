@@ -1,3 +1,9 @@
+## [1.0.0-dev.3](https://github.com/100-hours-a-week/18-team-18TEAM-fe/compare/v1.0.0-dev.2...v1.0.0-dev.3) (2026-01-25)
+
+### Bug Fixes
+
+* appespec.yml 경로 수정 ([49827f3](https://github.com/100-hours-a-week/18-team-18TEAM-fe/commit/49827f38ee74a2ceab0049a8d406b8467dd7ec50))
+
 ## [1.0.0-dev.2](https://github.com/100-hours-a-week/18-team-18TEAM-fe/compare/v1.0.0-dev.1...v1.0.0-dev.2) (2026-01-25)
 
 ### Bug Fixes
