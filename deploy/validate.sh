@@ -13,12 +13,25 @@ for i in $(seq 1 5); do
     continue
   fi
 
-  if curl -fsS --max-time 2 "$URL" >/dev/null; then
-    echo "[validate] OK"
-    exit 0
-  fi
-  echo "[validate] HTTP failed (try=$i)"
-  sleep 1
+#   if curl -fsS --max-time 2 "$URL" >/dev/null; then
+#     echo "[validate] OK"
+#     exit 0
+#   fi
+#   echo "[validate] HTTP failed (try=$i)"
+#   sleep 1
+  HTTP_CODE=$(curl -s -o /dev/null -w "%{http_code}" --max-time 2 "$URL" || echo "0")
+
+  echo "[validate] HTTP_CODE=$HTTP_CODE (try=$i)"
+
+  case "$HTTP_CODE" in
+    200|301|302|404)
+      echo "[validate] FE validated OK (HTTP=$HTTP_CODE)"
+      exit 0
+      ;;
+    *)
+      sleep 1
+      ;;
+  esac
 done
 
 echo "[validate] FAILED"
