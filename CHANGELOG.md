@@ -1,3 +1,9 @@
+## [1.0.0-dev.9](https://github.com/100-hours-a-week/18-team-18TEAM-fe/compare/v1.0.0-dev.8...v1.0.0-dev.9) (2026-01-25)
+
+### Bug Fixes
+
+* cache 설정 끄기 ([c5de966](https://github.com/100-hours-a-week/18-team-18TEAM-fe/commit/c5de966b8ffa0e064eeffaf903b6dc510574a206))
+
 ## [1.0.0-dev.8](https://github.com/100-hours-a-week/18-team-18TEAM-fe/compare/v1.0.0-dev.7...v1.0.0-dev.8) (2026-01-25)
 
 ### Bug Fixes
