@@ -122,9 +122,7 @@ jobs:
           rm -rf bundle && mkdir -p bundle/deploy
 
           # appspec + hooks + deploy script 포함
-          cp deploy/appspec.yml bundle/appspec.yml
-          cp deploy-fe.sh bundle/deploy-fe.sh
-          cp deploy/*.sh bundle/deploy/
+          cp deploy/* bundle/*
 
           ARCHIVE_URL="$(aws s3 presign "s3://$BUCKET/$RELEASE_KEY" --expires-in 3600)"
           ESCAPED_URL=$(printf "%s" "$ARCHIVE_URL" | sed "s/'/'\\\\''/g")
