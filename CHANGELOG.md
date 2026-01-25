@@ -1,3 +1,9 @@
+## [1.0.0-dev.4](https://github.com/100-hours-a-week/18-team-18TEAM-fe/compare/v1.0.0-dev.3...v1.0.0-dev.4) (2026-01-25)
+
+### Bug Fixes
+
+* cd 파이프라인 경로 수정 ([921c104](https://github.com/100-hours-a-week/18-team-18TEAM-fe/commit/921c104a66aa1e49e198c5dbb42366996c799b57))
+
 ## [1.0.0-dev.3](https://github.com/100-hours-a-week/18-team-18TEAM-fe/compare/v1.0.0-dev.2...v1.0.0-dev.3) (2026-01-25)
 
 ### Bug Fixes
