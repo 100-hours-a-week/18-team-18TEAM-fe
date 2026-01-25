@@ -1,7 +1,10 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-if systemctl is-active --quiet bizkit-fe; then
-  sudo systemctl stop bizkit-fe
-else
+SERVICE_UNIT="bizkit-fe.service"
+
+if systemctl is-active --quiet "${SERVICE_UNIT}"; then
+  systemctl stop "${SERVICE_UNIT}"
 fi
+
+exit 0
