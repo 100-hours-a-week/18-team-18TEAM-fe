@@ -6,7 +6,7 @@ URL="http://127.0.0.1:3000/"
 
 echo "[validate] checking FE..."
 
-for i in $(seq 1 10); do
+for i in $(seq 1 5); do
   if ! systemctl is-active --quiet "$SERVICE"; then
     echo "[validate] $SERVICE not active yet (try=$i)"
     sleep 1
@@ -17,7 +17,6 @@ for i in $(seq 1 10); do
     echo "[validate] OK"
     exit 0
   fi
-
   echo "[validate] HTTP failed (try=$i)"
   sleep 1
 done
