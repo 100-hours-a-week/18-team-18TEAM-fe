@@ -150,39 +150,39 @@ jobs:
           aws s3 cp bundle.zip "s3://$BUCKET/$BUNDLE_KEY"
           echo "BUNDLE_KEY=$BUNDLE_KEY" >> "$GITHUB_ENV"
 
-      # - name: Create CodeDeploy deployment & wait
-      #   shell: bash
-      #   run: |
-      #     set -euo pipefail
+      - name: Create CodeDeploy deployment & wait
+        shell: bash
+        run: |
+          set -euo pipefail
 
-      #     APP="${{ secrets.CODEDEPLOY_APP_FE_DEV }}"
-      #     DG="${{ secrets.CODEDEPLOY_DG_FE_DEV }}"
+          APP="${{ secrets.CODEDEPLOY_APP_FE_DEV }}"
+          DG="${{ secrets.CODEDEPLOY_DG_FE_DEV }}"
 
-      #     DEPLOY_ID="$(aws deploy create-deployment \
-      #       --application-name "$APP" \
-      #       --deployment-group-name "$DG" \
-      #       --s3-location bucket="$BUCKET",key="$BUNDLE_KEY",bundleType=zip \
-      #       --file-exists-behavior OVERWRITE \
-      #       --query "deploymentId" --output text)"
+          DEPLOY_ID="$(aws deploy create-deployment \
+            --application-name "$APP" \
+            --deployment-group-name "$DG" \
+            --s3-location bucket="$BUCKET",key="$BUNDLE_KEY",bundleType=zip \
+            --file-exists-behavior OVERWRITE \
+            --query "deploymentId" --output text)"
 
-      #     echo "deploymentId=$DEPLOY_ID"
-      #     aws deploy wait deployment-successful --deployment-id "$DEPLOY_ID"
-      #     echo "CodeDeploy SUCCESS"
+          echo "deploymentId=$DEPLOY_ID"
+          aws deploy wait deployment-successful --deployment-id "$DEPLOY_ID"
+          echo "CodeDeploy SUCCESS"
 
-      # - name: Notify Discord on failure
-      #   if: failure()
-      #   env:
-      #     DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
-      #   run: |
-      #     MESSAGE="FE Dev CD실패
-      #     Repo: \`${{ github.repository }}\`
-      #     Branch: \`${{ github.head_ref || github.ref_name }}\`
-      #     Workflow: \`${{ github.workflow }}\`
-      #     Job: \`${{ github.job }}\`
-      #     Author: \`${{ github.actor }}\`
-      #     Stage: \`${APP_STAGE}\`
-      #     링크: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+      - name: Notify Discord on failure
+        if: failure()
+        env:
+          DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+        run: |
+          MESSAGE="FE Dev CD실패
+          Repo: \`${{ github.repository }}\`
+          Branch: \`${{ github.head_ref || github.ref_name }}\`
+          Workflow: \`${{ github.workflow }}\`
+          Job: \`${{ github.job }}\`
+          Author: \`${{ github.actor }}\`
+          Stage: \`${APP_STAGE}\`
+          링크: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
 
-      #     JSON_MESSAGE=$(printf '%s\n' "$MESSAGE" | python3 -c 'import json,sys; print(json.dumps({"content": sys.stdin.read()}))')
+          JSON_MESSAGE=$(printf '%s\n' "$MESSAGE" | python3 -c 'import json,sys; print(json.dumps({"content": sys.stdin.read()}))')
 
-      #     curl -X POST \
+          curl -X POST \
