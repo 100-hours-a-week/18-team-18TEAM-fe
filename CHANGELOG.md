@@ -1,3 +1,9 @@
+## [1.0.0-dev.10](https://github.com/100-hours-a-week/18-team-18TEAM-fe/compare/v1.0.0-dev.9...v1.0.0-dev.10) (2026-01-25)
+
+### Bug Fixes
+
+* trigger 만들기 ([846c91f](https://github.com/100-hours-a-week/18-team-18TEAM-fe/commit/846c91f1d064b905de905a4663215d839477353b))
+
 ## [1.0.0-dev.9](https://github.com/100-hours-a-week/18-team-18TEAM-fe/compare/v1.0.0-dev.8...v1.0.0-dev.9) (2026-01-25)
 
 ### Bug Fixes
