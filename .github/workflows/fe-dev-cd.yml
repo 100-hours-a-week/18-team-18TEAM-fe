@@ -135,6 +135,7 @@ jobs:
           EOF
 
           (cd bundle && zip -r ../bundle.zip .)
+          unzip -l bundle.zip
 
       - name: Upload bundle.zip to S3
         shell: bash
