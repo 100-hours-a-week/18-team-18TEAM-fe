@@ -7,8 +7,4 @@ export {
   type CardInfoSectionProps,
   type CardInfo,
 } from './card-info-section'
-export {
-  DetailBottomNav,
-  type DetailBottomNavProps,
-  type NavTab,
-} from './detail-bottom-nav'
+export { MyCardPage } from './my-card-page'

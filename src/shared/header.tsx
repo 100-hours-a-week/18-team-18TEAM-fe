@@ -38,7 +38,7 @@ function Header({
     <header
       data-slot="header"
       className={cn(
-        'bg-background sticky top-0 z-40 flex h-14 items-center justify-between px-4',
+        'bg-background fixed top-0 left-1/2 z-40 flex h-14 w-full max-w-[430px] -translate-x-1/2 items-center justify-between px-4',
         className
       )}
       {...props}
