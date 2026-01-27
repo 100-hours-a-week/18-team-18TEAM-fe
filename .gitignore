@@ -40,5 +40,9 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
-# AI Instructions (Local Only)
-claud.md
+# local md files
+/docs
+/*.md
+
+# local images
+public/image
