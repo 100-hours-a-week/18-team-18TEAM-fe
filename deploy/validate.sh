@@ -24,7 +24,7 @@ for i in $(seq 1 5); do
   echo "[validate] HTTP_CODE=$HTTP_CODE (try=$i)"
 
   case "$HTTP_CODE" in
-    200|301|302|404)
+    200|301|302|307|404)
       echo "[validate] FE validated OK (HTTP=$HTTP_CODE)"
       exit 0
       ;;

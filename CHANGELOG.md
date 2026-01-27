@@ -1,3 +1,36 @@
+## [1.0.0-dev.14](https://github.com/100-hours-a-week/18-team-18TEAM-fe/compare/v1.0.0-dev.13...v1.0.0-dev.14) (2026-01-25)
+
+### Features
+
+* prod cd 파이프라인 추가 ([f29af15](https://github.com/100-hours-a-week/18-team-18TEAM-fe/commit/f29af1585fdbc8c56a24bf8b0eaff1870f36b65e))
+
+### Bug Fixes
+
+* 버저닝 자동 쓰기 변경 추가 ([c0e5fa9](https://github.com/100-hours-a-week/18-team-18TEAM-fe/commit/c0e5fa9a71ce0111dbde04876a897efd1933d8f4))
+
+## [1.0.0-dev.13](https://github.com/100-hours-a-week/18-team-18TEAM-fe/compare/v1.0.0-dev.12...v1.0.0-dev.13) (2026-01-25)
+
+### Features
+
+* httpOnly 쿠키 기반 인증 API Route 추가 ([e3e18d6](https://github.com/100-hours-a-week/18-team-18TEAM-fe/commit/e3e18d655168e7b35267f0bc22c0abc2227ea595))
+* TanStack Query 기반 인증 상태 관리 추가 ([3f244ba](https://github.com/100-hours-a-week/18-team-18TEAM-fe/commit/3f244ba3a18b66fb57eeb29b9a0e388467824974))
+* 인증 미들웨어 및 공통 API 클라이언트 추가 ([15e5dc2](https://github.com/100-hours-a-week/18-team-18TEAM-fe/commit/15e5dc21899b5a1d8fceda311189d8e0a3afdca8))
+* 카카오 로그인 콜백 페이지 및 인증 모델 추가 ([f4e2650](https://github.com/100-hours-a-week/18-team-18TEAM-fe/commit/f4e2650992601e9647573b7e89828d5a7b056ac8))
+* 카카오 로그인 페이지 추가 ([0717aab](https://github.com/100-hours-a-week/18-team-18TEAM-fe/commit/0717aabf50a82ff1c649870e1b3f1aefb20061b0))
+* 홈 페이지 추가 ([5fc5a01](https://github.com/100-hours-a-week/18-team-18TEAM-fe/commit/5fc5a01caec0aa18f4f374d2093ab34f61d15fe9))
+
+## [1.0.0-dev.12](https://github.com/100-hours-a-week/18-team-18TEAM-fe/compare/v1.0.0-dev.11...v1.0.0-dev.12) (2026-01-25)
+
+### Bug Fixes
+
+* standalone 제거 ([85fa05f](https://github.com/100-hours-a-week/18-team-18TEAM-fe/commit/85fa05f11acf73269258b84ec2bd12f345b05001))
+
+## [1.0.0-dev.11](https://github.com/100-hours-a-week/18-team-18TEAM-fe/compare/v1.0.0-dev.10...v1.0.0-dev.11) (2026-01-25)
+
+### Bug Fixes
+
+* 로그 추가 ([1468a97](https://github.com/100-hours-a-week/18-team-18TEAM-fe/commit/1468a97b1a1bdf14cbb6a5725183c160358ee92b))
+
 ## [1.0.0-dev.10](https://github.com/100-hours-a-week/18-team-18TEAM-fe/compare/v1.0.0-dev.9...v1.0.0-dev.10) (2026-01-25)
 
 ### Bug Fixes

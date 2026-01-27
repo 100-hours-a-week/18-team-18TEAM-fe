@@ -1,8 +1,8 @@
-name: CD - DEV (FE)
+name: CD - PROD (FE)
 
 on:
   push:
-    branches: ["develop"]
+    branches: ["main"]
 
 permissions:
   contents: write
@@ -10,7 +10,7 @@ permissions:
   pull-requests: write
   
 concurrency:
-  group: fe-dev-cd-${{ github.ref }}
+  group: fe-prod-cd-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
@@ -20,7 +20,7 @@ jobs:
 
     env:
       APP_NAME: "bizkit-FE"
-      APP_STAGE: dev
+      APP_STAGE: prod
 
 
     steps:
@@ -37,14 +37,13 @@ jobs:
       - name: Install pnpm
         run: npm install -g pnpm@9
 
-
       - name: Install Dependencies
         run: pnpm install --frozen-lockfile --prefer-offline
 
       - name: Build
         run: pnpm build
     
-      - name: Semantic Release (dev)
+      - name: Semantic Release (prod)
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: pnpm semantic-release
@@ -154,8 +153,8 @@ jobs:
         run: |
           set -euo pipefail
 
-          APP="${{ secrets.CODEDEPLOY_APP_FE_DEV }}"
-          DG="${{ secrets.CODEDEPLOY_DG_FE_DEV }}"
+          APP="${{ secrets.CODEDEPLOY_APP_FE_PROD }}"
+          DG="${{ secrets.CODEDEPLOY_DG_FE_PROD }}"
 
           echo "BUCKET=$BUCKET"
           echo "BUNDLE_KEY=$BUNDLE_KEY"
@@ -176,7 +175,7 @@ jobs:
         env:
           DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
         run: |
-          MESSAGE="FE Dev CD실패
+          MESSAGE="FE PROD CD실패
           Repo: \`${{ github.repository }}\`
           Branch: \`${{ github.head_ref || github.ref_name }}\`
           Workflow: \`${{ github.workflow }}\`
