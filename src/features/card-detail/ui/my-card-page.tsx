@@ -157,7 +157,7 @@ function MyCardPage() {
 
   // 프로필 편집 핸들러
   const handleProfileEdit = () => {
-    router.push('/user/edit/profile')
+    router.push('/my-card/edit')
   }
 
   // 경력 핸들러

@@ -1,4 +1,6 @@
+import { ProfileEditPage } from '@/features/profile-edit'
+
 export default function MyCardEditPage() {
-    return <div>My Card Edit Page</div>
+  return <ProfileEditPage />
 }
 

@@ -1,3 +1,4 @@
+import React from 'react'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import type { ProfileData } from '@/shared'
 import { getMyInfo } from './user.api'
@@ -40,9 +41,14 @@ export function useMyInfo() {
 export function useMyProfile() {
   const query = useMyInfo()
 
+  const profileData = React.useMemo(
+    () => (query.data ? toProfileData(query.data) : undefined),
+    [query.data],
+  )
+
   return {
     ...query,
-    data: query.data ? toProfileData(query.data) : undefined,
+    data: profileData,
     userInfo: query.data,
   }
 }
