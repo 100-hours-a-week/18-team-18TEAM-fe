@@ -7,11 +7,12 @@ import { DropdownMenu, IconButton } from '@/shared'
 
 interface BusinessCardItemProps extends React.HTMLAttributes<HTMLDivElement> {
   name: string
-  cardName?: string
+  company?: string
   department?: string
   position?: string
-  phone?: string
+  phone_number?: string
   email?: string
+  lined_number?: string
   onPress?: () => void
   onEdit?: () => void
   onDelete?: () => void
@@ -19,11 +20,12 @@ interface BusinessCardItemProps extends React.HTMLAttributes<HTMLDivElement> {
 
 function BusinessCardItem({
   name,
-  cardName,
+  company,
   department,
   position,
-  phone,
+  phone_number,
   email,
+  lined_number,
   onPress,
   onEdit,
   onDelete,
@@ -67,8 +69,8 @@ function BusinessCardItem({
       <div className="mb-4 flex items-start justify-between">
         <h3 className="text-foreground text-lg font-semibold">{name}</h3>
         <div className="flex items-center gap-2">
-          {cardName && (
-            <span className="text-muted-foreground text-sm">{cardName}</span>
+          {company && (
+            <span className="text-muted-foreground text-md">{company}</span>
           )}
           {hasMenu && (
             <DropdownMenu
@@ -98,8 +100,9 @@ function BusinessCardItem({
       </div>
 
       <div className="border-border space-y-0.5 border-t pt-3">
-        {phone && <p className="text-foreground text-sm">{phone}</p>}
+        {phone_number && <p className="text-foreground text-sm">{phone_number}</p>}
         {email && <p className="text-foreground text-sm">{email}</p>}
+        {lined_number && <p className="text-foreground text-sm">{lined_number}</p>}
       </div>
     </div>
   )
