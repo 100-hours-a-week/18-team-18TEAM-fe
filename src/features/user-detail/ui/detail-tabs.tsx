@@ -29,10 +29,7 @@ function DetailTabs({ activeTab, onTabChange, className }: DetailTabsProps) {
     <div
       data-slot="detail-tabs"
       role="tablist"
-      className={cn(
-        'scrollbar-hide border-border flex gap-1 overflow-x-auto border-b',
-        className
-      )}
+      className={cn('border-border flex border-b', className)}
     >
       {tabs.map((tab) => (
         <button
@@ -40,7 +37,7 @@ function DetailTabs({ activeTab, onTabChange, className }: DetailTabsProps) {
           type="button"
           onClick={() => onTabChange(tab.id)}
           className={cn(
-            '-mb-px border-b-2 px-4 py-2 text-sm font-medium whitespace-nowrap transition-colors',
+            '-mb-px flex-1 border-b-2 py-2 text-center text-sm font-medium transition-colors',
             activeTab === tab.id
               ? 'border-primary text-foreground'
               : 'text-muted-foreground hover:text-foreground border-transparent'

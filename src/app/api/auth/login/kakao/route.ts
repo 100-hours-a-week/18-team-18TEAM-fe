@@ -38,11 +38,14 @@ export async function POST(request: Request) {
 
   const cookieStore = await cookies()
   cookieStore.set('accessToken', data.access_token, {
-    httpOnly: true,
+    httpOnly: false, // 클라이언트 axios 인터셉터에서 읽어 Authorization 헤더로 전달
     secure: process.env.NODE_ENV === 'production',
     sameSite: 'lax',
     path: '/',
   })
 
-  return NextResponse.json({ success: true })
+  return NextResponse.json({
+    success: true,
+    accessToken: data.access_token,
+  })
 }

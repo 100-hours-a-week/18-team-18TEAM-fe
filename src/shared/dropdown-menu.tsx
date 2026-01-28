@@ -60,7 +60,7 @@ function DropdownMenu({
     ))
 
   return (
-    <ShadcnDropdownMenu>
+    <ShadcnDropdownMenu modal={false}>
       <DropdownMenuTrigger asChild>{trigger}</DropdownMenuTrigger>
       <DropdownMenuContent
         align={align}
