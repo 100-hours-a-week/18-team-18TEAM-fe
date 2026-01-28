@@ -21,7 +21,7 @@ function ProfileEditForm() {
     setValue,
     reset,
     watch,
-    formState: { errors, isSubmitting },
+    formState: { errors, isSubmitting, isDirty },
   } = useForm<ProfileFormData>({
     resolver: zodResolver(profileFormSchema),
     defaultValues: {
@@ -55,17 +55,22 @@ function ProfileEditForm() {
   }, [profileData, reset])
 
   const onSubmit = async (data: ProfileFormData) => {
+    if (!isDirty) {
+      toast.info('변경사항이 없습니다.')
+      return
+    }
+
     try {
       await updateProfile.mutateAsync(data)
-      toast.success('프로필이 저장되었습니다.')
+      toast.success('내 명함 정보가 업데이트되었습니다.')
       router.back()
     } catch {
-      toast.error('저장에 실패했습니다. 다시 시도해주세요.')
+      toast.error('정보 업데이트 중 오류가 발생했습니다.')
     }
   }
 
   const handleImageChange = (value: string | undefined) => {
-    setValue('profileImage', value || '')
+    setValue('profileImage', value || '', { shouldDirty: true })
   }
 
   if (isLoadingProfile) {
@@ -149,6 +154,7 @@ function ProfileEditForm() {
         type="submit"
         fullWidth
         loading={isSubmitting || updateProfile.isPending}
+        disabled={!isDirty || isSubmitting || updateProfile.isPending}
         className="mt-4"
       >
         저장
