@@ -10,7 +10,7 @@ import {
     FAB,
     FABMenu,
 } from '@/features/home/ui'
-
+import { useRouter } from 'next/navigation'
 // 더미 데이터 (퍼블리싱용)
 const MOCK_CARDS = [
     {
@@ -48,12 +48,13 @@ const MOCK_CARDS = [
 export default function HomePage() {
     const [fabOpen, setFabOpen] = React.useState(false)
     const cards = MOCK_CARDS // 나중에 API 연동, 여기를 비우면 빈 상태 UI 확인 가능
+    const router = useRouter()
 
     return (
         <div className="flex min-h-dvh flex-col">
             {/* 헤더 */}
             <header className="flex items-center justify-end px-6 py-2">
-                <MyCardButton />
+                <MyCardButton onClick={() => router.push('/my-card')} />
             </header>
 
             {/* 검색창 */}
