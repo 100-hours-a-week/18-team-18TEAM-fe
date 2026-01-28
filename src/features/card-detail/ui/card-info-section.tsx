@@ -32,41 +32,80 @@ function CardInfoSection({
       className={cn('space-y-4 p-4', className)}
       {...props}
     >
-      {info.phone && (
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <PhoneIcon className="text-muted-foreground size-5" />
-            <span className="text-foreground text-sm">{info.phone}</span>
-          </div>
-          <IconButton variant="ghost" size="sm" onClick={onPhoneClick}>
-            <PhoneIcon className="size-4" />
-          </IconButton>
+      {/* 휴대폰 - 항상 표시 */}
+      <div className="flex items-center justify-between">
+        <div className="flex flex-col gap-1">
+          <span className="text-muted-foreground shrink-0 text-sm font-medium">
+            휴대 전화
+          </span>
+          <span
+            className={cn(
+              'text-sm',
+              info.phone ? 'text-foreground' : 'text-[#757575]'
+            )}
+          >
+            {info.phone || '010-****-****'}
+          </span>
         </div>
-      )}
+        <IconButton
+          variant="ghost"
+          size="sm"
+          onClick={onPhoneClick}
+          disabled={!info.phone}
+        >
+          <PhoneIcon className="size-4" />
+        </IconButton>
+      </div>
 
-      {info.email && (
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <MailIcon className="text-muted-foreground size-5" />
-            <span className="text-foreground text-sm">{info.email}</span>
-          </div>
-          <IconButton variant="ghost" size="sm" onClick={onEmailClick}>
-            <MailIcon className="size-4" />
-          </IconButton>
+      {/* 이메일 - 항상 표시 */}
+      <div className="flex items-center justify-between">
+        <div className="flex flex-col gap-1">
+          <span className="text-muted-foreground shrink-0 text-sm font-medium">
+            이메일
+          </span>
+          <span
+            className={cn(
+              'text-sm',
+              info.email ? 'text-foreground' : 'text-[#757575]'
+            )}
+          >
+            {info.email || 'email@domain.com'}
+          </span>
         </div>
-      )}
+        <IconButton
+          variant="ghost"
+          size="sm"
+          onClick={onEmailClick}
+          disabled={!info.email}
+        >
+          <MailIcon className="size-4" />
+        </IconButton>
+      </div>
 
-      {info.tel && (
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <PhoneCallIcon className="text-muted-foreground size-5" />
-            <span className="text-foreground text-sm">{info.tel}</span>
-          </div>
-          <IconButton variant="ghost" size="sm" onClick={onTelClick}>
-            <PhoneCallIcon className="size-4" />
-          </IconButton>
+      {/* 유선전화 - 항상 표시 */}
+      <div className="flex items-center justify-between">
+        <div className="flex flex-col gap-1">
+          <span className="text-muted-foreground shrink-0 text-sm font-medium">
+            유선 전화
+          </span>
+          <span
+            className={cn(
+              'text-sm',
+              info.tel ? 'text-foreground' : 'text-[#757575]'
+            )}
+          >
+            {info.tel || '02-***-****'}
+          </span>
         </div>
-      )}
+        <IconButton
+          variant="ghost"
+          size="sm"
+          onClick={onTelClick}
+          disabled={!info.tel}
+        >
+          <PhoneCallIcon className="size-4" />
+        </IconButton>
+      </div>
     </div>
   )
 }

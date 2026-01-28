@@ -86,13 +86,15 @@ function Toaster() {
   return (
     <SonnerToaster
       position="top-center"
+      richColors
       toastOptions={{
         classNames: {
-          toast: 'bg-background border-border',
           title: 'text-foreground',
           description: 'text-muted-foreground',
           actionButton: 'bg-primary text-primary-foreground',
           cancelButton: 'bg-muted text-muted-foreground',
+          success: 'bg-green-500 text-white',
+          error: 'bg-red-500 text-white',
         },
       }}
     />

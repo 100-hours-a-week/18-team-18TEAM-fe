@@ -21,7 +21,7 @@ function BottomNav({ items, activeId, className, ...props }: BottomNavProps) {
     <nav
       data-slot="bottom-nav"
       className={cn(
-        'bg-background/60 border-border fixed right-0 bottom-0 left-0 z-50 flex h-[67px] items-center justify-center gap-12 border-t backdrop-blur-md',
+        'bg-background/60 border-border fixed bottom-0 left-1/2 z-50 flex h-[50px] w-full max-w-[430px] -translate-x-1/2 items-center justify-center gap-12 backdrop-blur-md',
         className
       )}
       {...props}

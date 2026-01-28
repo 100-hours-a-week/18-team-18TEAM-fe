@@ -38,11 +38,16 @@ export async function POST(request: Request) {
 
   const cookieStore = await cookies()
   cookieStore.set('accessToken', data.access_token, {
-    httpOnly: true,
+    httpOnly: false, // 클라이언트 axios 인터셉터에서 읽어 Authorization 헤더로 전달
     secure: process.env.NODE_ENV === 'production',
     sameSite: 'lax',
     path: '/',
+    // 액세스 토큰 유효기간(백엔드 30분)과 동일하게 세션을 끊어 만료된 토큰이 쿠키에 남지 않도록 한다
+    maxAge: 30 * 60,
   })
 
-  return NextResponse.json({ success: true })
+  return NextResponse.json({
+    success: true,
+    accessToken: data.access_token,
+  })
 }

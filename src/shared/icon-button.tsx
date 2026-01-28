@@ -11,7 +11,7 @@ const iconButtonVariants = cva(
     variants: {
       variant: {
         default: 'hover:bg-muted',
-        ghost: 'hover:bg-muted/50',
+        ghost: 'hover:bg-primary hover:text-primary-foreground',
         primary: 'bg-primary text-primary-foreground hover:bg-primary/90',
         surface: 'bg-surface text-surface-foreground hover:bg-surface/90',
       },

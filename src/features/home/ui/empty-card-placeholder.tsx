@@ -1,7 +1,7 @@
 'use client'
 
 import * as React from 'react'
-import { FolderOpenIcon } from 'lucide-react'
+import { QrCodeIcon, FolderOpenIcon } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import {
   Empty,
@@ -26,8 +26,8 @@ function EmptyCardPlaceholder({
   onCreate,
   onImport,
   onAdd,
-  title = '내 명함이 없습니다',
-  description = '새 명함을 만들거나 불러와 시작해 보세요.',
+  title = '보유한 명함이 없습니다',
+  description = '명함을 공유받고 명함 관리를 시작해 보세요.',
   className,
   ...props
 }: EmptyCardPlaceholderProps) {
@@ -58,7 +58,7 @@ function EmptyCardPlaceholder({
       <EmptyContent className="flex w-full flex-col gap-3 sm:flex-row sm:justify-center">
         {handleCreate && (
           <Button size="lg" className="w-full sm:w-auto" onClick={handleCreate}>
-            명함 만들기
+            종이 명함 추가하기
           </Button>
         )}
         {onImport && (
@@ -68,7 +68,8 @@ function EmptyCardPlaceholder({
             className="w-full sm:w-auto"
             onClick={onImport}
           >
-            명함 불러오기
+            <QrCodeIcon className="size-5" />
+            QR 코드 스캔
           </Button>
         )}
       </EmptyContent>
