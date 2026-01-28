@@ -35,7 +35,7 @@ function CardInfoSection({
       {/* 휴대폰 - 항상 표시 */}
       <div className="flex items-center justify-between">
         <div className="flex flex-col gap-1">
-          <span className="text-sm font-medium text-muted-foreground shrink-0">
+          <span className="text-muted-foreground shrink-0 text-sm font-medium">
             휴대 전화
           </span>
           <span
@@ -60,7 +60,7 @@ function CardInfoSection({
       {/* 이메일 - 항상 표시 */}
       <div className="flex items-center justify-between">
         <div className="flex flex-col gap-1">
-          <span className="text-sm font-medium text-muted-foreground shrink-0">
+          <span className="text-muted-foreground shrink-0 text-sm font-medium">
             이메일
           </span>
           <span
@@ -85,7 +85,7 @@ function CardInfoSection({
       {/* 유선전화 - 항상 표시 */}
       <div className="flex items-center justify-between">
         <div className="flex flex-col gap-1">
-          <span className="text-sm font-medium text-muted-foreground shrink-0">
+          <span className="text-muted-foreground shrink-0 text-sm font-medium">
             유선 전화
           </span>
           <span
@@ -106,7 +106,7 @@ function CardInfoSection({
           <PhoneCallIcon className="size-4" />
         </IconButton>
       </div>
-    </div >
+    </div>
   )
 }
 

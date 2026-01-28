@@ -1,11 +1,7 @@
 'use client'
 
 import * as React from 'react'
-import {
-  Drawer,
-  DrawerContent,
-  DrawerTitle,
-} from '@/components/ui/drawer'
+import { Drawer, DrawerContent, DrawerTitle } from '@/components/ui/drawer'
 import * as VisuallyHidden from '@radix-ui/react-visually-hidden'
 import type { ProfileData } from '@/shared'
 import { ProfileHeader } from './profile-header'

@@ -1,7 +1,4 @@
-export {
-  ProfileHeader,
-  type ProfileHeaderProps,
-} from './ui/profile-header'
+export { ProfileHeader, type ProfileHeaderProps } from './ui/profile-header'
 export {
   UserDetailDrawer,
   type UserDetailDrawerProps,
@@ -18,11 +15,7 @@ export {
   type CareerItem,
 } from './ui/career-list'
 export { SkillsList, type SkillsListProps } from './ui/skills-list'
-export {
-  LinksList,
-  type LinksListProps,
-  type LinkItem,
-} from './ui/links-list'
+export { LinksList, type LinksListProps, type LinkItem } from './ui/links-list'
 export {
   ProjectsList,
   type ProjectsListProps,

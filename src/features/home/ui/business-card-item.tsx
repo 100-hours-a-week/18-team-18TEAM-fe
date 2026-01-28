@@ -100,9 +100,13 @@ function BusinessCardItem({
       </div>
 
       <div className="border-border space-y-0.5 border-t pt-3">
-        {phone_number && <p className="text-foreground text-sm">{phone_number}</p>}
+        {phone_number && (
+          <p className="text-foreground text-sm">{phone_number}</p>
+        )}
         {email && <p className="text-foreground text-sm">{email}</p>}
-        {lined_number && <p className="text-foreground text-sm">{lined_number}</p>}
+        {lined_number && (
+          <p className="text-foreground text-sm">{lined_number}</p>
+        )}
       </div>
     </div>
   )

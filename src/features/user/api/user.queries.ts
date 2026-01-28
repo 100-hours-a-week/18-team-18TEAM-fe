@@ -43,7 +43,7 @@ export function useMyProfile() {
 
   const profileData = React.useMemo(
     () => (query.data ? toProfileData(query.data) : undefined),
-    [query.data],
+    [query.data]
   )
 
   return {

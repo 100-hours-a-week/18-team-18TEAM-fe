@@ -29,7 +29,7 @@ function GlassCardPreview({
     <div
       data-slot="glass-card-preview"
       className={cn(
-        'relative w-full h-[140px] rounded-[10px] bg-[#BFAE9F]/90 px-5 py-4 shadow-lg',
+        'relative h-[140px] w-full rounded-[10px] bg-[#BFAE9F]/90 px-5 py-4 shadow-lg',
         className
       )}
       {...props}
@@ -49,14 +49,7 @@ function GlassCardPreview({
 
       <div className="mt-2">
         {showDescription ? (
-          <div
-            className="max-h-[76px] overflow-y-auto pr-1
-              [&::-webkit-scrollbar]:w-1.5
-              [&::-webkit-scrollbar-track]:bg-transparent
-              [&::-webkit-scrollbar-thumb]:bg-black/20
-              [&::-webkit-scrollbar-thumb]:rounded-full
-              hover:[&::-webkit-scrollbar-thumb]:bg-black/30"
-          >
+          <div className="max-h-[76px] overflow-y-auto pr-1 [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-black/20 hover:[&::-webkit-scrollbar-thumb]:bg-black/30 [&::-webkit-scrollbar-track]:bg-transparent">
             <p className="font-inter text-[18px] leading-snug font-normal whitespace-pre-line text-black">
               {descriptionText}
             </p>

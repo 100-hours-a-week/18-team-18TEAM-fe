@@ -1,4 +1,1 @@
-export {
-  profileFormSchema,
-  type ProfileFormData,
-} from './profile-form.schema'
+export { profileFormSchema, type ProfileFormData } from './profile-form.schema'

@@ -2,7 +2,13 @@
 
 import * as React from 'react'
 import { useRouter } from 'next/navigation'
-import { SettingsIcon, EditIcon, UserIcon, HexagonIcon, StarIcon } from 'lucide-react'
+import {
+  SettingsIcon,
+  EditIcon,
+  UserIcon,
+  HexagonIcon,
+  StarIcon,
+} from 'lucide-react'
 import {
   Header,
   BottomNav,
@@ -99,7 +105,9 @@ const MOCK_ACTIVITIES_DATA: ActivityItem[] = [
 function MyCardPage() {
   const router = useRouter()
   const [isFlip, setIsFlip] = React.useState(false)
-  const [activeTab, setActiveTab] = React.useState<NavTab | undefined>(undefined)
+  const [activeTab, setActiveTab] = React.useState<NavTab | undefined>(
+    undefined
+  )
 
   // 내 정보 조회
   const { data: profileData, userInfo, isLoading, isError } = useMyProfile()
@@ -368,9 +376,7 @@ function MyCardPage() {
       {/* 삭제 확인 모달 */}
       <AlertDialog
         open={deleteDialog.open}
-        onOpenChange={(open) =>
-          setDeleteDialog((prev) => ({ ...prev, open }))
-        }
+        onOpenChange={(open) => setDeleteDialog((prev) => ({ ...prev, open }))}
         title={getDeleteDialogTitle()}
         type="destructive"
         confirmText="삭제"

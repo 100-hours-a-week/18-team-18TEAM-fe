@@ -21,7 +21,10 @@ function ProfileHeader({
   return (
     <div
       data-slot="profile-header"
-      className={cn('bg-muted/50 relative w-full rounded-[10px] p-6', className)}
+      className={cn(
+        'bg-muted/50 relative w-full rounded-[10px] p-6',
+        className
+      )}
       {...props}
     >
       {isOwner && onEditClick && (

@@ -19,9 +19,9 @@ function toast(message: string, options?: ToastOptions) {
     duration: options?.duration ?? 3000,
     action: options?.action
       ? {
-        label: options.action.label,
-        onClick: options.action.onClick,
-      }
+          label: options.action.label,
+          onClick: options.action.onClick,
+        }
       : undefined,
   })
 }
@@ -32,9 +32,9 @@ toast.success = (message: string, options?: ToastOptions) => {
     duration: options?.duration ?? 3000,
     action: options?.action
       ? {
-        label: options.action.label,
-        onClick: options.action.onClick,
-      }
+          label: options.action.label,
+          onClick: options.action.onClick,
+        }
       : undefined,
   })
 }
@@ -45,9 +45,9 @@ toast.error = (message: string, options?: ToastOptions) => {
     duration: options?.duration ?? 4000,
     action: options?.action
       ? {
-        label: options.action.label,
-        onClick: options.action.onClick,
-      }
+          label: options.action.label,
+          onClick: options.action.onClick,
+        }
       : undefined,
   })
 }
@@ -58,9 +58,9 @@ toast.info = (message: string, options?: ToastOptions) => {
     duration: options?.duration ?? 3000,
     action: options?.action
       ? {
-        label: options.action.label,
-        onClick: options.action.onClick,
-      }
+          label: options.action.label,
+          onClick: options.action.onClick,
+        }
       : undefined,
   })
 }
@@ -71,9 +71,9 @@ toast.warning = (message: string, options?: ToastOptions) => {
     duration: options?.duration ?? 3500,
     action: options?.action
       ? {
-        label: options.action.label,
-        onClick: options.action.onClick,
-      }
+          label: options.action.label,
+          onClick: options.action.onClick,
+        }
       : undefined,
   })
 }
