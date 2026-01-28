@@ -63,17 +63,20 @@ function GlassCardPreview({
           </div>
         ) : (
           <div className="flex flex-col gap-0.5">
-            {displayData.company && (
-              <p className="font-inter text-[18px] font-normal text-black">
-                {displayData.company}
-              </p>
-            )}
-            {displayData.department && (
-              <p className="font-inter text-[18px] font-normal text-black">
-                {displayData.department}
-                {displayData.position && ` / ${displayData.position}`}
-              </p>
-            )}
+            <p className="font-inter text-[18px] font-normal text-black">
+              {displayData.company || (
+                <span style={{ color: '#757575' }}>회사명</span>
+              )}
+            </p>
+            <p className="font-inter text-[18px] font-normal text-black">
+              {displayData.department || (
+                <span style={{ color: '#757575' }}>부서</span>
+              )}
+              {' / '}
+              {displayData.position || (
+                <span style={{ color: '#757575' }}>직책</span>
+              )}
+            </p>
           </div>
         )}
       </div>

@@ -123,7 +123,7 @@ function MyCardPage() {
     },
     {
       id: 'edit-card',
-      label: '명함 수정하기',
+      label: '프로필 수정하기',
       icon: <EditIcon className="size-4" />,
       onClick: () => router.push('/my-card/edit'),
     },

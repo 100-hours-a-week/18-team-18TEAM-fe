@@ -19,6 +19,7 @@ function ProfileEditForm() {
     register,
     handleSubmit,
     setValue,
+    reset,
     watch,
     formState: { errors, isSubmitting },
   } = useForm<ProfileFormData>({
@@ -37,19 +38,21 @@ function ProfileEditForm() {
 
   const profileImage = watch('profileImage')
 
-  // 프로필 데이터 로드 시 폼에 채워넣기
+  // 프로필 데이터 로드 시 폼에 한 번에 채워넣기
   React.useEffect(() => {
     if (profileData) {
-      setValue('profileImage', profileData.avatarSrc || '')
-      setValue('name', profileData.name || '')
-      setValue('company', profileData.company || '')
-      setValue('department', profileData.department || '')
-      setValue('position', profileData.position || '')
-      setValue('phone', profileData.phone || '')
-      setValue('email', profileData.email || '')
-      setValue('tel', profileData.tel || '')
+      reset({
+        profileImage: profileData.avatarSrc || '',
+        name: profileData.name || '',
+        company: profileData.company || '',
+        department: profileData.department || '',
+        position: profileData.position || '',
+        phone: profileData.phone || '',
+        email: profileData.email || '',
+        tel: profileData.tel || '',
+      })
     }
-  }, [profileData, setValue])
+  }, [profileData, reset])
 
   const onSubmit = async (data: ProfileFormData) => {
     try {
