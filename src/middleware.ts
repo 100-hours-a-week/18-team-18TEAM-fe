@@ -5,9 +5,9 @@ const PUBLIC_ROUTES = ['/login', '/kakao/callback']
 
 export function middleware(request: NextRequest) {
   // 개발 환경에서는 인증 체크 스킵 (로그인 테스트 시 주석 처리)
-  if (process.env.NODE_ENV === 'development') {
-    return NextResponse.next()
-  }
+  // if (process.env.NODE_ENV === 'development') {
+  //   return NextResponse.next()
+  // }
 
   const { pathname } = request.nextUrl
   const accessToken = request.cookies.get('accessToken')?.value

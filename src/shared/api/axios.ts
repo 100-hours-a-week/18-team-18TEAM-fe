@@ -33,3 +33,22 @@ apiClient.interceptors.request.use(
     return Promise.reject(error)
   }
 )
+
+// 401 응답 시 만료된 토큰을 쿠키에서 제거하고 로그인 페이지로 돌려보낸다
+apiClient.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    const status = error?.response?.status
+
+    if (typeof document !== 'undefined' && status === 401) {
+      // 쿠키 제거
+      document.cookie = 'accessToken=; path=/; max-age=0'
+      // 세션 상태 동기화
+      if (typeof window !== 'undefined') {
+        window.location.href = '/login'
+      }
+    }
+
+    return Promise.reject(error)
+  }
+)

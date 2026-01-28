@@ -42,6 +42,8 @@ export async function POST(request: Request) {
     secure: process.env.NODE_ENV === 'production',
     sameSite: 'lax',
     path: '/',
+    // 액세스 토큰 유효기간(백엔드 30분)과 동일하게 세션을 끊어 만료된 토큰이 쿠키에 남지 않도록 한다
+    maxAge: 30 * 60,
   })
 
   return NextResponse.json({

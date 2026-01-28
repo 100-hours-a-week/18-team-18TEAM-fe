@@ -1,5 +1,8 @@
+import { redirect } from 'next/navigation'
+
 export default function Page() {
-  return <div>안녕</div>
+  // 루트 진입 시 홈 화면으로 넘긴다 (미들웨어가 토큰 없을 때는 /login으로 보냄)
+  redirect('/home')
 }
 // "use client"
 
