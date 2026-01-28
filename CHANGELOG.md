@@ -1,3 +1,24 @@
+## [1.0.0-dev.15](https://github.com/100-hours-a-week/18-team-18TEAM-fe/compare/v1.0.0-dev.14...v1.0.0-dev.15) (2026-01-28)
+
+### Features
+
+* 내 명함 상세 정보 페이지 퍼블리싱 ([ebf7566](https://github.com/100-hours-a-week/18-team-18TEAM-fe/commit/ebf7566c445697a1fef208c730c2785ff2ddb51d))
+* 내 명함 페이지 연결 ([52a376d](https://github.com/100-hours-a-week/18-team-18TEAM-fe/commit/52a376d71936baedc9246a5a88db438088bd90ba))
+* 내 명함 페이지 퍼블리싱 ([c354820](https://github.com/100-hours-a-week/18-team-18TEAM-fe/commit/c3548206560d8bfdabf4c50cf693b5708cf78f84))
+* 리프레시 토큰 미구현으로 임시 로그인 방식 구현 ([f6eb8aa](https://github.com/100-hours-a-week/18-team-18TEAM-fe/commit/f6eb8aabf15af212d9d8be5984b4dfcd86e17e0f))
+* 명함 정보 표시 개선 ([3cb849a](https://github.com/100-hours-a-week/18-team-18TEAM-fe/commit/3cb849a7e7a1c037b605bb3146dc908f1a5fae20))
+* 사용자 정보 조회 API 및 쿼리 훅 추가 ([cacea56](https://github.com/100-hours-a-week/18-team-18TEAM-fe/commit/cacea56e20632e12cd4d01e77926c3421b3e9240))
+* 프로필 수정 기능 화면 구현 API 연동 ([21a2198](https://github.com/100-hours-a-week/18-team-18TEAM-fe/commit/21a21989fe43ca7dfbdfe92c7648cf3d8a27c550))
+* 프로필 수정 시 변경사항 확인 및 알림 추가 ([85d6740](https://github.com/100-hours-a-week/18-team-18TEAM-fe/commit/85d67406d123077e650ce688687e577208b65a20))
+* 홈 페이지 화면 퍼블리싱 및 명함 상세 페이지 구조 문서 추가 ([e80679c](https://github.com/100-hours-a-week/18-team-18TEAM-fe/commit/e80679c3301def474edb31560d02772d382d42bd))
+* 홈 화면 퍼블리싱 Merge ([5f76a2d](https://github.com/100-hours-a-week/18-team-18TEAM-fe/commit/5f76a2dfc42efc0924c933aadf2547ec24ef4afd))
+
+### Bug Fixes
+
+* FAB 버튼 위치 조정 ([9628d37](https://github.com/100-hours-a-week/18-team-18TEAM-fe/commit/9628d3708e9a16197721d9c1ddb65ce34713f48d))
+* 로그인 및 로그아웃 accessToken 처리방식 수정 ([618cb2d](https://github.com/100-hours-a-week/18-team-18TEAM-fe/commit/618cb2d49f422927281b27db980ed53e681e61f5))
+* 프로필 업데이트 요청 타입의 필드에 null 허용 ([fbca6c5](https://github.com/100-hours-a-week/18-team-18TEAM-fe/commit/fbca6c520de4c95e4ca8bb36925808a1929a7694))
+
 ## [1.0.0-dev.14](https://github.com/100-hours-a-week/18-team-18TEAM-fe/compare/v1.0.0-dev.13...v1.0.0-dev.14) (2026-01-25)
 
 ### Features
