@@ -52,6 +52,11 @@ jobs:
           ${{ secrets.FE_ENV_DEV }}
           EOF
 
+      - name: Verify env keys (masked)
+        run: |
+          test -s .env || (echo ".env empty" && exit 1)
+          awk -F= '{print $1"=***"}' .env | head -n 80
+          
       - name: Build
         run: pnpm build
       

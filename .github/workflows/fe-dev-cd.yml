@@ -41,6 +41,13 @@ jobs:
       - name: Install Dependencies
         run: pnpm install --frozen-lockfile --prefer-offline
 
+      - name: Create .env
+        run: |
+          cat << 'EOF' > .env
+          ${{ secrets.FE_ENV_DEV }}
+          EOF
+
+
       - name: Build
         run: pnpm build
     
