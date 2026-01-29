@@ -50,6 +50,14 @@ export default function HomePage() {
   const cards = MOCK_CARDS // 나중에 API 연동, 여기를 비우면 빈 상태 UI 확인 가능
   const router = useRouter()
 
+  const handleShareCard = () => {
+    router.push('/share')
+  }
+
+  const handleScanQR = () => {
+    router.push('/scan')
+  }
+
   return (
     <div className="flex min-h-dvh flex-col">
       {/* 헤더 */}
@@ -88,7 +96,12 @@ export default function HomePage() {
 
       {/* FAB */}
       <FAB open={fabOpen} onClick={() => setFabOpen(!fabOpen)} />
-      <FABMenu open={fabOpen} onClose={() => setFabOpen(false)} />
+      <FABMenu
+        open={fabOpen}
+        onClose={() => setFabOpen(false)}
+        onShareCard={handleShareCard}
+        onScanQR={handleScanQR}
+      />
     </div>
   )
 }
