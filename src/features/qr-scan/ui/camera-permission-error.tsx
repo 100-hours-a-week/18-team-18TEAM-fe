@@ -31,9 +31,9 @@ function CameraPermissionError({ onGoBack }: CameraPermissionErrorProps) {
       <main className="flex flex-1 flex-col items-center px-6 pt-12">
         {/* 아이콘 및 제목 */}
         <div className="flex flex-col items-center gap-3">
-          <div className="flex size-16 items-center justify-center rounded-full bg-destructive/10">
+          <div className="bg-destructive/10 flex size-16 items-center justify-center rounded-full">
             <CameraOffIcon
-              className="size-8 text-destructive"
+              className="text-destructive size-8"
               strokeWidth={1.5}
             />
           </div>
@@ -51,7 +51,7 @@ function CameraPermissionError({ onGoBack }: CameraPermissionErrorProps) {
         <Card variant="outline" className="mt-8 w-full max-w-[328px]">
           <CardContent className="p-4">
             <div className="flex items-center gap-2">
-              <SettingsIcon className="size-5 text-accent" strokeWidth={1.5} />
+              <SettingsIcon className="text-accent size-5" strokeWidth={1.5} />
               <h2 className="text-foreground text-base font-medium">
                 권한 설정 방법
               </h2>

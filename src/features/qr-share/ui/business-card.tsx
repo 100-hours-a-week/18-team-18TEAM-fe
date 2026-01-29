@@ -20,7 +20,7 @@ function BusinessCard({ data, className, ...props }: BusinessCardProps) {
     >
       {/* 왼쪽 상단: 이름, 회사, 부서/직책 */}
       <div className="flex flex-col gap-[5px] text-white">
-        <h3 className="font-pretendard text-[20px] font-semibold leading-[22px] tracking-[-0.4px]">
+        <h3 className="font-pretendard text-[20px] leading-[22px] font-semibold tracking-[-0.4px]">
           {data.name}
         </h3>
         <div className="flex flex-col text-[15px] leading-[22px] tracking-[-0.3px]">

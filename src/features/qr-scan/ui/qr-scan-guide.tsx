@@ -87,15 +87,11 @@ function QrScanGuide({ onScanSuccess }: QrScanGuideProps) {
       setIsScanning(true)
       setStatus('scanning')
 
-      const scanner = new QrScanner(
-        videoRef.current,
-        handleScanResult,
-        {
-          returnDetailedScanResult: true,
-          highlightScanRegion: true,
-          highlightCodeOutline: true,
-        }
-      )
+      const scanner = new QrScanner(videoRef.current, handleScanResult, {
+        returnDetailedScanResult: true,
+        highlightScanRegion: true,
+        highlightCodeOutline: true,
+      })
 
       scannerRef.current = scanner
       await scanner.start()
@@ -160,7 +156,7 @@ function QrScanGuide({ onScanSuccess }: QrScanGuideProps) {
             {/* 카메라 아이콘 및 안내 문구 */}
             <div className="flex flex-col items-center gap-1">
               <CameraIcon className="text-foreground size-12" strokeWidth={1} />
-              <h1 className="text-foreground mt-2 text-center text-[28px] font-normal leading-[40px] tracking-[-0.56px]">
+              <h1 className="text-foreground mt-2 text-center text-[28px] leading-[40px] font-normal tracking-[-0.56px]">
                 QR 코드를 스캔하기 위해
                 <br />
                 카메라 접근 권한이 필요해요
@@ -169,7 +165,7 @@ function QrScanGuide({ onScanSuccess }: QrScanGuideProps) {
 
             {/* 촬영 팁 */}
             <div className="mt-10 w-full max-w-[328px] rounded-[10px] bg-[#D9D9D9] px-6 py-4">
-              <h2 className="text-foreground text-[24px] font-normal leading-[40px]">
+              <h2 className="text-foreground text-[24px] leading-[40px] font-normal">
                 촬영 팁
               </h2>
               <ul className="text-foreground mt-2 list-disc space-y-1 pl-5 text-[16px] leading-[40px]">

@@ -141,8 +141,8 @@ function QrScanPage() {
 
         <main className="flex flex-1 flex-col items-center justify-center px-6">
           <div className="flex flex-col items-center gap-4">
-            <div className="flex size-16 items-center justify-center rounded-full bg-accent/10">
-              <CameraIcon className="size-8 text-accent" strokeWidth={1.5} />
+            <div className="bg-accent/10 flex size-16 items-center justify-center rounded-full">
+              <CameraIcon className="text-accent size-8" strokeWidth={1.5} />
             </div>
             <p className="text-muted-foreground text-center text-base">
               카메라 권한을 확인하고 있습니다...
@@ -170,12 +170,12 @@ function QrScanPage() {
             <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
               <div className="relative size-48 rounded-lg">
                 {/* 코너 강조 */}
-                <div className="absolute -left-0.5 -top-0.5 size-4 border-l-4 border-t-4 border-primary rounded-tl" />
-                <div className="absolute -right-0.5 -top-0.5 size-4 border-r-4 border-t-4 border-primary rounded-tr" />
-                <div className="absolute -bottom-0.5 -left-0.5 size-4 border-b-4 border-l-4 border-primary rounded-bl" />
-                <div className="absolute -bottom-0.5 -right-0.5 size-4 border-b-4 border-r-4 border-primary rounded-br" />
+                <div className="border-primary absolute -top-0.5 -left-0.5 size-4 rounded-tl border-t-4 border-l-4" />
+                <div className="border-primary absolute -top-0.5 -right-0.5 size-4 rounded-tr border-t-4 border-r-4" />
+                <div className="border-primary absolute -bottom-0.5 -left-0.5 size-4 rounded-bl border-b-4 border-l-4" />
+                <div className="border-primary absolute -right-0.5 -bottom-0.5 size-4 rounded-br border-r-4 border-b-4" />
                 {/* 스캔 라인 애니메이션 */}
-                <div className="animate-scan-line absolute left-2 right-2 h-0.5 bg-destructive" />
+                <div className="animate-scan-line bg-destructive absolute right-2 left-2 h-0.5" />
               </div>
             </div>
           </div>
@@ -207,8 +207,8 @@ function QrScanPage() {
       <main className="flex flex-1 flex-col items-center px-6 pt-24">
         {/* 아이콘 및 제목 */}
         <div className="flex flex-col items-center gap-3">
-          <div className="flex size-16 items-center justify-center rounded-full bg-accent/10">
-            <ScanIcon className="size-8 text-accent" strokeWidth={1.5} />
+          <div className="bg-accent/10 flex size-16 items-center justify-center rounded-full">
+            <ScanIcon className="text-accent size-8" strokeWidth={1.5} />
           </div>
           <h1 className="text-foreground text-center text-2xl font-semibold">
             QR 코드 스캔
@@ -224,10 +224,8 @@ function QrScanPage() {
         <Card variant="outline" className="mt-8 w-full max-w-[328px]">
           <CardContent className="p-4">
             <div className="flex items-center gap-2">
-              <LightbulbIcon className="size-5 text-accent" strokeWidth={1.5} />
-              <h2 className="text-foreground text-base font-medium">
-                촬영 팁
-              </h2>
+              <LightbulbIcon className="text-accent size-5" strokeWidth={1.5} />
+              <h2 className="text-foreground text-base font-medium">촬영 팁</h2>
             </div>
             <ul className="text-muted-foreground mt-3 space-y-2 text-sm">
               <li className="flex items-start gap-2">

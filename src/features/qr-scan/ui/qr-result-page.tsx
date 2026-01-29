@@ -14,7 +14,7 @@ function ScannedBusinessCard({ data }: { data: ScannedCardData }) {
     <div className="relative h-[200px] w-full max-w-[366px] rounded-[10px] bg-[#022840] px-6 py-7 shadow-[0px_4px_4px_0px_rgba(0,0,0,0.25)]">
       {/* 왼쪽 상단: 이름, 회사, 부서/직책 */}
       <div className="flex flex-col gap-[5px] text-white">
-        <h3 className="font-pretendard text-[20px] font-semibold leading-[22px] tracking-[-0.4px]">
+        <h3 className="font-pretendard text-[20px] leading-[22px] font-semibold tracking-[-0.4px]">
           {data.name}
         </h3>
         <div className="flex flex-col text-[15px] leading-[22px] tracking-[-0.3px]">
