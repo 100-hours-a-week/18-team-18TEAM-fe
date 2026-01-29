@@ -2,10 +2,9 @@
 
 import * as React from 'react'
 import { useRouter } from 'next/navigation'
-import { CameraIcon } from 'lucide-react'
+import { CameraIcon, ScanIcon, LightbulbIcon } from 'lucide-react'
 import QrScanner from 'qr-scanner'
-import { cn } from '@/lib/utils'
-import { Header, Button } from '@/shared'
+import { Header, Button, Card, CardContent } from '@/shared'
 import { CameraPermissionError } from './camera-permission-error'
 import { QrScanFailure } from './qr-scan-failure'
 import type { QrScanStatus } from '../model'
@@ -36,7 +35,6 @@ function QrScanPage() {
 
   const handleScanResult = React.useCallback(
     (result: QrScanner.ScanResult) => {
-      // 스캐너 정리
       if (scannerRef.current) {
         scannerRef.current.stop()
         scannerRef.current.destroy()
@@ -44,7 +42,6 @@ function QrScanPage() {
       }
       setIsScanning(false)
 
-      // QR 코드에서 uuid 추출 (URL 형식: .../result?uuid=xxx)
       const url = result.data
       let uuid: string | null = null
 
@@ -52,7 +49,6 @@ function QrScanPage() {
         const urlObj = new URL(url)
         uuid = urlObj.searchParams.get('uuid')
       } catch {
-        // URL이 아닌 경우 직접 uuid로 사용
         uuid = url
       }
 
@@ -61,21 +57,19 @@ function QrScanPage() {
         return
       }
 
-      // result 페이지로 이동
       router.push(`/result?uuid=${uuid}`)
     },
     [router]
   )
 
-  // 스캐너 초기화 (isScanning 상태 변경 후 실행)
   const initScanner = React.useCallback(async () => {
     if (!videoRef.current || scannerRef.current) return
 
     try {
       const scanner = new QrScanner(videoRef.current, handleScanResult, {
         returnDetailedScanResult: true,
-        highlightScanRegion: true,
-        highlightCodeOutline: true,
+        highlightScanRegion: false,
+        highlightCodeOutline: false,
       })
 
       scannerRef.current = scanner
@@ -87,17 +81,16 @@ function QrScanPage() {
     }
   }, [handleScanResult])
 
-  // UI 상태만 변경 (실제 스캐너 초기화는 useEffect에서)
   const startScanner = async () => {
     try {
-      // 카메라 권한 확인
+      setStatus('requesting')
+
       const hasCamera = await QrScanner.hasCamera()
       if (!hasCamera) {
         setStatus('permission-denied')
         return
       }
 
-      // 상태만 변경 - 실제 스캐너 초기화는 useEffect에서 처리
       setIsScanning(true)
       setStatus('scanning')
     } catch (error) {
@@ -114,14 +107,12 @@ function QrScanPage() {
     setStatus('idle')
   }
 
-  // isScanning 상태가 true로 변경되면 스캐너 초기화
   React.useEffect(() => {
     if (isScanning && videoRef.current && !scannerRef.current) {
       initScanner()
     }
   }, [isScanning, initScanner])
 
-  // 컴포넌트 언마운트 시 스캐너 정리
   React.useEffect(() => {
     return () => {
       stopScanner()
@@ -142,78 +133,142 @@ function QrScanPage() {
     return null
   }
 
+  // 권한 요청 중 화면
+  if (status === 'requesting') {
+    return (
+      <div className="bg-background flex min-h-screen flex-col">
+        <Header showClose onClose={handleClose} />
+
+        <main className="flex flex-1 flex-col items-center justify-center px-6">
+          <div className="flex flex-col items-center gap-4">
+            <div className="flex size-16 items-center justify-center rounded-full bg-accent/10">
+              <CameraIcon className="size-8 text-accent" strokeWidth={1.5} />
+            </div>
+            <p className="text-muted-foreground text-center text-base">
+              카메라 권한을 확인하고 있습니다...
+            </p>
+          </div>
+        </main>
+      </div>
+    )
+  }
+
+  // 스캐닝 화면
+  if (isScanning) {
+    return (
+      <div className="bg-background flex min-h-screen flex-col">
+        <Header showClose onClose={handleClose} />
+
+        <main className="flex flex-1 flex-col items-center px-6 pt-8">
+          {/* 카메라 뷰 */}
+          <div className="relative w-full max-w-[328px]">
+            <video
+              ref={videoRef}
+              className="aspect-square w-full rounded-xl bg-black object-cover"
+            />
+            {/* 스캔 프레임 오버레이 */}
+            <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
+              <div className="relative size-48 rounded-lg">
+                {/* 코너 강조 */}
+                <div className="absolute -left-0.5 -top-0.5 size-4 border-l-4 border-t-4 border-primary rounded-tl" />
+                <div className="absolute -right-0.5 -top-0.5 size-4 border-r-4 border-t-4 border-primary rounded-tr" />
+                <div className="absolute -bottom-0.5 -left-0.5 size-4 border-b-4 border-l-4 border-primary rounded-bl" />
+                <div className="absolute -bottom-0.5 -right-0.5 size-4 border-b-4 border-r-4 border-primary rounded-br" />
+                {/* 스캔 라인 애니메이션 */}
+                <div className="animate-scan-line absolute left-2 right-2 h-0.5 bg-destructive" />
+              </div>
+            </div>
+          </div>
+
+          {/* 안내 텍스트 */}
+          <p className="text-muted-foreground mt-6 text-center text-sm">
+            QR 코드를 프레임 안에 맞춰주세요
+          </p>
+
+          {/* 스캔 취소 버튼 */}
+          <Button
+            variant="outline"
+            fullWidth
+            className="mt-8 max-w-[328px]"
+            onClick={stopScanner}
+          >
+            스캔 취소
+          </Button>
+        </main>
+      </div>
+    )
+  }
+
+  // 초기 화면 (idle)
   return (
-    <div className="bg-background min-h-screen">
+    <div className="bg-background flex min-h-screen flex-col">
       <Header showClose onClose={handleClose} />
 
-      <main className="flex flex-col items-center px-8 pt-[95px]">
-        {/* 단일 비디오 엘리먼트 - 항상 DOM에 유지, 스타일만 조건부 변경 */}
-        <video
-          ref={videoRef}
-          className={cn(
-            'aspect-square w-full max-w-[328px] rounded-[10px] bg-black object-cover',
-            !isScanning && 'sr-only'
-          )}
-        />
-
-        {/* 스캐닝 중일 때 UI */}
-        {isScanning ? (
-          <div className="flex w-full flex-col items-center gap-6">
-            <p className="text-muted-foreground text-center text-sm">
-              QR 코드를 카메라에 비춰주세요
-            </p>
-            <Button
-              variant="secondary"
-              fullWidth
-              className="max-w-[328px]"
-              onClick={stopScanner}
-            >
-              스캔 취소
-            </Button>
+      <main className="flex flex-1 flex-col items-center px-6 pt-12">
+        {/* 아이콘 및 제목 */}
+        <div className="flex flex-col items-center gap-3">
+          <div className="flex size-16 items-center justify-center rounded-full bg-accent/10">
+            <ScanIcon className="size-8 text-accent" strokeWidth={1.5} />
           </div>
-        ) : (
-          <>
-            {/* 카메라 아이콘 및 안내 문구 */}
-            <div className="flex flex-col items-center gap-1">
-              <CameraIcon className="text-foreground size-12" strokeWidth={1} />
-              <h1 className="text-foreground mt-2 text-center text-[28px] font-normal leading-[40px] tracking-[-0.56px]">
-                QR 코드를 스캔하기 위해
-                <br />
-                카메라 접근 권한이 필요해요
-              </h1>
-            </div>
+          <h1 className="text-foreground text-center text-2xl font-semibold">
+            QR 코드 스캔
+          </h1>
+          <p className="text-muted-foreground text-center text-sm">
+            명함의 QR 코드를 스캔하여
+            <br />
+            연락처를 저장하세요
+          </p>
+        </div>
 
-            {/* 촬영 팁 */}
-            <div className="mt-10 w-full max-w-[328px] rounded-[10px] bg-[#D9D9D9] px-6 py-4">
-              <h2 className="text-foreground text-[24px] font-normal leading-[40px]">
+        {/* 촬영 팁 카드 */}
+        <Card variant="outline" className="mt-8 w-full max-w-[328px]">
+          <CardContent className="p-4">
+            <div className="flex items-center gap-2">
+              <LightbulbIcon className="size-5 text-accent" strokeWidth={1.5} />
+              <h2 className="text-foreground text-base font-medium">
                 촬영 팁
               </h2>
-              <ul className="text-foreground mt-2 list-disc space-y-1 pl-5 text-[16px] leading-[40px]">
-                <li>밝은 곳에서 스캔해 주세요</li>
-                <li>
-                  빛 반사에 주의해 주세요
-                  <br />
-                  <span className="text-[12px] leading-[21px] text-[#666]">
-                    tip. 각도를 살짝 조절해 보세요
-                  </span>
-                </li>
-                <li>20~30cm 정도 거리를 유지해 주세요</li>
-                <li>렌즈를 깨끗이 닦아주세요</li>
-              </ul>
             </div>
+            <ul className="text-muted-foreground mt-3 space-y-2 text-sm">
+              <li className="flex items-start gap-2">
+                <span className="text-accent mt-1">•</span>
+                <span>밝은 곳에서 스캔해 주세요</span>
+              </li>
+              <li className="flex items-start gap-2">
+                <span className="text-accent mt-1">•</span>
+                <span>
+                  빛 반사에 주의해 주세요
+                  <span className="text-muted-foreground/70 ml-1 text-xs">
+                    (각도를 살짝 조절해 보세요)
+                  </span>
+                </span>
+              </li>
+              <li className="flex items-start gap-2">
+                <span className="text-accent mt-1">•</span>
+                <span>20~30cm 정도 거리를 유지해 주세요</span>
+              </li>
+              <li className="flex items-start gap-2">
+                <span className="text-accent mt-1">•</span>
+                <span>렌즈를 깨끗이 닦아주세요</span>
+              </li>
+            </ul>
+          </CardContent>
+        </Card>
 
-            {/* QR코드 인식 버튼 */}
-            <Button
-              variant="secondary"
-              fullWidth
-              className="mt-10 h-16 max-w-[328px] bg-[#D9D9D9] text-[36px] font-normal tracking-[-0.72px]"
-              onClick={startScanner}
-            >
-              QR코드 인식
-            </Button>
-          </>
-        )}
+        {/* CTA 버튼 */}
+        <Button
+          variant="primary"
+          fullWidth
+          className="mt-8 max-w-[328px]"
+          onClick={startScanner}
+        >
+          <CameraIcon className="mr-2 size-5" strokeWidth={1.5} />
+          QR코드 스캔 시작
+        </Button>
       </main>
+
+      {/* 숨겨진 비디오 엘리먼트 (DOM에 유지) */}
+      <video ref={videoRef} className="sr-only" />
     </div>
   )
 }

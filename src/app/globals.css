@@ -183,3 +183,22 @@
     @apply bg-background text-foreground;
   }
 }
+
+/* QR Scan Line Animation */
+@keyframes scan-line {
+  0% {
+    top: 0.5rem;
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+  100% {
+    top: calc(100% - 0.5rem);
+    opacity: 1;
+  }
+}
+
+.animate-scan-line {
+  animation: scan-line 2s ease-in-out infinite alternate;
+}

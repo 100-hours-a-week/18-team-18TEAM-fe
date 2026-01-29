@@ -31,6 +31,7 @@ export interface ScannedCardData {
 /** QR 스캔 상태 */
 export type QrScanStatus =
   | 'idle'
+  | 'requesting'
   | 'scanning'
   | 'success'
   | 'failure'
