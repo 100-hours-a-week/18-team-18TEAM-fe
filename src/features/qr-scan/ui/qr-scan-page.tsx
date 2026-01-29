@@ -204,7 +204,7 @@ function QrScanPage() {
     <div className="bg-background flex min-h-screen flex-col">
       <Header showClose onClose={handleClose} />
 
-      <main className="flex flex-1 flex-col items-center px-6 pt-12">
+      <main className="flex flex-1 flex-col items-center px-6 pt-24">
         {/* 아이콘 및 제목 */}
         <div className="flex flex-col items-center gap-3">
           <div className="flex size-16 items-center justify-center rounded-full bg-accent/10">
