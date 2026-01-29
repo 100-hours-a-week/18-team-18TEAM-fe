@@ -1,8 +1,9 @@
+import { redirect } from 'next/navigation';
 import { cookies } from 'next/headers'
 import { NextResponse } from 'next/server'
 
 export async function POST(request: Request) {
-  const { code } = await request.json()
+  const { code, redirectUri } = await request.json()
 
   // [DEBUG] 백엔드 요청 정보 로그
   console.log('=== Kakao Login Debug ===')
@@ -17,7 +18,7 @@ export async function POST(request: Request) {
     {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ code }),
+      body: JSON.stringify({ code, redirectUri }),
     }
   )
 

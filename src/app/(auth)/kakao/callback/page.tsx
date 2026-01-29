@@ -12,6 +12,7 @@ function KakaoCallbackContent() {
 
   React.useEffect(() => {
     const code = searchParams.get('code')
+    const redirectUri = process.env.NEXT_PUBLIC_KAKAO_REDIRECT_URI
 
     if (!code) {
       setError('인가 코드가 없습니다.')
@@ -23,7 +24,7 @@ function KakaoCallbackContent() {
         const res = await fetch('/api/auth/login/kakao', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ code }),
+          body: JSON.stringify({ code, redirectUri }),
         })
 
         if (!res.ok) {
