@@ -29,7 +29,6 @@ jobs:
       - name: Install pnpm
         run: npm install -g pnpm@9
 
-
       - name: Install Dependencies
         run: pnpm install --frozen-lockfile --prefer-offline
 
@@ -46,6 +45,12 @@ jobs:
         env:
           NODE_ENV: "test"
         run: pnpm test -- --watch=false
+
+      - name: Create .env
+        run: |
+          cat << 'EOF' > .env
+          ${{ secrets.FE_ENV_DEV }}
+          EOF
 
       - name: Build
         run: pnpm build
