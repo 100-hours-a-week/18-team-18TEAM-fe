@@ -1,3 +1,10 @@
+## [1.0.0-dev.19](https://github.com/100-hours-a-week/18-team-18TEAM-fe/compare/v1.0.0-dev.18...v1.0.0-dev.19) (2026-01-30)
+
+### Bug Fixes
+
+* pnpm-lock 변경 ([f955146](https://github.com/100-hours-a-week/18-team-18TEAM-fe/commit/f95514646a3091d769a964aba04fbc562e486567))
+* prettier ([39cf4e6](https://github.com/100-hours-a-week/18-team-18TEAM-fe/commit/39cf4e6b724d6a7c19c807c99b4a3cb769a5e541))
+
 ## [1.0.0-dev.18](https://github.com/100-hours-a-week/18-team-18TEAM-fe/compare/v1.0.0-dev.17...v1.0.0-dev.18) (2026-01-30)
 
 ### Bug Fixes
