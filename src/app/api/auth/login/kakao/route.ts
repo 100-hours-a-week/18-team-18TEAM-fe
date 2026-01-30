@@ -1,7 +1,7 @@
-import { redirect } from 'next/navigation'
 import { cookies } from 'next/headers'
 import { NextResponse } from 'next/server'
 
+export const dynamic = 'force-dynamic'
 export async function POST(request: Request) {
   const { code, redirectUri } = await request.json()
 
@@ -37,8 +37,8 @@ export async function POST(request: Request) {
 
   const data = await res.json()
 
-  const cookieStore = await cookies()
-  cookieStore.set('accessToken', data.access_token, {
+  const response = NextResponse.json({ success: true, accessToken: data.access_token })
+  response.cookies.set('accessToken', data.access_token, {
     httpOnly: false, // 클라이언트 axios 인터셉터에서 읽어 Authorization 헤더로 전달
     secure: process.env.NODE_ENV === 'production',
     sameSite: 'lax',
@@ -47,8 +47,5 @@ export async function POST(request: Request) {
     maxAge: 30 * 60,
   })
 
-  return NextResponse.json({
-    success: true,
-    accessToken: data.access_token,
-  })
+  return response
 }
