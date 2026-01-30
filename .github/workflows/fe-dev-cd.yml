@@ -126,7 +126,7 @@ jobs:
           rm -rf bundle && mkdir -p bundle/deploy
 
           cp deploy/appspec.yml bundle/appspec.yml
-          cp deploy/deploy-fe.sh bundle/deploy-fe.sh
+          cp deploy/deploy-fe.sh bundle/deploy/deploy-fe.sh
           cp deploy/start.sh bundle/deploy/start.sh
           cp deploy/stop.sh bundle/deploy/stop.sh
           cp deploy/validate.sh bundle/deploy/validate.sh
