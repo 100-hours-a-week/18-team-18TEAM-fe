@@ -39,7 +39,7 @@ jobs:
 
 
       - name: Install Dependencies
-        run: pnpm install --frozen-lockfile --include=optional
+        run: pnpm install --include=optional
 
       - name: Create .env
         run: |
