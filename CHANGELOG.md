@@ -1,3 +1,17 @@
+## [1.0.0-dev.16](https://github.com/100-hours-a-week/18-team-18TEAM-fe/compare/v1.0.0-dev.15...v1.0.0-dev.16) (2026-01-29)
+
+### Features
+
+* FABMenu에 QR 스캔/공유 네비게이션 연결 ([094b369](https://github.com/100-hours-a-week/18-team-18TEAM-fe/commit/094b3699f56f0f98ee6f30caae74ca77a32c18ee))
+* QR 스캔/공유/결과 페이지 라우트 추가 ([004dcb2](https://github.com/100-hours-a-week/18-team-18TEAM-fe/commit/004dcb265f85e8311e69151524bbbbc2fee60a94))
+* QR 코드 공유 기능 구현 ([2b99e63](https://github.com/100-hours-a-week/18-team-18TEAM-fe/commit/2b99e633cbc406c87b827c3a65d0279d2d6bf43c))
+* QR 코드 스캔 기능 구현 ([95c85ca](https://github.com/100-hours-a-week/18-team-18TEAM-fe/commit/95c85ca8ff085529b2cb10167b71cd2bdb9feedb))
+* 스캔 화면 디자인 추가 및 스캔 프레임 추가 ([eb6cd98](https://github.com/100-hours-a-week/18-team-18TEAM-fe/commit/eb6cd980b51f3c6e89e67d78ae809b4049b9fc9d))
+
+### Bug Fixes
+
+* 카카오 로그인 시 redirectUri 전달 방식 수정 ([b8af6c2](https://github.com/100-hours-a-week/18-team-18TEAM-fe/commit/b8af6c202cd37998c169132b8afbffb95b84a4aa))
+
 ## [1.0.0-dev.15](https://github.com/100-hours-a-week/18-team-18TEAM-fe/compare/v1.0.0-dev.14...v1.0.0-dev.15) (2026-01-28)
 
 ### Features
