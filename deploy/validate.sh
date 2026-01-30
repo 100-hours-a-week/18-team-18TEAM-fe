@@ -4,34 +4,27 @@ set -euo pipefail
 SERVICE="bizkit-fe.service"
 URL="http://127.0.0.1:3000/"
 
+TRIES="${TRIES:-5}"
+SLEEP_SEC="${SLEEP_SEC:-1}"
+TIMEOUT_SEC="${TIMEOUT_SEC:-2}"
+
 echo "[validate] checking FE..."
 
-for i in $(seq 1 5); do
+for i in $(seq 1 "${TRIES}"); do
   if ! systemctl is-active --quiet "$SERVICE"; then
     echo "[validate] $SERVICE not active yet (try=$i)"
-    sleep 1
+    sleep "${SLEEP_SEC}"
     continue
   fi
 
-#   if curl -fsS --max-time 2 "$URL" >/dev/null; then
-#     echo "[validate] OK"
-#     exit 0
-#   fi
-#   echo "[validate] HTTP failed (try=$i)"
-#   sleep 1
-  HTTP_CODE=$(curl -s -o /dev/null -w "%{http_code}" --max-time 2 "$URL" || echo "0")
+  HTTP_CODE="$(curl -fsSL -o /dev/null -w "%{http_code}" --max-time "${TIMEOUT_SEC}" "${URL}" 2>/dev/null || echo "0")"
+  echo "[validate] HTTP_CODE=${HTTP_CODE} (try=${i}/${TRIES})"
+  if [[ "${HTTP_CODE}" =~ ^[23][0-9]{2}$ ]]; then
+    echo "[validate] FE validated OK (HTTP=${HTTP_CODE})"
+    exit 0
+  fi
 
-  echo "[validate] HTTP_CODE=$HTTP_CODE (try=$i)"
-
-  case "$HTTP_CODE" in
-    200|301|302|307|404)
-      echo "[validate] FE validated OK (HTTP=$HTTP_CODE)"
-      exit 0
-      ;;
-    *)
-      sleep 1
-      ;;
-  esac
+  sleep "${SLEEP_SEC}"
 done
 
 echo "[validate] FAILED"
