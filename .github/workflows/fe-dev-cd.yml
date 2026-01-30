@@ -38,7 +38,7 @@ jobs:
         run: npm install -g pnpm@9
 
       - name: Install Dependencies
-        run: pnpm install --frozen-lockfile
+        run: pnpm install --frozen-lockfile --prefer-offline
 
       - name: Create .env
         run: |
@@ -69,7 +69,6 @@ jobs:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ secrets.AWS_REGION }}
-    
       
       - name: Build FE Deploy Artifact
         shell: bash
