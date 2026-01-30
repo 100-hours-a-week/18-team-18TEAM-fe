@@ -1,3 +1,9 @@
+## [1.0.0-dev.17](https://github.com/100-hours-a-week/18-team-18TEAM-fe/compare/v1.0.0-dev.16...v1.0.0-dev.17) (2026-01-30)
+
+### Bug Fixes
+
+* 동적 렌더링 고정방식으로 수정 ([21781f4](https://github.com/100-hours-a-week/18-team-18TEAM-fe/commit/21781f45bc29a06e4d2db04d62fd8d8401e87208))
+
 ## [1.0.0-dev.16](https://github.com/100-hours-a-week/18-team-18TEAM-fe/compare/v1.0.0-dev.15...v1.0.0-dev.16) (2026-01-29)
 
 ### Features
