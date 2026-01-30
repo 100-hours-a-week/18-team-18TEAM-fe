@@ -1,3 +1,9 @@
+## [1.0.0-dev.20](https://github.com/100-hours-a-week/18-team-18TEAM-fe/compare/v1.0.0-dev.19...v1.0.0-dev.20) (2026-01-30)
+
+### Bug Fixes
+
+* 디렉토리 구조 변경 ([797bd60](https://github.com/100-hours-a-week/18-team-18TEAM-fe/commit/797bd600d2112308984e2e874f77daafd8288033))
+
 ## [1.0.0-dev.19](https://github.com/100-hours-a-week/18-team-18TEAM-fe/compare/v1.0.0-dev.18...v1.0.0-dev.19) (2026-01-30)
 
 ### Bug Fixes
