@@ -1,3 +1,9 @@
+## [1.0.0-dev.23](https://github.com/100-hours-a-week/18-team-18TEAM-fe/compare/v1.0.0-dev.22...v1.0.0-dev.23) (2026-01-30)
+
+### Features
+
+* public cp 추가 경로 수정 ([e78676e](https://github.com/100-hours-a-week/18-team-18TEAM-fe/commit/e78676eb79358c5beb3bd853c4ed5de09b0d9c0e))
+
 ## [1.0.0-dev.22](https://github.com/100-hours-a-week/18-team-18TEAM-fe/compare/v1.0.0-dev.21...v1.0.0-dev.22) (2026-01-30)
 
 ### Features
