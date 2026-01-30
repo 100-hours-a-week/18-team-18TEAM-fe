@@ -15,11 +15,11 @@ concurrency:
 
 jobs:
   deploy:
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-24.04-arm
     timeout-minutes: 20
 
     env:
-      APP_NAME: "bizkit-FE"
+      APP_NAME: "BizKit-FE"
       APP_STAGE: prod
 
 
@@ -39,6 +39,12 @@ jobs:
 
       - name: Install Dependencies
         run: pnpm install --frozen-lockfile --prefer-offline
+
+      - name: Create .env
+        run: |
+          cat << 'EOF' > .env
+          ${{ secrets.FE_ENV_PROD }}
+          EOF
 
       - name: Build
         run: pnpm build
@@ -76,9 +82,9 @@ jobs:
             tar \
                 --exclude='.git' \
                 -czf "$OUT_ARCHIVE" \
-                .next \
+                 .next/standalone \
+                .next/static \
                 public \
-                node_modules \
                 package.json \
                 pnpm-lock.yaml \
                 next.config.* || {
@@ -119,9 +125,8 @@ jobs:
 
           rm -rf bundle && mkdir -p bundle/deploy
 
-          # appspec + hooks + deploy script 포함
           cp deploy/appspec.yml bundle/appspec.yml
-          cp deploy/deploy-fe.sh bundle/deploy-fe.sh
+          cp deploy/deploy-fe.sh bundle/deploy/deploy-fe.sh
           cp deploy/start.sh bundle/deploy/start.sh
           cp deploy/stop.sh bundle/deploy/stop.sh
           cp deploy/validate.sh bundle/deploy/validate.sh
@@ -187,3 +192,24 @@ jobs:
           JSON_MESSAGE=$(printf '%s\n' "$MESSAGE" | python3 -c 'import json,sys; print(json.dumps({"content": sys.stdin.read()}))')
 
           curl -X POST \
+      
+          - name: Notify Discord on success
+            if: success()
+            env:
+              DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+            run: |
+              MESSAGE="✅ FE PROD CD 성공 ✅
+              Repo: \`${{ github.repository }}\`
+              Branch: \`${{ github.head_ref || github.ref_name }}\`
+              Workflow: \`${{ github.workflow }}\`
+              Job: \`${{ github.job }}\`
+              Author: \`${{ github.actor }}\`
+              Stage: \`${APP_STAGE}\`
+              링크: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+
+              JSON_MESSAGE=$(printf '%s\n' "$MESSAGE" | python3 -c 'import json,sys; print(json.dumps({"content": sys.stdin.read()}))')
+
+              curl -X POST \
+                -H "Content-Type: application/json" \
+                -d "$JSON_MESSAGE" \
+                "$DISCORD_WEBHOOK_URL"

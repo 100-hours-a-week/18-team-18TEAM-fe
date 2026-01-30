@@ -53,8 +53,8 @@ sudo rm -rf "${TARGET_DIR}"
 sudo mkdir -p "${TARGET_DIR}"
 sudo tar -xzf "${TAR_PATH}" -C "${TARGET_DIR}"
 
-cd /home/ubuntu/artifact/fe/current
-cp -r public .next/standalone/public
+mkdir -p "${TARGET_DIR}/.next/standalone/public"
+cp -a "${TARGET_DIR}/public/." "${TARGET_DIR}/.next/standalone/public/"
 
 sudo chown -R ubuntu:ubuntu "${RELEASES_DIR}"
 
