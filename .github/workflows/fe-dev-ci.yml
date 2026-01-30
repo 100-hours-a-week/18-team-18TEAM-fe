@@ -14,7 +14,7 @@ env:
 
 jobs:
   setup:
-    runs-on: ubuntu-latest 
+    runs-on: ubuntu-24.04-arm
     timeout-minutes: 15
 
     steps:
@@ -45,17 +45,6 @@ jobs:
         env:
           NODE_ENV: "test"
         run: pnpm test -- --watch=false
-
-      - name: Create .env
-        run: |
-          cat << 'EOF' > .env
-          ${{ secrets.FE_ENV_DEV }}
-          EOF
-
-      - name: Verify env keys (masked)
-        run: |
-          test -s .env || (echo ".env empty" && exit 1)
-          awk -F= '{print $1"=***"}' .env | head -n 80
           
       - name: Build
         run: pnpm build
@@ -65,7 +54,28 @@ jobs:
         env:
           DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
         run: |
-          MESSAGE="FE Dev PR CI 실패
+          MESSAGE="❌ FE Dev PR CI 실패 ❌
+          Repo: \`${{ github.repository }}\`
+          Branch: \`${{ github.head_ref || github.ref_name }}\`
+          Workflow: \`${{ github.workflow }}\`
+          Job: \`${{ github.job }}\`
+          Author: \`${{ github.actor }}\`
+          Stage: \`${APP_STAGE}\`
+          링크: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+
+          JSON_MESSAGE=$(printf '%s\n' "$MESSAGE" | python3 -c 'import json,sys; print(json.dumps({"content": sys.stdin.read()}))')
+
+          curl -X POST \
+            -H "Content-Type: application/json" \
+            -d "$JSON_MESSAGE" \
+            "$DISCORD_WEBHOOK_URL"
+      
+      - name: Notify Discord on success
+        if: success()
+        env:
+          DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+        run: |
+          MESSAGE="✅ FE Dev PR CI 성공 ✅
           Repo: \`${{ github.repository }}\`
           Branch: \`${{ github.head_ref || github.ref_name }}\`
           Workflow: \`${{ github.workflow }}\`

@@ -17,23 +17,37 @@ fi
 : "${RELEASE_ID:?RELEASE_ID is required}"
 : "${ARCHIVE_URL:?ARCHIVE_URL is required}"
 
+# 파일 저장 경로/파일명 정의
 ARTIFACT_DIR="/home/ubuntu/artifact/fe"
 TAR_PATH="${ARTIFACT_DIR}/bizkit-fe-${RELEASE_ID}.tar.gz"
 
+TMP_TAR="/tmp/bizkit-fe-${RELEASE_ID}.tar.gz"
+
+# TMP 삭제
+cleanup() {
+  if [[ -f "${TMP_TAR}" ]]; then
+    sudo rm -f "${TMP_TAR}" || true
+  fi
+}
+trap cleanup EXIT
+
 sudo mkdir -p "${ARTIFACT_DIR}"
 
+# presigned url로 tar.gz 다운로드 /tmp으로 임시 파일 저장
 if command -v curl >/dev/null 2>&1; then
-  curl -fsSL "${ARCHIVE_URL}" -o "/tmp/bizkit-fe-${RELEASE_ID}.tar.gz"
+  curl -fsSL "${ARCHIVE_URL}" -o "${TMP_TAR}"
 elif command -v wget >/dev/null 2>&1; then
-  wget -qO "/tmp/bizkit-fe-${RELEASE_ID}.tar.gz" "${ARCHIVE_URL}"
+  wget -qO "${TMP_TAR}" "${ARCHIVE_URL}"
 else
   echo "[start-fe] neither curl nor wget is installed" >&2
   exit 10
 fi
 
-sudo mv "/tmp/bizkit-fe-${RELEASE_ID}.tar.gz" "${TAR_PATH}"
+# 실행 위치로 이동 및 권한 정리
+sudo mv "${TMP_TAR}" "${TAR_PATH}"
 sudo chmod 0644 "${TAR_PATH}"
 ls -al "${TAR_PATH}" || true
 
-chmod +x "/home/ubuntu/deploy-fe.sh"
-exec "/home/ubuntu/deploy-fe.sh" "${RELEASE_ID}"
+# 배포 스크립트 deploy-fe.sh 실행
+chmod +x "${HOOK_DIR}/deploy-fe.sh"
+exec "${HOOK_DIR}/deploy-fe.sh" "${RELEASE_ID}"
