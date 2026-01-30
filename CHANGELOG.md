@@ -1,3 +1,9 @@
+## [1.0.0-dev.22](https://github.com/100-hours-a-week/18-team-18TEAM-fe/compare/v1.0.0-dev.21...v1.0.0-dev.22) (2026-01-30)
+
+### Features
+
+* public/ cp 추가 ([08220b9](https://github.com/100-hours-a-week/18-team-18TEAM-fe/commit/08220b9f756da489c009aa74f0bea9c896047047))
+
 ## [1.0.0-dev.21](https://github.com/100-hours-a-week/18-team-18TEAM-fe/compare/v1.0.0-dev.20...v1.0.0-dev.21) (2026-01-30)
 
 ### Bug Fixes
