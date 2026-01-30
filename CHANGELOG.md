@@ -1,3 +1,9 @@
+## [1.0.0-dev.21](https://github.com/100-hours-a-week/18-team-18TEAM-fe/compare/v1.0.0-dev.20...v1.0.0-dev.21) (2026-01-30)
+
+### Bug Fixes
+
+* 시크릿 변경 ([f1e8bab](https://github.com/100-hours-a-week/18-team-18TEAM-fe/commit/f1e8bab56946b1e4270e1f367beba643ee8c720a))
+
 ## [1.0.0-dev.20](https://github.com/100-hours-a-week/18-team-18TEAM-fe/compare/v1.0.0-dev.19...v1.0.0-dev.20) (2026-01-30)
 
 ### Bug Fixes
