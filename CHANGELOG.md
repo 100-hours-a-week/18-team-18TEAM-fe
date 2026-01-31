@@ -1,3 +1,10 @@
+## [1.0.0-dev.25](https://github.com/100-hours-a-week/18-team-18TEAM-fe/compare/v1.0.0-dev.24...v1.0.0-dev.25) (2026-01-31)
+
+### Features
+
+* 이미지 삭제 기능과 이미지 저장 로직 별도 분리 ([403cfa5](https://github.com/100-hours-a-week/18-team-18TEAM-fe/commit/403cfa577988fea3b95c025de86d8fdf3fc2df8a))
+* 이미지 업로드 및 수정 기능 구현 ([1857547](https://github.com/100-hours-a-week/18-team-18TEAM-fe/commit/1857547cc05a46f83b9c4d681d0bba86bd717284))
+
 ## [1.0.0-dev.24](https://github.com/100-hours-a-week/18-team-18TEAM-fe/compare/v1.0.0-dev.23...v1.0.0-dev.24) (2026-01-31)
 
 ### Features
