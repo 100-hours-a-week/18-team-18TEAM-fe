@@ -73,6 +73,10 @@ function ProfileEditForm() {
     setValue('profileImage', value || '', { shouldDirty: true })
   }
 
+  const handleS3KeyChange = (key: string | undefined) => {
+    setValue('profileImageKey', key || '', { shouldDirty: true })
+  }
+
   if (isLoadingProfile) {
     return (
       <div className="flex flex-1 items-center justify-center">
@@ -87,6 +91,7 @@ function ProfileEditForm() {
       <ImageUpload
         value={profileImage}
         onChange={handleImageChange}
+        onS3KeyChange={handleS3KeyChange}
         className="mb-2"
       />
 

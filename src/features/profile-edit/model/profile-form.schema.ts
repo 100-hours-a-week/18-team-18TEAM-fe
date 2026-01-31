@@ -2,6 +2,7 @@ import { z } from 'zod'
 
 export const profileFormSchema = z.object({
   profileImage: z.string().optional(),
+  profileImageKey: z.string().optional(),
   name: z.string().max(20, '이름이 너무 깁니다.').optional().or(z.literal('')),
   company: z
     .string()
