@@ -23,11 +23,20 @@ function ImageUpload({
   className,
 }: ImageUploadProps) {
   const inputRef = React.useRef<HTMLInputElement>(null)
+  const [pendingFile, setPendingFile] = React.useState<File | null>(null)
   const [isUploading, setIsUploading] = React.useState(false)
 
   const handleClick = () => {
     if (isUploading) return
     inputRef.current?.click()
+  }
+
+  const handleRemove = () => {
+    if (isUploading) return
+    inputRef.current && (inputRef.current.value = '')
+    onChange?.(undefined)
+    onS3KeyChange?.(undefined)
+    setPendingFile(null)
   }
 
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -56,12 +65,19 @@ function ImageUpload({
     }
     reader.readAsDataURL(file)
 
-    // S3 업로드
+    // 업로드는 저장 버튼에서 수행
+    setPendingFile(file)
+  }
+
+  const handleSaveUpload = async () => {
+    if (!pendingFile || isUploading) return
     setIsUploading(true)
     try {
-      const { url, key } = await getPresignedUrl(file.name)
-      await uploadToS3(url, file)
+      const { url, key } = await getPresignedUrl(pendingFile.name)
+      await uploadToS3(url, pendingFile)
       onS3KeyChange?.(key)
+      setPendingFile(null)
+      toast.success('이미지가 저장되었습니다.')
     } catch (error) {
       console.error('이미지 업로드 실패:', error)
       toast.error('이미지 업로드에 실패했습니다.')
@@ -92,6 +108,32 @@ function ImageUpload({
           </div>
         )}
       </button>
+      <div className="mt-2 flex gap-2">
+        <button
+          type="button"
+          onClick={handleRemove}
+          disabled={isUploading}
+          className={cn(
+            'rounded px-3 py-1 text-[12px]',
+            'bg-destructive text-destructive-foreground hover:bg-destructive/90',
+            'disabled:opacity-50'
+          )}
+        >
+          이미지 삭제
+        </button>
+        <button
+          type="button"
+          onClick={handleSaveUpload}
+          disabled={isUploading || !pendingFile}
+          className={cn(
+            'rounded px-3 py-1 text-[12px]',
+            'bg-primary text-primary-foreground hover:bg-primary/90',
+            'disabled:opacity-50'
+          )}
+        >
+          이미지 저장
+        </button>
+      </div>
       <input
         ref={inputRef}
         type="file"
