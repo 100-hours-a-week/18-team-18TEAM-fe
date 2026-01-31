@@ -5,6 +5,15 @@ import { MoreHorizontalIcon } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { DropdownMenu, IconButton } from '@/shared'
 
+const CARD_COLORS = [
+  { bg: 'bg-[#022840]', text: 'text-white' },
+  { bg: 'bg-[#1B6C8C]', text: 'text-white' },
+  { bg: 'bg-[#EADFD8]', text: 'text-[#2d2c2c]' },
+  { bg: 'bg-[#bfd8e7]', text: 'text-[#2d2c2c]' },
+  { bg: 'bg-[#96b3cb]', text: 'text-[#2d2c2c]' },
+  { bg: 'bg-[#ad9b8f]', text: 'text-[#2d2c2c]' },
+] as const
+
 interface BusinessCardItemProps extends React.HTMLAttributes<HTMLDivElement> {
   name: string
   company?: string
@@ -13,6 +22,7 @@ interface BusinessCardItemProps extends React.HTMLAttributes<HTMLDivElement> {
   phone_number?: string
   email?: string
   lined_number?: string
+  colorIndex?: number
   onPress?: () => void
   onEdit?: () => void
   onDelete?: () => void
@@ -26,6 +36,7 @@ function BusinessCardItem({
   phone_number,
   email,
   lined_number,
+  colorIndex = 0,
   onPress,
   onEdit,
   onDelete,
@@ -49,6 +60,13 @@ function BusinessCardItem({
     return items
   }, [onEdit, onDelete])
 
+  const colorScheme = CARD_COLORS[colorIndex % CARD_COLORS.length]
+
+  const roleText =
+    department && position
+      ? `${department} / ${position}`
+      : department || position || ''
+
   return (
     <div
       data-slot="business-card-item"
@@ -61,52 +79,46 @@ function BusinessCardItem({
         }
       }}
       className={cn(
-        'bg-card border-border relative w-full cursor-pointer rounded-[10px] border p-4 shadow-sm transition-shadow hover:shadow-md',
+        'relative h-[200px] w-full cursor-pointer rounded-[10px] px-[23px] py-[29px] shadow-[0px_4px_4px_0px_rgba(0,0,0,0.25)]',
+        colorScheme.bg,
+        colorScheme.text,
         className
       )}
       {...props}
     >
-      <div className="mb-4 flex items-start justify-between">
-        <h3 className="text-foreground text-lg font-semibold">{name}</h3>
-        <div className="flex items-center gap-2">
-          {company && (
-            <span className="text-muted-foreground text-md">{company}</span>
-          )}
-          {hasMenu && (
-            <DropdownMenu
-              trigger={
-                <IconButton
-                  variant="ghost"
-                  size="sm"
-                  aria-label="더보기"
-                  onClick={(e) => e.stopPropagation()}
-                >
-                  <MoreHorizontalIcon className="size-4" />
-                </IconButton>
-              }
-              items={menuItems}
-            />
-          )}
+      {hasMenu && (
+        <div className="absolute top-3 right-3">
+          <DropdownMenu
+            trigger={
+              <IconButton
+                variant="ghost"
+                size="sm"
+                aria-label="더보기"
+                onClick={(e) => e.stopPropagation()}
+                className={cn('hover:bg-white/10', colorScheme.text)}
+              >
+                <MoreHorizontalIcon className="size-4" />
+              </IconButton>
+            }
+            items={menuItems}
+          />
+        </div>
+      )}
+
+      <div className="flex flex-col gap-[5px]">
+        <h3 className="text-[20px] leading-[22px] font-semibold tracking-[-0.4px]">
+          {name}
+        </h3>
+        <div className="flex flex-col text-[15px] leading-[22px] tracking-[-0.3px]">
+          {company && <p>{company}</p>}
+          {roleText && <p className="font-medium">{roleText}</p>}
         </div>
       </div>
 
-      <div className="mb-4 space-y-0.5">
-        {department && (
-          <p className="text-muted-foreground text-sm">{department}</p>
-        )}
-        {position && (
-          <p className="text-muted-foreground text-sm">{position}</p>
-        )}
-      </div>
-
-      <div className="border-border space-y-0.5 border-t pt-3">
-        {phone_number && (
-          <p className="text-foreground text-sm">{phone_number}</p>
-        )}
-        {email && <p className="text-foreground text-sm">{email}</p>}
-        {lined_number && (
-          <p className="text-foreground text-sm">{lined_number}</p>
-        )}
+      <div className="absolute right-[21px] bottom-[29px] flex flex-col gap-0 text-[12px] leading-[22px] tracking-[-0.24px]">
+        {phone_number && <p>M: {phone_number}</p>}
+        {email && <p>E: {email}</p>}
+        {lined_number && <p>T: {lined_number}</p>}
       </div>
     </div>
   )
