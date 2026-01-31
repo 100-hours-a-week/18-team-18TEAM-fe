@@ -1,3 +1,10 @@
+## [1.0.0-dev.24](https://github.com/100-hours-a-week/18-team-18TEAM-fe/compare/v1.0.0-dev.23...v1.0.0-dev.24) (2026-01-31)
+
+### Features
+
+* 명함 목록 구현[#32](https://github.com/100-hours-a-week/18-team-18TEAM-fe/issues/32) 및 무한 스크롤 적용 ([a13b215](https://github.com/100-hours-a-week/18-team-18TEAM-fe/commit/a13b215df73b54996ecefa9d46dc390d2af17c77))
+* 화면 적용 및 명함 추가시 invalidate 적용 ([6e39271](https://github.com/100-hours-a-week/18-team-18TEAM-fe/commit/6e39271a611397008182c10e264b42c0447c2fc8))
+
 ## [1.0.0-dev.23](https://github.com/100-hours-a-week/18-team-18TEAM-fe/compare/v1.0.0-dev.22...v1.0.0-dev.23) (2026-01-30)
 
 ### Features
