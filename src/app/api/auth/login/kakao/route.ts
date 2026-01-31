@@ -37,7 +37,10 @@ export async function POST(request: Request) {
 
   const data = await res.json()
 
-  const response = NextResponse.json({ success: true, accessToken: data.access_token })
+  const response = NextResponse.json({
+    success: true,
+    accessToken: data.access_token,
+  })
   response.cookies.set('accessToken', data.access_token, {
     httpOnly: false, // 클라이언트 axios 인터셉터에서 읽어 Authorization 헤더로 전달
     secure: process.env.NODE_ENV === 'production',

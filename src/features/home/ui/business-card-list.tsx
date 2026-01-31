@@ -38,7 +38,7 @@ function BusinessCardList({
       {hasNext && (
         <div ref={ref} className="h-4 w-full" aria-hidden>
           {isFetchingNextPage && (
-            <div className="py-4 text-center text-sm text-muted-foreground">
+            <div className="text-muted-foreground py-4 text-center text-sm">
               명함을 가져오고 있어요...
             </div>
           )}

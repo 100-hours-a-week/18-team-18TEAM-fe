@@ -20,13 +20,8 @@ export default function HomePage() {
   const [keyword, setKeyword] = React.useState('')
   const router = useRouter()
 
-  const {
-    data,
-    isLoading,
-    fetchNextPage,
-    hasNextPage,
-    isFetchingNextPage,
-  } = useWallets({ keyword: keyword || undefined })
+  const { data, isLoading, fetchNextPage, hasNextPage, isFetchingNextPage } =
+    useWallets({ keyword: keyword || undefined })
   const deleteCard = useDeleteWalletCard()
 
   const cards =

@@ -86,9 +86,8 @@ function BusinessCardItem({
       )}
       {...props}
     >
-
       {hasMenu && (
-        <div className="absolute right-3 top-3">
+        <div className="absolute top-3 right-3">
           <DropdownMenu
             trigger={
               <IconButton
@@ -107,7 +106,7 @@ function BusinessCardItem({
       )}
 
       <div className="flex flex-col gap-[5px]">
-        <h3 className="text-[20px] font-semibold leading-[22px] tracking-[-0.4px]">
+        <h3 className="text-[20px] leading-[22px] font-semibold tracking-[-0.4px]">
           {name}
         </h3>
         <div className="flex flex-col text-[15px] leading-[22px] tracking-[-0.3px]">
@@ -116,7 +115,7 @@ function BusinessCardItem({
         </div>
       </div>
 
-      <div className="absolute bottom-[29px] right-[21px] flex flex-col gap-0 text-[12px] leading-[22px] tracking-[-0.24px]">
+      <div className="absolute right-[21px] bottom-[29px] flex flex-col gap-0 text-[12px] leading-[22px] tracking-[-0.24px]">
         {phone_number && <p>M: {phone_number}</p>}
         {email && <p>E: {email}</p>}
         {lined_number && <p>T: {lined_number}</p>}
