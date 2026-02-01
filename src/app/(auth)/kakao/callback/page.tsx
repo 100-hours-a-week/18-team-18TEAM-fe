@@ -30,25 +30,6 @@ function KakaoCallbackContent() {
             credentials: 'include',
           }
         )
-
-        // 디버깅 로그
-        console.log('=== 카카오 로그인 응답 ===')
-        console.log('Status:', res.status)
-        console.log('Headers:')
-        res.headers.forEach((value, key) => {
-          console.log(`  ${key}: ${value}`)
-        })
-
-        const data = await res.json()
-        console.log('Response Body:', data)
-        console.log('document.cookie:', document.cookie)
-        console.log('=========================')
-
-        if (!res.ok) {
-          throw new Error('Login failed')
-        }
-
-        console.log(res)
         // 로그인 성공 → /home으로 이동 → useUser 훅이 유저 정보 fetch
         router.replace('/home')
       } catch (err) {
