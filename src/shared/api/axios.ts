@@ -2,53 +2,60 @@ import axios from 'axios'
 
 export const apiClient = axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_URL,
+  withCredentials: true, // 쿠키 자동 전송
   headers: {
     'Content-Type': 'application/json',
   },
 })
 
-// 브라우저 쿠키에서 accessToken 값을 읽어 Authorization 헤더로 추가
-apiClient.interceptors.request.use(
-  (config) => {
-    if (typeof document === 'undefined') {
-      return config
-    }
+// refresh 동시 호출 방지
+let isRefreshing = false
+let refreshPromise: Promise<void> | null = null
 
-    const rawTokenCookie = document.cookie
-      .split(';')
-      .map((c) => c.trim())
-      .find((c) => c.startsWith('accessToken='))
-
-    const accessToken = rawTokenCookie
-      ? decodeURIComponent(rawTokenCookie.split('=')[1] ?? '')
-      : null
-
-    if (accessToken) {
-      config.headers.Authorization = `Bearer ${accessToken}`
-    }
-
-    return config
-  },
-  (error) => {
-    return Promise.reject(error)
-  }
-)
-
-// 401 응답 시 만료된 토큰을 쿠키에서 제거하고 로그인 페이지로 돌려보낸다
+// 응답 인터셉터: 401 → refresh → 재요청
 apiClient.interceptors.response.use(
   (response) => response,
-  (error) => {
-    const status = error?.response?.status
+  async (error) => {
+    const status = error.response?.status
+    const originalRequest = error.config
 
-    if (typeof document !== 'undefined' && status === 401) {
-      // 쿠키 제거
-      document.cookie = 'accessToken=; path=/; max-age=0'
-      // 세션 상태 동기화
+    // 401 아니면 그대로 에러
+    if (status !== 401) {
+      return Promise.reject(error)
+    }
+
+    // 무한 루프 방지
+    if (originalRequest._retry) {
+      // refresh도 실패 → 로그아웃 처리
       if (typeof window !== 'undefined') {
         window.location.href = '/login'
       }
+      return Promise.reject(error)
+    }
+    originalRequest._retry = true
+
+    // refresh는 한 번만 실행
+    if (!isRefreshing) {
+      isRefreshing = true
+      refreshPromise = apiClient
+        .post('/auth/rotation')
+        .then(() => {})
+        .catch(() => {
+          // refresh 실패 → 로그아웃
+          if (typeof window !== 'undefined') {
+            window.location.href = '/login'
+          }
+        })
+        .finally(() => {
+          isRefreshing = false
+          refreshPromise = null
+        })
     }
 
-    return Promise.reject(error)
+    // refresh 끝날 때까지 대기
+    await refreshPromise
+
+    // 원래 요청 재시도
+    return apiClient(originalRequest)
   }
 )
