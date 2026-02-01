@@ -48,6 +48,7 @@ function KakaoCallbackContent() {
           throw new Error('Login failed')
         }
 
+        console.log(res)
         // 로그인 성공 → /home으로 이동 → useUser 훅이 유저 정보 fetch
         router.replace('/home')
       } catch (err) {
