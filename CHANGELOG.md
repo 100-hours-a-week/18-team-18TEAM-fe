@@ -1,3 +1,9 @@
+## [1.0.0-dev.27](https://github.com/100-hours-a-week/18-team-18TEAM-fe/compare/v1.0.0-dev.26...v1.0.0-dev.27) (2026-02-01)
+
+### Bug Fixes
+
+*  static/ standalone 파일 밑으로 경로 복사 ([7fff3d5](https://github.com/100-hours-a-week/18-team-18TEAM-fe/commit/7fff3d52c28a65ade9f318fc45a762c3b01f21ed))
+
 ## [1.0.0-dev.26](https://github.com/100-hours-a-week/18-team-18TEAM-fe/compare/v1.0.0-dev.25...v1.0.0-dev.26) (2026-02-01)
 
 ### Features
