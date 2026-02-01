@@ -40,7 +40,7 @@ function FABMenu({ open, onClose, onShareCard, onScanQR }: FABMenuProps) {
     <div
       data-slot="fab-menu"
       className={cn(
-        'fixed bottom-40 z-50 flex flex-col gap-3',
+        'fixed bottom-30 z-50 flex flex-col gap-3',
         'animate-in slide-in-from-bottom-2 fade-in-0'
       )}
       style={{ right: 'max(1.5rem, calc((100vw - 430px) / 2 + 1.5rem))' }}

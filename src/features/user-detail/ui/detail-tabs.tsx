@@ -12,10 +12,10 @@ interface Tab {
 
 const tabs: Tab[] = [
   { id: 'career', label: '경력' },
-  { id: 'skills', label: '기술' },
-  { id: 'links', label: '링크' },
-  { id: 'projects', label: '프로젝트' },
-  { id: 'activities', label: '활동' },
+  // { id: 'skills', label: '기술' },
+  // { id: 'links', label: '링크' },
+  // { id: 'projects', label: '프로젝트' },
+  // { id: 'activities', label: '활동' },
 ]
 
 interface DetailTabsProps {

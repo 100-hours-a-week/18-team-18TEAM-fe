@@ -155,19 +155,19 @@ function CardView({
 
   const menuItems: MenuItem[] = showMenu
     ? [
-        {
-          id: 'settings',
-          label: '설정',
-          icon: <SettingsIcon className="size-4" />,
-          onClick: () => router.push('/settings'),
-        },
-        {
-          id: 'edit-card',
-          label: '프로필 수정하기',
-          icon: <EditIcon className="size-4" />,
-          onClick: () => router.push('/my-card/edit'),
-        },
-      ]
+      {
+        id: 'settings',
+        label: '설정',
+        icon: <SettingsIcon className="size-4" />,
+        onClick: () => router.push('/settings'),
+      },
+      {
+        id: 'edit-card',
+        label: '프로필 수정하기',
+        icon: <EditIcon className="size-4" />,
+        onClick: () => router.push('/my-card/edit'),
+      },
+    ]
     : []
 
   const handleClose = () => {
@@ -183,6 +183,7 @@ function CardView({
   const handleEmailClick = () => {
     if (profileData?.email) {
       navigator.clipboard.writeText(profileData.email)
+      toast.success('복사되었습니다.')
     }
   }
 
@@ -296,18 +297,18 @@ function CardView({
       label: '상세 정보',
       onClick: () => handleTabChange('user-detail'),
     },
-    {
-      id: 'charts',
-      icon: <HexagonIcon className="size-5" />,
-      label: '역량 차트',
-      onClick: () => handleTabChange('charts'),
-    },
-    {
-      id: 'reviews',
-      icon: <StarIcon className="size-5" />,
-      label: '리뷰',
-      onClick: () => handleTabChange('reviews'),
-    },
+    // {
+    //   id: 'charts',
+    //   icon: <HexagonIcon className="size-5" />,
+    //   label: '역량 차트',
+    //   onClick: () => handleTabChange('charts'),
+    // },
+    // {
+    //   id: 'reviews',
+    //   icon: <StarIcon className="size-5" />,
+    //   label: '리뷰',
+    //   onClick: () => handleTabChange('reviews'),
+    // },
   ]
 
   return (
