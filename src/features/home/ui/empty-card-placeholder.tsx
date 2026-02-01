@@ -56,11 +56,11 @@ function EmptyCardPlaceholder({
       </EmptyHeader>
 
       <EmptyContent className="flex w-full flex-col gap-3 sm:flex-row sm:justify-center">
-        {handleCreate && (
+        {/* {handleCreate && (
           <Button size="lg" className="w-full sm:w-auto" onClick={handleCreate}>
             종이 명함 추가하기
           </Button>
-        )}
+        )} */}
         {onImport && (
           <Button
             size="lg"
