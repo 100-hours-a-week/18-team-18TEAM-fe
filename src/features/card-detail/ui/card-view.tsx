@@ -155,19 +155,19 @@ function CardView({
 
   const menuItems: MenuItem[] = showMenu
     ? [
-      {
-        id: 'settings',
-        label: '설정',
-        icon: <SettingsIcon className="size-4" />,
-        onClick: () => router.push('/settings'),
-      },
-      {
-        id: 'edit-card',
-        label: '프로필 수정하기',
-        icon: <EditIcon className="size-4" />,
-        onClick: () => router.push('/my-card/edit'),
-      },
-    ]
+        {
+          id: 'settings',
+          label: '설정',
+          icon: <SettingsIcon className="size-4" />,
+          onClick: () => router.push('/settings'),
+        },
+        {
+          id: 'edit-card',
+          label: '프로필 수정하기',
+          icon: <EditIcon className="size-4" />,
+          onClick: () => router.push('/my-card/edit'),
+        },
+      ]
     : []
 
   const handleClose = () => {
