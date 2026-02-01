@@ -64,7 +64,10 @@ export function useInvalidateMyInfo() {
 }
 
 /** 특정 유저 프로필 조회 훅 */
-export function useUserProfile(userId: string, options?: { enabled?: boolean }) {
+export function useUserProfile(
+  userId: string,
+  options?: { enabled?: boolean }
+) {
   const query = useQuery({
     queryKey: userKeys.profile(userId),
     queryFn: async () => {

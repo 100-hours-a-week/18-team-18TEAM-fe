@@ -8,7 +8,9 @@ export async function getMyInfo(): Promise<UserInfoResponse> {
 }
 
 /** 특정 유저 프로필 조회 */
-export async function getUserProfile(userId: string): Promise<UserInfoResponse> {
+export async function getUserProfile(
+  userId: string
+): Promise<UserInfoResponse> {
   const response = await apiClient.get<UserInfoResponse>(`/users/${userId}`)
   return response.data
 }

@@ -8,7 +8,12 @@ export default function UserCardPage() {
   const params = useParams()
   const userId = params.id as string
 
-  const { data: profileData, userInfo, isLoading, isError } = useUserProfile(userId)
+  const {
+    data: profileData,
+    userInfo,
+    isLoading,
+    isError,
+  } = useUserProfile(userId)
 
   if (isLoading) {
     return (
