@@ -63,7 +63,8 @@ function QrSharePage() {
             <>
               <QrCodeCard value={qrValue} className="w-full max-w-[340px]" />
               <p className="font-inter text-center text-[12px] leading-normal text-[#666]">
-                QR 코드를 스캔하면 누구나 회원님의 명함 정보를 확인할 수 있습니다.
+                QR 코드를 스캔하면 누구나 회원님의 명함 정보를 확인할 수
+                있습니다.
               </p>
             </>
           )}

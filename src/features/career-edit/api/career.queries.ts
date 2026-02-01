@@ -16,7 +16,8 @@ export const careerKeys = {
   all: ['careers'] as const,
   lists: () => [...careerKeys.all, 'list'] as const,
   list: () => [...careerKeys.lists()] as const,
-  listByUser: (userId: string) => [...careerKeys.lists(), 'user', userId] as const,
+  listByUser: (userId: string) =>
+    [...careerKeys.lists(), 'user', userId] as const,
   details: () => [...careerKeys.all, 'detail'] as const,
   detail: (id: string) => [...careerKeys.details(), id] as const,
 }
@@ -80,13 +81,8 @@ export function useUpdateCareer() {
   const queryClient = useQueryClient()
 
   return useMutation({
-    mutationFn: ({
-      cardId,
-      data,
-    }: {
-      cardId: string
-      data: CareerFormData
-    }) => updateCareer(cardId, data),
+    mutationFn: ({ cardId, data }: { cardId: string; data: CareerFormData }) =>
+      updateCareer(cardId, data),
     onSuccess: (_, { cardId }) => {
       queryClient.invalidateQueries({ queryKey: careerKeys.lists() })
       queryClient.invalidateQueries({ queryKey: careerKeys.detail(cardId) })

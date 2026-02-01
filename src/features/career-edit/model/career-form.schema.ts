@@ -2,7 +2,11 @@ import { z } from 'zod'
 
 export const careerFormSchema = z
   .object({
-    name: z.string().max(20, '이름이 너무 깁니다.').optional().or(z.literal('')),
+    name: z
+      .string()
+      .max(20, '이름이 너무 깁니다.')
+      .optional()
+      .or(z.literal('')),
     company: z
       .string()
       .max(20, '회사명이 너무 깁니다.')

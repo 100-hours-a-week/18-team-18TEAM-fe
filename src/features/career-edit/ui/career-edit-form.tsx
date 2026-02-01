@@ -220,7 +220,9 @@ function CareerEditForm({ cardId }: CareerEditFormProps) {
       <Button
         type="submit"
         fullWidth
-        loading={isSubmitting || createCareer.isPending || updateCareer.isPending}
+        loading={
+          isSubmitting || createCareer.isPending || updateCareer.isPending
+        }
         disabled={
           !isDirty ||
           isSubmitting ||

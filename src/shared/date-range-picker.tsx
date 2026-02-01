@@ -125,9 +125,7 @@ function DateRangePicker({
           <CalendarIcon className="text-muted-foreground size-4" />
         </button>
 
-        {startError && (
-          <p className="text-destructive text-xs">{startError}</p>
-        )}
+        {startError && <p className="text-destructive text-xs">{startError}</p>}
       </div>
 
       {/* 종료일 */}
