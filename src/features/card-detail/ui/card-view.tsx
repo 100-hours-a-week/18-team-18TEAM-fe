@@ -15,6 +15,7 @@ import {
   AlertDialog,
   type MenuItem,
   type BottomNavItem,
+  type ProfileData,
 } from '@/shared'
 import {
   UserDetailDrawer,
@@ -23,7 +24,7 @@ import {
   type ProjectItem,
   type ActivityItem,
 } from '@/features/user-detail'
-import { useMyProfile } from '@/features/user'
+import type { UserInfo } from '@/features/user/model'
 import { GlassCardPreview } from './glass-card-preview'
 import { CardInfoSection } from './card-info-section'
 
@@ -102,15 +103,24 @@ const MOCK_ACTIVITIES_DATA: ActivityItem[] = [
   },
 ]
 
-function MyCardPage() {
+interface CardViewProps {
+  profileData: ProfileData
+  userInfo?: UserInfo
+  showMenu?: boolean
+  isOwner?: boolean
+}
+
+function CardView({
+  profileData,
+  userInfo,
+  showMenu = false,
+  isOwner = false,
+}: CardViewProps) {
   const router = useRouter()
   const [isFlip, setIsFlip] = React.useState(false)
   const [activeTab, setActiveTab] = React.useState<NavTab | undefined>(
     undefined
   )
-
-  // 내 정보 조회
-  const { data: profileData, userInfo, isLoading, isError } = useMyProfile()
 
   // AI 설명 (API의 description 필드 사용)
   const aiDescription = userInfo?.description || ''
@@ -122,20 +132,22 @@ function MyCardPage() {
     id: string
   }>({ open: false, type: 'career', id: '' })
 
-  const menuItems: MenuItem[] = [
-    {
-      id: 'settings',
-      label: '설정',
-      icon: <SettingsIcon className="size-4" />,
-      onClick: () => router.push('/settings'),
-    },
-    {
-      id: 'edit-card',
-      label: '프로필 수정하기',
-      icon: <EditIcon className="size-4" />,
-      onClick: () => router.push('/my-card/edit'),
-    },
-  ]
+  const menuItems: MenuItem[] = showMenu
+    ? [
+        {
+          id: 'settings',
+          label: '설정',
+          icon: <SettingsIcon className="size-4" />,
+          onClick: () => router.push('/settings'),
+        },
+        {
+          id: 'edit-card',
+          label: '프로필 수정하기',
+          icon: <EditIcon className="size-4" />,
+          onClick: () => router.push('/my-card/edit'),
+        },
+      ]
+    : []
 
   const handleClose = () => {
     router.back()
@@ -266,27 +278,13 @@ function MyCardPage() {
     },
   ]
 
-  // 로딩 상태
-  if (isLoading) {
-    return (
-      <div className="bg-background flex min-h-screen items-center justify-center">
-        <p className="text-muted-foreground">로딩 중...</p>
-      </div>
-    )
-  }
-
-  // 에러 상태
-  if (isError || !profileData) {
-    return (
-      <div className="bg-background flex min-h-screen items-center justify-center">
-        <p className="text-muted-foreground">정보를 불러올 수 없습니다.</p>
-      </div>
-    )
-  }
-
   return (
     <div className="bg-background flex min-h-screen flex-col pt-14 pb-[67px]">
-      <Header showClose onClose={handleClose} menuItems={menuItems} />
+      <Header
+        showClose
+        onClose={handleClose}
+        menuItems={showMenu ? menuItems : undefined}
+      />
 
       {/* 이미지 + GlassCard 영역 */}
       <div className="relative overflow-hidden">
@@ -339,21 +337,21 @@ function MyCardPage() {
         linksData={MOCK_LINKS_DATA}
         projectsData={MOCK_PROJECTS_DATA}
         activitiesData={MOCK_ACTIVITIES_DATA}
-        isOwner
-        onProfileEdit={handleProfileEdit}
-        onCareerAdd={handleCareerAdd}
-        onCareerEdit={handleCareerEdit}
-        onCareerDelete={handleCareerDelete}
-        onSkillAdd={handleSkillAdd}
-        onSkillEdit={handleSkillEdit}
-        onLinkAdd={handleLinkAdd}
-        onLinkEdit={handleLinkEdit}
-        onProjectAdd={handleProjectAdd}
-        onProjectEdit={handleProjectEdit}
-        onProjectDelete={handleProjectDelete}
-        onActivityAdd={handleActivityAdd}
-        onActivityEdit={handleActivityEdit}
-        onActivityDelete={handleActivityDelete}
+        isOwner={isOwner}
+        onProfileEdit={isOwner ? handleProfileEdit : undefined}
+        onCareerAdd={isOwner ? handleCareerAdd : undefined}
+        onCareerEdit={isOwner ? handleCareerEdit : undefined}
+        onCareerDelete={isOwner ? handleCareerDelete : undefined}
+        onSkillAdd={isOwner ? handleSkillAdd : undefined}
+        onSkillEdit={isOwner ? handleSkillEdit : undefined}
+        onLinkAdd={isOwner ? handleLinkAdd : undefined}
+        onLinkEdit={isOwner ? handleLinkEdit : undefined}
+        onProjectAdd={isOwner ? handleProjectAdd : undefined}
+        onProjectEdit={isOwner ? handleProjectEdit : undefined}
+        onProjectDelete={isOwner ? handleProjectDelete : undefined}
+        onActivityAdd={isOwner ? handleActivityAdd : undefined}
+        onActivityEdit={isOwner ? handleActivityEdit : undefined}
+        onActivityDelete={isOwner ? handleActivityDelete : undefined}
       />
 
       {/* 역량 차트 섹션 */}
@@ -374,17 +372,22 @@ function MyCardPage() {
       <BottomNav items={navItems} activeId={activeTab} />
 
       {/* 삭제 확인 모달 */}
-      <AlertDialog
-        open={deleteDialog.open}
-        onOpenChange={(open) => setDeleteDialog((prev) => ({ ...prev, open }))}
-        title={getDeleteDialogTitle()}
-        type="destructive"
-        confirmText="삭제"
-        cancelText="취소"
-        onConfirm={handleDeleteConfirm}
-      />
+      {isOwner && (
+        <AlertDialog
+          open={deleteDialog.open}
+          onOpenChange={(open) =>
+            setDeleteDialog((prev) => ({ ...prev, open }))
+          }
+          title={getDeleteDialogTitle()}
+          type="destructive"
+          confirmText="삭제"
+          cancelText="취소"
+          onConfirm={handleDeleteConfirm}
+        />
+      )}
     </div>
   )
 }
 
-export { MyCardPage }
+export { CardView }
+export type { CardViewProps }

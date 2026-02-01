@@ -7,4 +7,4 @@ export {
   type CardInfoSectionProps,
   type CardInfo,
 } from './card-info-section'
-export { MyCardPage } from './my-card-page'
+export { CardView, type CardViewProps } from './card-view'
