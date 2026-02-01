@@ -35,6 +35,7 @@ export default function UserCardPage() {
     <CardView
       profileData={profileData}
       userInfo={userInfo}
+      userId={userId}
       showMenu={false}
       isOwner={false}
     />

@@ -16,7 +16,13 @@ export default function LoginPage() {
   return (
     <div className="flex min-h-screen flex-col items-center justify-center px-4">
       <div className="flex w-full max-w-sm flex-col items-center gap-4">
-        <h1 className="text-2xl font-bold">CARO</h1>
+        <Image
+          src="/icons/Bizkit_logo.png"
+          alt="BizKit"
+          width={184}
+          height={47}
+          priority
+        />
 
         <button
           type="button"
