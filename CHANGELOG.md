@@ -1,3 +1,12 @@
+## [1.0.0-dev.26](https://github.com/100-hours-a-week/18-team-18TEAM-fe/compare/v1.0.0-dev.25...v1.0.0-dev.26) (2026-02-01)
+
+### Features
+
+* CardView 공통 컴포넌트 생성 ([d9122cd](https://github.com/100-hours-a-week/18-team-18TEAM-fe/commit/d9122cd4749cf7c69786c261e9961edb371c8ee3))
+* 설정 페이지 추가 ([bda1a14](https://github.com/100-hours-a-week/18-team-18TEAM-fe/commit/bda1a14df81898b4b2fc1064e7823d0415b75fec))
+* 특정 유저 프로필 조회 API 및 훅 추가 ([8dd1fa7](https://github.com/100-hours-a-week/18-team-18TEAM-fe/commit/8dd1fa7ab188db155b61965a3a6ce56874ba413c))
+* 홈에서 명함 클릭 시 유저 상세 페이지로 이동 ([1110492](https://github.com/100-hours-a-week/18-team-18TEAM-fe/commit/111049276e4da0254385204971ca7d6425799428))
+
 ## [1.0.0-dev.25](https://github.com/100-hours-a-week/18-team-18TEAM-fe/compare/v1.0.0-dev.24...v1.0.0-dev.25) (2026-01-31)
 
 ### Features
