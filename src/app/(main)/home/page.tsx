@@ -105,6 +105,7 @@ export default function HomePage() {
                 email={card.email}
                 lined_number={card.lined_number}
                 colorIndex={index}
+                onPress={() => router.push(`/user/${card.user_id}`)}
                 onDelete={() => handleDelete(card.id)}
               />
             ))}
