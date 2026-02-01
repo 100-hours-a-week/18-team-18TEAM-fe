@@ -56,6 +56,9 @@ sudo tar -xzf "${TAR_PATH}" -C "${TARGET_DIR}"
 mkdir -p "${TARGET_DIR}/.next/standalone/public"
 cp -a "${TARGET_DIR}/public/." "${TARGET_DIR}/.next/standalone/public/"
 
+mkdir -p "${TARGET_DIR}/.next/standalone/.next/static"
+cp -a "${TARGET_DIR}/.next/static/." "${TARGET_DIR}/.next/standalone/.next/static/"
+
 sudo chown -R ubuntu:ubuntu "${RELEASES_DIR}"
 
 # symblolic 정상 작동
