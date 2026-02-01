@@ -21,11 +21,28 @@ function KakaoCallbackContent() {
 
     const handleLogin = async () => {
       try {
-        const res = await fetch('/api/auth/login/kakao', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ code, redirectUri }),
+        const res = await fetch(
+          `${process.env.NEXT_PUBLIC_API_URL}/auth/login/kakao`,
+          {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ code, redirectUri }),
+            credentials: 'include',
+          }
+        )
+
+        // 디버깅 로그
+        console.log('=== 카카오 로그인 응답 ===')
+        console.log('Status:', res.status)
+        console.log('Headers:')
+        res.headers.forEach((value, key) => {
+          console.log(`  ${key}: ${value}`)
         })
+
+        const data = await res.json()
+        console.log('Response Body:', data)
+        console.log('document.cookie:', document.cookie)
+        console.log('=========================')
 
         if (!res.ok) {
           throw new Error('Login failed')
@@ -33,7 +50,8 @@ function KakaoCallbackContent() {
 
         // 로그인 성공 → /home으로 이동 → useUser 훅이 유저 정보 fetch
         router.replace('/home')
-      } catch {
+      } catch (err) {
+        console.error('로그인 에러:', err)
         setError('로그인에 실패했습니다. 다시 시도해주세요.')
       }
     }
