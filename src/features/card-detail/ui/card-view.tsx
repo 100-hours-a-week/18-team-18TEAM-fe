@@ -13,6 +13,7 @@ import {
   Header,
   BottomNav,
   AlertDialog,
+  toast,
   type MenuItem,
   type BottomNavItem,
   type ProfileData,
@@ -24,29 +25,25 @@ import {
   type ProjectItem,
   type ActivityItem,
 } from '@/features/user-detail'
+import {
+  useCareers,
+  useUserCareers,
+  useDeleteCareer,
+} from '@/features/career-edit'
 import type { UserInfo } from '@/features/user/model'
 import { GlassCardPreview } from './glass-card-preview'
 import { CardInfoSection } from './card-info-section'
 
 type NavTab = 'user-detail' | 'charts' | 'reviews'
 
-// TODO: 경력/기술/링크/프로젝트/활동 API 연결 필요
-const MOCK_CAREER_DATA: CareerItem[] = [
-  {
-    id: '1',
-    company: '카로 주식회사',
-    position: '프론트엔드 개발자',
-    period: '2023.01 - 현재',
-    description: 'React, TypeScript를 활용한 웹 애플리케이션 개발',
-  },
-  {
-    id: '2',
-    company: '테크 스타트업',
-    position: '주니어 개발자',
-    period: '2021.03 - 2022.12',
-    description: 'JavaScript, Vue.js 기반 프론트엔드 개발',
-  },
-]
+/** 날짜 문자열을 YYYY.MM 형식으로 변환 */
+function formatDateToMonth(dateString: string | null | undefined): string {
+  if (!dateString) return ''
+  const date = new Date(dateString)
+  const year = date.getFullYear()
+  const month = String(date.getMonth() + 1).padStart(2, '0')
+  return `${year}.${month}`
+}
 
 const MOCK_SKILLS_DATA: string[] = [
   'React',
@@ -106,6 +103,7 @@ const MOCK_ACTIVITIES_DATA: ActivityItem[] = [
 interface CardViewProps {
   profileData: ProfileData
   userInfo?: UserInfo
+  userId?: string
   showMenu?: boolean
   isOwner?: boolean
 }
@@ -113,6 +111,7 @@ interface CardViewProps {
 function CardView({
   profileData,
   userInfo,
+  userId,
   showMenu = false,
   isOwner = false,
 }: CardViewProps) {
@@ -121,6 +120,28 @@ function CardView({
   const [activeTab, setActiveTab] = React.useState<NavTab | undefined>(
     undefined
   )
+
+  // 경력 API 연동 - isOwner면 내 경력, 아니면 해당 유저 경력 조회
+  const { data: myCareersData } = useCareers()
+  const { data: userCareersData } = useUserCareers(userId, {
+    enabled: !isOwner && Boolean(userId),
+  })
+  const careersData = isOwner ? myCareersData : userCareersData
+  const deleteCareerMutation = useDeleteCareer()
+
+  // API 응답을 CareerItem 형식으로 변환
+  const careerItems: CareerItem[] = React.useMemo(() => {
+    if (!careersData) return []
+    return careersData.map((career) => ({
+      id: String(career.id),
+      company: career.company || '',
+      position: career.position || '',
+      period: career.is_progress
+        ? `${formatDateToMonth(career.start_date)} - 현재`
+        : `${formatDateToMonth(career.start_date)} - ${formatDateToMonth(career.end_date)}`,
+      description: career.department || undefined,
+    }))
+  }, [careersData])
 
   // AI 설명 (API의 description 필드 사용)
   const aiDescription = userInfo?.description || ''
@@ -182,11 +203,11 @@ function CardView({
 
   // 경력 핸들러
   const handleCareerAdd = () => {
-    router.push('/user/edit/career/new')
+    router.push('/career/new')
   }
 
   const handleCareerEdit = (id: string) => {
-    router.push(`/user/edit/career/${id}`)
+    router.push(`/career/${id}/edit`)
   }
 
   const handleCareerDelete = (id: string) => {
@@ -238,10 +259,21 @@ function CardView({
   }
 
   // 삭제 확인
-  const handleDeleteConfirm = () => {
-    // TODO: API 호출하여 실제 삭제 처리
-    console.log(`Deleting ${deleteDialog.type} with id: ${deleteDialog.id}`)
+  const handleDeleteConfirm = async () => {
+    const { type, id } = deleteDialog
     setDeleteDialog({ open: false, type: 'career', id: '' })
+
+    if (type === 'career') {
+      try {
+        await deleteCareerMutation.mutateAsync(id)
+        toast.success('경력이 삭제되었습니다.')
+      } catch {
+        toast.error('경력 삭제 중 오류가 발생했습니다.')
+      }
+    } else {
+      // TODO: 프로젝트, 활동 삭제 API 연동
+      console.log(`Deleting ${type} with id: ${id}`)
+    }
   }
 
   const getDeleteDialogTitle = () => {
@@ -332,7 +364,7 @@ function CardView({
         open={activeTab === 'user-detail'}
         onOpenChange={(open) => !open && setActiveTab(undefined)}
         profileData={profileData}
-        careerData={MOCK_CAREER_DATA}
+        careerData={careerItems}
         skillsData={MOCK_SKILLS_DATA}
         linksData={MOCK_LINKS_DATA}
         projectsData={MOCK_PROJECTS_DATA}

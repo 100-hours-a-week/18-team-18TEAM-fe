@@ -38,6 +38,7 @@ export {
   type TextareaFieldProps,
 } from './field'
 export { DatePicker, type DatePickerProps } from './date-picker'
+export { DateRangePicker, type DateRangePickerProps } from './date-range-picker'
 export { toast, Toaster, type ToastOptions, type ToastType } from './toast'
 
 // Shared Components - Custom
