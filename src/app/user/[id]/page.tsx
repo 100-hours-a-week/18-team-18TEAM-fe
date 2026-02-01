@@ -1,10 +1,14 @@
 'use client'
 
-import { useMyProfile } from '@/features/user'
+import { useParams } from 'next/navigation'
+import { useUserProfile } from '@/features/user'
 import { CardView } from '@/features/card-detail/ui'
 
-export default function MyCardPage() {
-  const { data: profileData, userInfo, isLoading, isError } = useMyProfile()
+export default function UserCardPage() {
+  const params = useParams()
+  const userId = params.id as string
+
+  const { data: profileData, userInfo, isLoading, isError } = useUserProfile(userId)
 
   if (isLoading) {
     return (
@@ -26,8 +30,8 @@ export default function MyCardPage() {
     <CardView
       profileData={profileData}
       userInfo={userInfo}
-      showMenu={true}
-      isOwner={true}
+      showMenu={false}
+      isOwner={false}
     />
   )
 }
