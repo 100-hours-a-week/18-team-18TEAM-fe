@@ -3,6 +3,18 @@
 ### Bug Fixes
 
 * Github token 수정 ([9483db8](https://github.com/100-hours-a-week/18-team-18TEAM-fe/commit/9483db873355023fe503148cfee5568e9b5c63ac))
+## [1.1.0](https://github.com/100-hours-a-week/18-team-18TEAM-fe/compare/v1.0.0...v1.1.0) (2026-02-01)
+
+### Features
+
+* DateRangePicker 컴포넌트 추가 ([b27e0e6](https://github.com/100-hours-a-week/18-team-18TEAM-fe/commit/b27e0e6e7d77fd95c7be71c8f4493ebeae8722e4))
+* 경력 목록 API 연동 및 삭제 기능 추가 ([d0aff58](https://github.com/100-hours-a-week/18-team-18TEAM-fe/commit/d0aff5898d45a66e1c2ca1633733c2ba0967733c))
+* 경력 생성/수정/삭제 기능 구현 ([cdf6e57](https://github.com/100-hours-a-week/18-team-18TEAM-fe/commit/cdf6e5756b88d1118cdaf88cb63724a0c840c1bb))
+* 경력 없을 때 빈 상태 UI 표시 ([8983dff](https://github.com/100-hours-a-week/18-team-18TEAM-fe/commit/8983dffa3c8fc8e4985a305406cef8ab2214f541))
+
+### Bug Fixes
+
+* FAB, Dialog 430px 레이아웃 내 배치 ([b5d9709](https://github.com/100-hours-a-week/18-team-18TEAM-fe/commit/b5d9709c79f8f3c1c25e93081276171c7ecf6104))
 
 ## [1.1.0-dev.1](https://github.com/100-hours-a-week/18-team-18TEAM-fe/compare/v1.0.0...v1.1.0-dev.1) (2026-02-01)
 
