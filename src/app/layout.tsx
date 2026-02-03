@@ -1,4 +1,5 @@
 import './globals.css'
+import { KakaoScript } from '@/shared/kakao-script'
 import { Providers } from './providers'
 
 export default function RootLayout({
@@ -14,6 +15,7 @@ export default function RootLayout({
             <main className="min-h-dvh w-full">{children}</main>
           </div>
         </Providers>
+        <KakaoScript />
       </body>
     </html>
   )
