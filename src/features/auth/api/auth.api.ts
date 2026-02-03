@@ -1,6 +1,8 @@
-export function getKakaoAuthUrl(): string {
+export function getKakaoAuthUrl(next?: string): string {
   const clientId = process.env.NEXT_PUBLIC_KAKAO_CLIENT_ID
   const redirectUri = process.env.NEXT_PUBLIC_KAKAO_REDIRECT_URI
+  const state = next ? encodeURIComponent(next) : undefined
 
-  return `https://kauth.kakao.com/oauth/authorize?client_id=${clientId}&redirect_uri=${redirectUri}&response_type=code`
+  const base = `https://kauth.kakao.com/oauth/authorize?client_id=${clientId}&redirect_uri=${redirectUri}&response_type=code`
+  return state ? `${base}&state=${state}` : base
 }

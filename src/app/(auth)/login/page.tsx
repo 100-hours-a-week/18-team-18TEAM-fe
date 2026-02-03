@@ -2,15 +2,18 @@
 
 import * as React from 'react'
 import Image from 'next/image'
+import { useSearchParams } from 'next/navigation'
 import { getKakaoAuthUrl } from '@/features/auth/api'
 import { TermsDialog, PrivacyDialog } from '@/features/auth/ui'
 
 export default function LoginPage() {
+  const searchParams = useSearchParams()
   const [termsOpen, setTermsOpen] = React.useState(false)
   const [privacyOpen, setPrivacyOpen] = React.useState(false)
 
   const handleKakaoLogin = () => {
-    window.location.href = getKakaoAuthUrl()
+    const next = searchParams.get('next') || undefined
+    window.location.href = getKakaoAuthUrl(next)
   }
 
   return (
