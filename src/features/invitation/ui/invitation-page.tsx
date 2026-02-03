@@ -3,8 +3,7 @@
 import * as React from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { CheckCircle2Icon } from 'lucide-react'
-import { Header, Button } from '@/shared'
-import { useUser } from '@/features/auth/api'
+import { Header, Button, toast } from '@/shared'
 import { useCardByUuid, useSaveCardToWallet } from '../api'
 import { LoginRequiredDialog } from './login-required-dialog'
 import type { InvitationCardData } from '../model'
@@ -76,7 +75,6 @@ function InvitationPage() {
   const searchParams = useSearchParams()
   const uuid = searchParams.get('uuid')
 
-  const { data: user, isLoading: isUserLoading } = useUser()
   const {
     data: cardResponse,
     isLoading: isCardLoading,
@@ -90,23 +88,29 @@ function InvitationPage() {
     router.push('/home')
   }
 
-  const handleSave = () => {
-    // 유저 정보 로딩 중이면 무시
-    if (isUserLoading) return
-
-    // 미로그인 상태
-    if (!user) {
-      setShowLoginDialog(true)
-      return
-    }
-
-    // 로그인 상태: 명함 저장
+  const handleSave = async () => {
     if (uuid) {
       saveCard(
         { uuid },
         {
           onSuccess: () => {
             router.push('/home')
+          },
+          onError: (error: any) => {
+            const status = error?.response?.status
+            const message =
+              error?.response?.data?.message || '명함을 저장할 수 없습니다.'
+            if (status === 401) {
+              setShowLoginDialog(true)
+              return
+            }
+            if (status === 400 || status === 409) {
+              // 이미 저장된 명함이거나 내 명함일 가능성 → 안내만 표시
+              toast.error(message)
+              return
+            }
+            toast.error(message)
+            console.error(error)
           },
         }
       )

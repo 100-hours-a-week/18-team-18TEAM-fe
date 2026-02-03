@@ -19,6 +19,8 @@ export async function getCardByUuid(
 export async function saveCardToWallet(
   data: SaveCardRequest
 ): Promise<SaveCardResponse> {
-  const response = await apiClient.post<SaveCardResponse>('/wallets', data)
+  const response = await apiClient.post<SaveCardResponse>('/wallets', data, {
+    skipAuthHandling: true, // 401 시 글로벌 refresh/redirect 우회 → 호출측에서 모달 처리
+  })
   return response.data
 }

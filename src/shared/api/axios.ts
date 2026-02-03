@@ -1,5 +1,12 @@
 import axios from 'axios'
 
+declare module 'axios' {
+  // 커스텀 플래그로 401 처리(자동 refresh/리다이렉트) 우회
+  export interface AxiosRequestConfig {
+    skipAuthHandling?: boolean
+  }
+}
+
 export const apiClient = axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_URL,
   withCredentials: true, // 쿠키 자동 전송
@@ -21,6 +28,11 @@ apiClient.interceptors.response.use(
 
     // 401 아니면 그대로 에러
     if (status !== 401) {
+      return Promise.reject(error)
+    }
+
+    // 특정 요청에서 401 자동 처리 우회
+    if (originalRequest?.skipAuthHandling) {
       return Promise.reject(error)
     }
 
