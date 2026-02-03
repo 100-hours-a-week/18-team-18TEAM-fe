@@ -1,3 +1,13 @@
+## [1.2.0-dev.2](https://github.com/100-hours-a-week/18-team-18TEAM-fe/compare/v1.2.0-dev.1...v1.2.0-dev.2) (2026-02-03)
+
+### Features
+
+* 로그인 URL에 다음 작업 경로 반영 ([811fb07](https://github.com/100-hours-a-week/18-team-18TEAM-fe/commit/811fb07b63b10b99ce4bc02976e73f49b7d5dac4))
+
+### Bug Fixes
+
+* SearchParams 사용으로 Suspense 적용 ([f318bd2](https://github.com/100-hours-a-week/18-team-18TEAM-fe/commit/f318bd230ac902d1a4601b8b54f41689f384ba0f))
+
 ## [1.2.0-dev.1](https://github.com/100-hours-a-week/18-team-18TEAM-fe/compare/v1.1.1-dev.1...v1.2.0-dev.1) (2026-02-03)
 
 ### Features
