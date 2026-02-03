@@ -12,6 +12,7 @@ function KakaoCallbackContent() {
 
   React.useEffect(() => {
     const code = searchParams.get('code')
+    const next = searchParams.get('state') || '/home'
     const redirectUri = process.env.NEXT_PUBLIC_KAKAO_REDIRECT_URI
 
     if (!code) {
@@ -31,7 +32,7 @@ function KakaoCallbackContent() {
           }
         )
         // 로그인 성공 → /home으로 이동 → useUser 훅이 유저 정보 fetch
-        router.replace('/home')
+        router.replace(next)
       } catch (err) {
         console.error('로그인 에러:', err)
         setError('로그인에 실패했습니다. 다시 시도해주세요.')
