@@ -1,3 +1,4 @@
+export { LoginPage } from './login-page'
 export { LoginForm, type LoginFormProps } from './login-form'
 export { LoginErrorState, type LoginErrorStateProps } from './login-error-state'
 export { TermsDialog, type TermsDialogProps } from './terms-dialog'

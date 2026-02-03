@@ -1,6 +1,7 @@
 'use client'
 
-import { toast as sonnerToast, Toaster as SonnerToaster } from 'sonner'
+import { toast as sonnerToast } from 'sonner'
+import { Toaster as ShadcnToaster } from '@/components/ui/sonner'
 
 type ToastType = 'success' | 'error' | 'info' | 'warning'
 
@@ -84,7 +85,7 @@ toast.dismiss = sonnerToast.dismiss
 
 function Toaster() {
   return (
-    <SonnerToaster
+    <ShadcnToaster
       position="top-center"
       richColors
       toastOptions={{
