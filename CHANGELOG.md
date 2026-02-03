@@ -1,3 +1,10 @@
+## [1.1.1-dev.1](https://github.com/100-hours-a-week/18-team-18TEAM-fe/compare/v1.1.0...v1.1.1-dev.1) (2026-02-03)
+
+### Bug Fixes
+
+* Github token 수정 ([b970d31](https://github.com/100-hours-a-week/18-team-18TEAM-fe/commit/b970d316fa27ce7052c92a357b263eb875255e3c))
+* Github token 수정 ([9483db8](https://github.com/100-hours-a-week/18-team-18TEAM-fe/commit/9483db873355023fe503148cfee5568e9b5c63ac))
+
 ## [1.1.0-dev.2](https://github.com/100-hours-a-week/18-team-18TEAM-fe/compare/v1.1.0-dev.1...v1.1.0-dev.2) (2026-02-03)
 
 ### Bug Fixes
