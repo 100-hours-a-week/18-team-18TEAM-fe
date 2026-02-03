@@ -1,3 +1,9 @@
+## [1.2.0-dev.1](https://github.com/100-hours-a-week/18-team-18TEAM-fe/compare/v1.1.1-dev.1...v1.2.0-dev.1) (2026-02-03)
+
+### Features
+
+* 카카오 공유하기 및 링크 공유하기 기능 추가 ([8bfcd04](https://github.com/100-hours-a-week/18-team-18TEAM-fe/commit/8bfcd04b424445aba332964f0cfada20ece468fb))
+
 ## [1.1.1-dev.1](https://github.com/100-hours-a-week/18-team-18TEAM-fe/compare/v1.1.0...v1.1.1-dev.1) (2026-02-03)
 
 ### Bug Fixes
