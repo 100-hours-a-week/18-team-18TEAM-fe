@@ -2,12 +2,7 @@
 
 import * as React from 'react'
 import { useRouter } from 'next/navigation'
-import {
-  Tabs,
-  TabsList,
-  TabsTrigger,
-  TabsContent,
-} from '@/components/ui/tabs'
+import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs'
 import { Header } from '@/shared'
 import { useMyLatestCard } from '../api'
 import { BusinessCard } from './business-card'

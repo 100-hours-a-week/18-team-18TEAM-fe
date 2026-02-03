@@ -77,7 +77,11 @@ function InvitationPage() {
   const uuid = searchParams.get('uuid')
 
   const { data: user, isLoading: isUserLoading } = useUser()
-  const { data: cardResponse, isLoading: isCardLoading, isError } = useCardByUuid(uuid ?? '')
+  const {
+    data: cardResponse,
+    isLoading: isCardLoading,
+    isError,
+  } = useCardByUuid(uuid ?? '')
   const { mutate: saveCard, isPending: isSaving } = useSaveCardToWallet()
 
   const [showLoginDialog, setShowLoginDialog] = React.useState(false)

@@ -19,9 +19,12 @@ export function middleware(request: NextRequest) {
   )
 
   if (!isPublicRoute && !accessToken && !refreshToken) {
-    const url = new URL('/login', request.url);
-    url.searchParams.set('next', pathname + (searchParams ? `?${searchParams}` : ''));
-    return NextResponse.redirect(url);
+    const url = new URL('/login', request.url)
+    url.searchParams.set(
+      'next',
+      pathname + (searchParams ? `?${searchParams}` : '')
+    )
+    return NextResponse.redirect(url)
     // return NextResponse.redirect(new URL('/login', request.url))
   }
 
