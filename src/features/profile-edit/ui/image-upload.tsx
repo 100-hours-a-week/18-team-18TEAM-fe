@@ -112,7 +112,7 @@ function ImageUpload({
         <button
           type="button"
           onClick={handleRemove}
-          disabled={isUploading}
+          disabled={isUploading || !value}
           className={cn(
             'rounded px-3 py-1 text-[12px]',
             'bg-destructive text-destructive-foreground hover:bg-destructive/90',
