@@ -1,3 +1,9 @@
+## [1.2.0-dev.3](https://github.com/100-hours-a-week/18-team-18TEAM-fe/compare/v1.2.0-dev.2...v1.2.0-dev.3) (2026-02-04)
+
+### Bug Fixes
+
+* 기본이미지에서 동작하던 삭제 버튼 수정 (Close [#66](https://github.com/100-hours-a-week/18-team-18TEAM-fe/issues/66)) ([610337f](https://github.com/100-hours-a-week/18-team-18TEAM-fe/commit/610337ffca1fbfd15f35b7693a9d87c7a67721ab))
+
 ## [1.2.0-dev.2](https://github.com/100-hours-a-week/18-team-18TEAM-fe/compare/v1.2.0-dev.1...v1.2.0-dev.2) (2026-02-03)
 
 ### Features
