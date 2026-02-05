@@ -1,9 +1,36 @@
-## [1.1.1](https://github.com/100-hours-a-week/18-team-18TEAM-fe/compare/v1.1.0...v1.1.1) (2026-02-03)
+## [1.2.0-dev.5](https://github.com/100-hours-a-week/18-team-18TEAM-fe/compare/v1.2.0-dev.4...v1.2.0-dev.5) (2026-02-05)
 
 ### Bug Fixes
 
-* Github token 수정 ([b970d31](https://github.com/100-hours-a-week/18-team-18TEAM-fe/commit/b970d316fa27ce7052c92a357b263eb875255e3c))
-* Github token 수정 ([9483db8](https://github.com/100-hours-a-week/18-team-18TEAM-fe/commit/9483db873355023fe503148cfee5568e9b5c63ac))
+* [#34](https://github.com/100-hours-a-week/18-team-18TEAM-fe/issues/34) ([b7bb13f](https://github.com/100-hours-a-week/18-team-18TEAM-fe/commit/b7bb13f9e3285ffae54f263a483fb77d2eaafb45))
+
+## [1.2.0-dev.4](https://github.com/100-hours-a-week/18-team-18TEAM-fe/compare/v1.2.0-dev.3...v1.2.0-dev.4) (2026-02-05)
+
+### Bug Fixes
+
+* 경력 없을 때 생성 페이지로 연결 (Close [#83](https://github.com/100-hours-a-week/18-team-18TEAM-fe/issues/83)) ([e67fe35](https://github.com/100-hours-a-week/18-team-18TEAM-fe/commit/e67fe35cf0fa4d049f5b34f949c0a75ff0630676))
+
+## [1.2.0-dev.3](https://github.com/100-hours-a-week/18-team-18TEAM-fe/compare/v1.2.0-dev.2...v1.2.0-dev.3) (2026-02-04)
+
+### Bug Fixes
+
+* 기본이미지에서 동작하던 삭제 버튼 수정 (Close [#66](https://github.com/100-hours-a-week/18-team-18TEAM-fe/issues/66)) ([610337f](https://github.com/100-hours-a-week/18-team-18TEAM-fe/commit/610337ffca1fbfd15f35b7693a9d87c7a67721ab))
+
+## [1.2.0-dev.2](https://github.com/100-hours-a-week/18-team-18TEAM-fe/compare/v1.2.0-dev.1...v1.2.0-dev.2) (2026-02-03)
+
+### Features
+
+* 로그인 URL에 다음 작업 경로 반영 ([811fb07](https://github.com/100-hours-a-week/18-team-18TEAM-fe/commit/811fb07b63b10b99ce4bc02976e73f49b7d5dac4))
+
+### Bug Fixes
+
+* SearchParams 사용으로 Suspense 적용 ([f318bd2](https://github.com/100-hours-a-week/18-team-18TEAM-fe/commit/f318bd230ac902d1a4601b8b54f41689f384ba0f))
+
+## [1.2.0-dev.1](https://github.com/100-hours-a-week/18-team-18TEAM-fe/compare/v1.1.1-dev.1...v1.2.0-dev.1) (2026-02-03)
+
+### Features
+
+* 카카오 공유하기 및 링크 공유하기 기능 추가 ([8bfcd04](https://github.com/100-hours-a-week/18-team-18TEAM-fe/commit/8bfcd04b424445aba332964f0cfada20ece468fb))
 
 ## [1.1.1-dev.1](https://github.com/100-hours-a-week/18-team-18TEAM-fe/compare/v1.1.0...v1.1.1-dev.1) (2026-02-03)
 

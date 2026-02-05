@@ -190,9 +190,11 @@
     top: 0.5rem;
     opacity: 1;
   }
+
   50% {
     opacity: 0.5;
   }
+
   100% {
     top: calc(100% - 0.5rem);
     opacity: 1;
@@ -201,4 +203,19 @@
 
 .animate-scan-line {
   animation: scan-line 2s ease-in-out infinite alternate;
+}
+
+/* Login slide-up animation */
+@keyframes slide-up {
+  from {
+    transform: translateY(100%);
+  }
+
+  to {
+    transform: translateY(0);
+  }
+}
+
+.animate-slide-up {
+  animation: slide-up 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
