@@ -1,7 +1,7 @@
 'use client'
 
 import * as React from 'react'
-import { PhoneIcon, MailIcon, PhoneCallIcon } from 'lucide-react'
+import { PhoneIcon, Copy, PhoneCallIcon } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { IconButton } from '@/shared'
 
@@ -78,7 +78,7 @@ function CardInfoSection({
           onClick={onEmailClick}
           disabled={!info.email}
         >
-          <MailIcon className="size-4" />
+          <Copy className="size-4" />
         </IconButton>
       </div>
 
