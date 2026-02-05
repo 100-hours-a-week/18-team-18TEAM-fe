@@ -1,3 +1,9 @@
+## [1.2.0-dev.4](https://github.com/100-hours-a-week/18-team-18TEAM-fe/compare/v1.2.0-dev.3...v1.2.0-dev.4) (2026-02-05)
+
+### Bug Fixes
+
+* 경력 없을 때 생성 페이지로 연결 (Close [#83](https://github.com/100-hours-a-week/18-team-18TEAM-fe/issues/83)) ([e67fe35](https://github.com/100-hours-a-week/18-team-18TEAM-fe/commit/e67fe35cf0fa4d049f5b34f949c0a75ff0630676))
+
 ## [1.2.0-dev.3](https://github.com/100-hours-a-week/18-team-18TEAM-fe/compare/v1.2.0-dev.2...v1.2.0-dev.3) (2026-02-04)
 
 ### Bug Fixes
