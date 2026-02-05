@@ -4,9 +4,11 @@ import * as React from 'react'
 import { useRouter } from 'next/navigation'
 import { CameraIcon, ScanIcon, LightbulbIcon } from 'lucide-react'
 import QrScanner from 'qr-scanner'
+import { useAtom } from 'jotai'
 import { Header, Button, Card, CardContent } from '@/shared'
 import { CameraPermissionError } from './camera-permission-error'
 import { QrScanFailure } from './qr-scan-failure'
+import { cameraPermissionAtom } from '../model'
 import type { QrScanStatus } from '../model'
 
 function QrScanPage() {
@@ -14,6 +16,7 @@ function QrScanPage() {
   const videoRef = React.useRef<HTMLVideoElement>(null)
   const scannerRef = React.useRef<QrScanner | null>(null)
 
+  const [cameraPermission, setCameraPermission] = useAtom(cameraPermissionAtom)
   const [status, setStatus] = React.useState<QrScanStatus>('idle')
   const [isScanning, setIsScanning] = React.useState(false)
   const [isClosing, setIsClosing] = React.useState(false)
@@ -76,14 +79,21 @@ function QrScanPage() {
       await scanner.start()
     } catch (error) {
       console.error('Scanner error:', error)
+      setCameraPermission('denied')
       setStatus('permission-denied')
       setIsScanning(false)
     }
-  }, [handleScanResult])
+  }, [handleScanResult, setCameraPermission])
 
   const startScanner = async () => {
     try {
       setStatus('requesting')
+
+      // 이미 권한이 거부된 상태면 바로 에러 화면
+      if (cameraPermission === 'denied') {
+        setStatus('permission-denied')
+        return
+      }
 
       const hasCamera = await QrScanner.hasCamera()
       if (!hasCamera) {
@@ -95,6 +105,7 @@ function QrScanPage() {
       setStatus('scanning')
     } catch (error) {
       console.error('Scanner error:', error)
+      setCameraPermission('denied')
       setStatus('permission-denied')
     }
   }
