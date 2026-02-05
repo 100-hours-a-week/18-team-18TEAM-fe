@@ -23,4 +23,5 @@ export interface CardData {
   end_date: string
   is_progress: string
   ai_card_image_url: string
+  description: string
 }

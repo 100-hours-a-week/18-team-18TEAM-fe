@@ -1,5 +1,5 @@
 // API
-export { useMyLatestCard, qrShareKeys } from './api'
+export { useMyLatestCard, qrShareKeys, toProfileDataFromCard } from './api'
 
 // Model
 export type { CardData, MyLatestCardResponse } from './model'

@@ -1,6 +1,8 @@
 import { useQuery } from '@tanstack/react-query'
 import { AxiosError } from 'axios'
+import type { ProfileData } from '@/shared'
 import { getMyLatestCard } from './qr-share.api'
+import type { CardData } from '../model'
 
 /** 쿼리 키 */
 export const qrShareKeys = {
@@ -28,4 +30,21 @@ export function useMyLatestCard() {
     staleTime: 5 * 60 * 1000,
     gcTime: 10 * 60 * 1000,
   })
+}
+
+/** CardData를 ProfileData로 변환 */
+export function toProfileDataFromCard(
+  cardData: CardData,
+  profileImageUrl?: string
+): ProfileData {
+  return {
+    name: cardData.name,
+    email: cardData.email,
+    phone: cardData.phone_number,
+    tel: cardData.lined_number,
+    company: cardData.company,
+    department: cardData.department,
+    position: cardData.position,
+    avatarSrc: profileImageUrl || null,
+  }
 }
