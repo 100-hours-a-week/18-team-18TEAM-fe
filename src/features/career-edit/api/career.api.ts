@@ -11,6 +11,7 @@ export interface CareerResponse {
   company: string | null
   position: string | null
   department: string | null
+  description: string | null
   start_date: string
   end_date: string | null
   is_progress: boolean
