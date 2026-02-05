@@ -1,3 +1,9 @@
+## [1.2.0-dev.5](https://github.com/100-hours-a-week/18-team-18TEAM-fe/compare/v1.2.0-dev.4...v1.2.0-dev.5) (2026-02-05)
+
+### Bug Fixes
+
+* [#34](https://github.com/100-hours-a-week/18-team-18TEAM-fe/issues/34) ([b7bb13f](https://github.com/100-hours-a-week/18-team-18TEAM-fe/commit/b7bb13f9e3285ffae54f263a483fb77d2eaafb45))
+
 ## [1.2.0-dev.4](https://github.com/100-hours-a-week/18-team-18TEAM-fe/compare/v1.2.0-dev.3...v1.2.0-dev.4) (2026-02-05)
 
 ### Bug Fixes
