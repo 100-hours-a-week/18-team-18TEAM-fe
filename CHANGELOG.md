@@ -1,3 +1,9 @@
+## [1.2.0-dev.6](https://github.com/100-hours-a-week/18-team-18TEAM-fe/compare/v1.2.0-dev.5...v1.2.0-dev.6) (2026-02-05)
+
+### Bug Fixes
+
+* 상대 명함 조회 api 연결 수정 (Close [#88](https://github.com/100-hours-a-week/18-team-18TEAM-fe/issues/88)) ([8dc402d](https://github.com/100-hours-a-week/18-team-18TEAM-fe/commit/8dc402d745ecb02aa14eecdf125699ac4286beef))
+
 ## [1.2.0-dev.5](https://github.com/100-hours-a-week/18-team-18TEAM-fe/compare/v1.2.0-dev.4...v1.2.0-dev.5) (2026-02-05)
 
 ### Bug Fixes
