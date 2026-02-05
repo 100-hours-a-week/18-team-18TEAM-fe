@@ -55,7 +55,7 @@ function ProfileEditForm() {
 
       {/* 이메일 (읽기 전용) */}
       <div className="space-y-2">
-        <p className="text-green-600 text-xs">
+        <p className="text-xs text-green-600">
           지금 계정과 연동된 이메일입니다.
         </p>
         <Field
