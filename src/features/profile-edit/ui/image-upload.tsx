@@ -11,20 +11,54 @@ const ALLOWED_TYPES = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp']
 
 interface ImageUploadProps {
   value?: string
+  originalValue?: string // 원본 이미지 URL (isDirty 비교용)
   onChange?: (value: string | undefined) => void
-  onS3KeyChange?: (key: string | undefined) => void
+  onSave?: (key: string | null) => Promise<void> // PATCH 호출 콜백
+  onSuccess?: () => void // 저장 성공 시 콜백 (페이지 이동용)
   className?: string
 }
 
 function ImageUpload({
   value,
+  originalValue,
   onChange,
-  onS3KeyChange,
+  onSave,
+  onSuccess,
   className,
 }: ImageUploadProps) {
   const inputRef = React.useRef<HTMLInputElement>(null)
   const [pendingFile, setPendingFile] = React.useState<File | null>(null)
+  const [pendingHash, setPendingHash] = React.useState<string | null>(null)
+  const [originalHash, setOriginalHash] = React.useState<string | null>(null)
   const [isUploading, setIsUploading] = React.useState(false)
+
+  // 원본 이미지 해시 계산 (동일 이미지 업로드 방지)
+  React.useEffect(() => {
+    let canceled = false
+
+    async function fetchAndHash() {
+      if (!originalValue) {
+        setOriginalHash(null)
+        return
+      }
+
+      try {
+        const response = await fetch(originalValue)
+        if (!response.ok) throw new Error('failed to fetch original image')
+        const buffer = await response.arrayBuffer()
+        const hash = await computeHash(buffer)
+        if (!canceled) setOriginalHash(hash)
+      } catch {
+        // CORS 차단 등으로 해시 계산 실패 시, 중복 검증은 생략
+        if (!canceled) setOriginalHash(null)
+      }
+    }
+
+    fetchAndHash()
+    return () => {
+      canceled = true
+    }
+  }, [originalValue])
 
   const handleClick = () => {
     if (isUploading) return
@@ -35,8 +69,8 @@ function ImageUpload({
     if (isUploading) return
     inputRef.current && (inputRef.current.value = '')
     onChange?.(undefined)
-    onS3KeyChange?.(undefined)
     setPendingFile(null)
+    setPendingHash(null)
   }
 
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -67,24 +101,76 @@ function ImageUpload({
 
     // 업로드는 저장 버튼에서 수행
     setPendingFile(file)
+
+    // 해시 계산 (동일 이미지 방지용)
+    try {
+      const buffer = await file.arrayBuffer()
+      const hash = await computeHash(buffer)
+      setPendingHash(hash)
+
+      if (originalHash && hash === originalHash) {
+        toast.error('이미 등록된 이미지입니다.')
+        setPendingFile(null)
+        return
+      }
+    } catch {
+      setPendingHash(null)
+    }
   }
 
   const handleSaveUpload = async () => {
-    if (!pendingFile || isUploading) return
+    // Base64 비교와 별개로 해시가 동일하면 업로드/패치 생략
+    if (pendingHash && originalHash && pendingHash === originalHash) {
+      toast.error('이미 등록된 이미지입니다.')
+      return
+    }
+
+    // 1. 원본과 동일한 경우 → "이미 등록된 이미지입니다" 토스트 (페이지 이동 X)
+    if (value === originalValue) {
+      toast.error('이미 등록된 이미지입니다.')
+      return
+    }
+
+    // 2. 이미지 삭제 (기본 이미지)인 경우 → PATCH만 (key = null)
+    if (!value || value === '') {
+      setIsUploading(true)
+      try {
+        await onSave?.(null)
+        toast.success('프로필 이미지가 삭제되었습니다.')
+        onSuccess?.() // 성공 시에만 페이지 이동
+      } catch {
+        toast.error('이미지 삭제에 실패했습니다.')
+        // 실패 시 페이지 이동 X
+      } finally {
+        setIsUploading(false)
+      }
+      return
+    }
+
+    // 3. 새 이미지인 경우 → S3 업로드 + PATCH
+    if (!pendingFile) return
     setIsUploading(true)
     try {
       const { url, key } = await getPresignedUrl(pendingFile.name)
       await uploadToS3(url, pendingFile)
-      onS3KeyChange?.(key)
+      await onSave?.(key) // PATCH 호출
       setPendingFile(null)
       toast.success('이미지가 저장되었습니다.')
-    } catch (error) {
-      console.error('이미지 업로드 실패:', error)
+      onSuccess?.() // 성공 시에만 페이지 이동
+    } catch {
       toast.error('이미지 업로드에 실패했습니다.')
+      // 업로드 실패 또는 PATCH 실패 시 페이지 이동 X
     } finally {
       setIsUploading(false)
     }
   }
+
+  // 저장 버튼 활성화 조건: 원본과 다르고, (삭제했거나 새 파일이 있는 경우)
+  const canSave =
+    !isUploading &&
+    value !== originalValue &&
+    ((!value && originalValue) || pendingFile) &&
+    !(pendingHash && originalHash && pendingHash === originalHash)
 
   return (
     <div className={cn('flex flex-col items-center', className)}>
@@ -124,7 +210,7 @@ function ImageUpload({
         <button
           type="button"
           onClick={handleSaveUpload}
-          disabled={isUploading || !pendingFile}
+          disabled={!canSave}
           className={cn(
             'rounded px-3 py-1 text-[12px]',
             'bg-primary text-primary-foreground hover:bg-primary/90',
@@ -148,3 +234,10 @@ function ImageUpload({
 
 export { ImageUpload }
 export type { ImageUploadProps }
+
+async function computeHash(buffer: ArrayBuffer): Promise<string> {
+  const hashBuffer = await crypto.subtle.digest('SHA-256', buffer)
+  return Array.from(new Uint8Array(hashBuffer))
+    .map((b) => b.toString(16).padStart(2, '0'))
+    .join('')
+}
