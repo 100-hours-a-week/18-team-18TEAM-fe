@@ -40,6 +40,8 @@ function CareerEditForm({ cardId }: CareerEditFormProps) {
     formState: { errors, isSubmitting, isDirty },
   } = useForm<CareerFormData>({
     resolver: zodResolver(careerFormSchema),
+    mode: 'onBlur',
+    reValidateMode: 'onChange',
     defaultValues: {
       name: '',
       company: '',
@@ -111,6 +113,7 @@ function CareerEditForm({ cardId }: CareerEditFormProps) {
         label="이름"
         placeholder="이름을 입력해주세요"
         error={errors.name?.message}
+        required
         {...register('name')}
       />
 
@@ -119,6 +122,7 @@ function CareerEditForm({ cardId }: CareerEditFormProps) {
         label="회사명"
         placeholder="회사명을 입력해주세요"
         error={errors.company?.message}
+        required
         {...register('company')}
       />
 
