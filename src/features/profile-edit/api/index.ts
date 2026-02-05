@@ -1,2 +1,2 @@
-export { updateProfile } from './profile.api'
-export { useUpdateProfile } from './profile.queries'
+export { getPresignedUrl, uploadToS3, updateProfileImage } from './profile.api'
+export { useUpdateProfileImage } from './profile.queries'

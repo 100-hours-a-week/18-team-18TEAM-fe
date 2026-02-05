@@ -1,8 +1,10 @@
 // API
-export { updateProfile, useUpdateProfile } from './api'
-
-// Model
-export { profileFormSchema, type ProfileFormData } from './model'
+export {
+  getPresignedUrl,
+  uploadToS3,
+  updateProfileImage,
+  useUpdateProfileImage,
+} from './api'
 
 // UI
 export { ProfileEditPage } from './ui/profile-edit-page'
