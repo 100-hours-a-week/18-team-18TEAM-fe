@@ -1,16 +1,14 @@
-## [1.2.0](https://github.com/100-hours-a-week/18-team-18TEAM-fe/compare/v1.1.1...v1.2.0) (2026-02-05)
-
-### Features
-
-* 로그인 URL에 다음 작업 경로 반영 ([811fb07](https://github.com/100-hours-a-week/18-team-18TEAM-fe/commit/811fb07b63b10b99ce4bc02976e73f49b7d5dac4))
-* 카카오 공유하기 및 링크 공유하기 기능 추가 ([8bfcd04](https://github.com/100-hours-a-week/18-team-18TEAM-fe/commit/8bfcd04b424445aba332964f0cfada20ece468fb))
+## [1.2.1-dev.1](https://github.com/100-hours-a-week/18-team-18TEAM-fe/compare/v1.2.0...v1.2.1-dev.1) (2026-02-05)
 
 ### Bug Fixes
 
-* [#34](https://github.com/100-hours-a-week/18-team-18TEAM-fe/issues/34) ([b7bb13f](https://github.com/100-hours-a-week/18-team-18TEAM-fe/commit/b7bb13f9e3285ffae54f263a483fb77d2eaafb45))
-* SearchParams 사용으로 Suspense 적용 ([f318bd2](https://github.com/100-hours-a-week/18-team-18TEAM-fe/commit/f318bd230ac902d1a4601b8b54f41689f384ba0f))
-* 경력 없을 때 생성 페이지로 연결 (Close [#83](https://github.com/100-hours-a-week/18-team-18TEAM-fe/issues/83)) ([e67fe35](https://github.com/100-hours-a-week/18-team-18TEAM-fe/commit/e67fe35cf0fa4d049f5b34f949c0a75ff0630676))
-* 기본이미지에서 동작하던 삭제 버튼 수정 (Close [#66](https://github.com/100-hours-a-week/18-team-18TEAM-fe/issues/66)) ([610337f](https://github.com/100-hours-a-week/18-team-18TEAM-fe/commit/610337ffca1fbfd15f35b7693a9d87c7a67721ab))
+* 상대 명함 조회 api 연결 수정 (Close [#88](https://github.com/100-hours-a-week/18-team-18TEAM-fe/issues/88)) ([8dc402d](https://github.com/100-hours-a-week/18-team-18TEAM-fe/commit/8dc402d745ecb02aa14eecdf125699ac4286beef))
+
+## [1.2.0-dev.6](https://github.com/100-hours-a-week/18-team-18TEAM-fe/compare/v1.2.0-dev.5...v1.2.0-dev.6) (2026-02-05)
+
+### Bug Fixes
+
+* 상대 명함 조회 api 연결 수정 (Close [#88](https://github.com/100-hours-a-week/18-team-18TEAM-fe/issues/88)) ([8dc402d](https://github.com/100-hours-a-week/18-team-18TEAM-fe/commit/8dc402d745ecb02aa14eecdf125699ac4286beef))
 
 ## [1.2.0-dev.5](https://github.com/100-hours-a-week/18-team-18TEAM-fe/compare/v1.2.0-dev.4...v1.2.0-dev.5) (2026-02-05)
 
