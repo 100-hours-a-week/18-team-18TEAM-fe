@@ -1,3 +1,9 @@
+## [1.3.0](https://github.com/100-hours-a-week/18-team-18TEAM-fe/compare/v1.2.1...v1.3.0) (2026-02-08)
+
+### Features
+
+* develop 프리릴리즈와 main 정식 릴리즈 파이프라인 분리 ([a55adb0](https://github.com/100-hours-a-week/18-team-18TEAM-fe/commit/a55adb070ac329c4d189bee4185302d93ba136b7))
+
 ## [1.2.1](https://github.com/100-hours-a-week/18-team-18TEAM-fe/compare/v1.2.0...v1.2.1) (2026-02-07)
 
 ### Bug Fixes
