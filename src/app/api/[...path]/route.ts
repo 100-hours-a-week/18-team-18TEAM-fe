@@ -103,7 +103,10 @@ async function handleKakaoLogin(
 
   const tokenPair = extractTokenPairFromBody(bodyText)
   if (!tokenPair) {
-    return jsonError(502, 'Failed to create a session from Kakao login response.')
+    return jsonError(
+      502,
+      'Failed to create a session from Kakao login response.'
+    )
   }
 
   const now = new Date().toISOString()
@@ -120,9 +123,12 @@ async function handleKakaoLogin(
 
   await createSession(sessionId, sessionRecord)
 
-  const response = NextResponse.json({ success: true }, {
-    status: upstream.status,
-  })
+  const response = NextResponse.json(
+    { success: true },
+    {
+      status: upstream.status,
+    }
+  )
   issueSessionCookie(response, sessionId)
   return response
 }

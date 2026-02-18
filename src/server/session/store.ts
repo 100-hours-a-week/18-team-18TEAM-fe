@@ -1,5 +1,10 @@
 import { getServerEnv } from '@/server/config/env'
-import { redisDel, redisExpire, redisGet, redisSetEx } from '@/server/redis/client'
+import {
+  redisDel,
+  redisExpire,
+  redisGet,
+  redisSetEx,
+} from '@/server/redis/client'
 
 export interface SessionRecord {
   userId: number | string | null
@@ -38,7 +43,11 @@ export async function createSession(
   record: SessionRecord
 ): Promise<void> {
   const { sessionTtlSeconds } = getServerEnv()
-  await redisSetEx(buildSessionKey(sessionId), sessionTtlSeconds, JSON.stringify(record))
+  await redisSetEx(
+    buildSessionKey(sessionId),
+    sessionTtlSeconds,
+    JSON.stringify(record)
+  )
 }
 
 export async function getSession(
