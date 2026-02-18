@@ -43,11 +43,11 @@ function trimTrailingSlash(url: string): string {
 
 export function getServerEnv(): ServerEnv {
   const springApiBaseUrl =
-    process.env.SPRING_API_BASE_URL || process.env.NEXT_PUBLIC_API_URL || ''
+    process.env.SPRING_API_BASE_URL || ''
 
   if (!springApiBaseUrl) {
     throw new Error(
-      'SPRING_API_BASE_URL (or NEXT_PUBLIC_API_URL fallback) is required for BFF routes.'
+      'SPRING_API_BASE_URL is required for BFF routes.'
     )
   }
 
