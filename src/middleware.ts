@@ -1,7 +1,13 @@
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
 
-const PUBLIC_ROUTES = ['/login', '/kakao/callback', '/result', '/invitation']
+const PUBLIC_ROUTES = [
+  '/login',
+  '/kakao/callback',
+  '/result',
+  '/invitation',
+  '/health',
+]
 const LOCAL_HOSTS = ['localhost', '127.0.0.1']
 const SESSION_COOKIE_NAME = 'sessionId'
 
