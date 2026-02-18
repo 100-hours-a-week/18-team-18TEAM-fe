@@ -6,7 +6,5 @@ export interface User {
 }
 
 export interface LoginResponse {
-  accessToken: string
-  refreshToken: string
   user: User
 }
