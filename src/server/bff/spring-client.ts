@@ -19,6 +19,9 @@ function pickRequestHeader(headers: Headers, name: string): string | null {
 export function toProxyHeaders(headers: Headers): Headers {
   const nextHeaders = new Headers(headers)
   nextHeaders.delete('set-cookie')
+  nextHeaders.delete('content-encoding')
+  nextHeaders.delete('content-length')
+  nextHeaders.delete('transfer-encoding')
   return nextHeaders
 }
 
