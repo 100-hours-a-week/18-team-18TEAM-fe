@@ -22,15 +22,16 @@ function KakaoCallbackContent() {
 
     const handleLogin = async () => {
       try {
-        const res = await fetch(
-          `${process.env.NEXT_PUBLIC_API_URL}/auth/login/kakao`,
-          {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ code, redirectUri }),
-            credentials: 'include',
-          }
-        )
+        const res = await fetch('/api/auth/login/kakao', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ code, redirectUri }),
+          credentials: 'include',
+        })
+
+        if (!res.ok) {
+          throw new Error('Kakao login failed')
+        }
         // 로그인 성공 → /home으로 이동 → useUser 훅이 유저 정보 fetch
         router.replace(next)
       } catch (err) {
