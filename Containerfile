@@ -1,30 +1,25 @@
-# syntax=docker/dockerfile:1
-
-FROM node:20-alpine AS base
+FROM node:20-alpine AS deps
 WORKDIR /app
 
 RUN apk add --no-cache libc6-compat \
   && corepack enable \
   && corepack prepare pnpm@9 --activate
 
-FROM base AS deps
-
-# lockfile 기반 패키지 스토어를 먼저 채워 의존성 레이어 재사용률을 높인다.
 COPY package.json pnpm-lock.yaml ./
-RUN pnpm fetch --frozen-lockfile
+RUN pnpm install --frozen-lockfile
 
-FROM base AS builder
+FROM node:20-alpine AS builder
+WORKDIR /app
 
-# fetch된 스토어를 사용해 네트워크 없이 의존성 설치
-COPY --from=deps /root/.local/share/pnpm/store /root/.local/share/pnpm/store
-COPY package.json pnpm-lock.yaml ./
-RUN pnpm install --frozen-lockfile --offline
+RUN apk add --no-cache libc6-compat \
+  && corepack enable \
+  && corepack prepare pnpm@9 --activate
 
-COPY next.config.ts tsconfig.json postcss.config.mjs ./
+COPY --from=deps /app/node_modules ./node_modules
+COPY package.json pnpm-lock.yaml next.config.ts next-env.d.ts tsconfig.json postcss.config.mjs ./
 COPY public ./public
 COPY src ./src
 
-# CI/CD에서 secrets로 생성한 .env를 빌드 시점에만 사용
 COPY .env ./.env
 
 RUN pnpm build
