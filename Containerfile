@@ -1,0 +1,49 @@
+# syntax=docker/dockerfile:1
+
+FROM node:20-alpine AS base
+WORKDIR /app
+
+RUN apk add --no-cache libc6-compat \
+  && corepack enable \
+  && corepack prepare pnpm@9 --activate
+
+FROM base AS deps
+
+# lockfile 기반 패키지 스토어를 먼저 채워 의존성 레이어 재사용률을 높인다.
+COPY package.json pnpm-lock.yaml ./
+RUN pnpm fetch --frozen-lockfile
+
+FROM base AS builder
+
+# fetch된 스토어를 사용해 네트워크 없이 의존성 설치
+COPY --from=deps /root/.local/share/pnpm/store /root/.local/share/pnpm/store
+COPY package.json pnpm-lock.yaml ./
+RUN pnpm install --frozen-lockfile --offline
+
+COPY next.config.ts tsconfig.json postcss.config.mjs ./
+COPY public ./public
+COPY src ./src
+
+# CI/CD에서 secrets로 생성한 .env를 빌드 시점에만 사용
+COPY .env ./.env
+
+RUN pnpm build
+
+FROM node:20-alpine AS runner
+WORKDIR /app
+
+ENV NODE_ENV=production
+ENV HOSTNAME=0.0.0.0
+ENV PORT=3000
+
+RUN addgroup -S nodejs && adduser -S nextjs -G nodejs
+
+COPY --from=builder /app/public ./public
+COPY --from=builder /app/.next/standalone ./
+COPY --from=builder /app/.next/static ./.next/static
+
+USER nextjs
+
+EXPOSE 3000
+
+CMD ["node", "server.js"]
