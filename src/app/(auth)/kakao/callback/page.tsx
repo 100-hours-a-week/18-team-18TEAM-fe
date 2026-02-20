@@ -22,7 +22,7 @@ function KakaoCallbackContent() {
 
     const handleLogin = async () => {
       try {
-        const res = await fetch('/api/auth/login/kakao', {
+        const res = await fetch('/bff/auth/login/kakao', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ code, redirectUri }),
