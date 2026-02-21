@@ -2,6 +2,7 @@
 
 import * as React from 'react'
 import Image from 'next/image'
+import { MessageCircleIcon } from 'lucide-react'
 import {
   SearchInput,
   MyCardButton,
@@ -13,7 +14,7 @@ import {
 } from '@/features/home/ui'
 import { useWallets, useDeleteWalletCard } from '@/features/home/api'
 import { useRouter } from 'next/navigation'
-import { toast } from '@/shared'
+import { IconButton, toast } from '@/shared'
 
 export default function HomePage() {
   const [fabOpen, setFabOpen] = React.useState(false)
@@ -63,7 +64,15 @@ export default function HomePage() {
           height={47}
           priority
         />
-        <div className="absolute right-6">
+        <div className="absolute right-6 flex items-center gap-2">
+          <IconButton
+            variant="surface"
+            size="default"
+            aria-label="채팅방 목록으로 이동"
+            onClick={() => router.push('/chat')}
+          >
+            <MessageCircleIcon className="size-5" />
+          </IconButton>
           <MyCardButton onClick={() => router.push('/my-card')} />
         </div>
       </header>
