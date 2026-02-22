@@ -4,10 +4,3 @@ export type {
   ChatMessage,
   ChatRoomState,
 } from './chat.types'
-
-export {
-  getMockChatRooms,
-  getMockRoom,
-  getMockMessages,
-  getMockRoomState,
-} from './mock-chat-data'
