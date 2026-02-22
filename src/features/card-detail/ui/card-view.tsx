@@ -2,6 +2,7 @@
 
 import * as React from 'react'
 import { useRouter } from 'next/navigation'
+import { useQueryClient } from '@tanstack/react-query'
 import {
   SettingsIcon,
   EditIcon,
@@ -33,7 +34,7 @@ import {
   useDeleteCareer,
 } from '@/features/career-edit'
 import type { UserInfo } from '@/features/user/model'
-import { createChatRoom } from '@/features/chat/api'
+import { createChatRoom, patchChatRoomLatestMessage } from '@/features/chat/api'
 import { GlassCardPreview } from './glass-card-preview'
 import { CardInfoSection } from './card-info-section'
 
@@ -119,6 +120,7 @@ function CardView({
   isOwner = false,
 }: CardViewProps) {
   const router = useRouter()
+  const queryClient = useQueryClient()
   const [isFlip, setIsFlip] = React.useState(false)
   const [isCreatingDmRoom, setIsCreatingDmRoom] = React.useState(false)
   const [activeTab, setActiveTab] = React.useState<NavTab | undefined>(
@@ -216,6 +218,7 @@ function CardView({
       const response = await createChatRoom({
         target_user_id: targetUserId,
       })
+      patchChatRoomLatestMessage(queryClient, response.data)
       router.push(`/chat/${response.data.room_id}`)
     } catch {
       toast.error('채팅방 생성에 실패했습니다.')

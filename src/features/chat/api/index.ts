@@ -1,26 +1,7 @@
 export {
-  ChatRoomListPage,
-  ChatRoomPage,
-  ChatRoomListItem,
-  ChatMessageList,
-  ChatComposer,
-} from './ui'
-
-export type {
-  ChatParticipant,
-  ChatRoomSummary,
-  ChatMessage,
-  ChatRoomState,
-} from './model'
-
-export {
   createChatRoom,
   getChatRoomMessages,
   getChatRooms,
-  chatKeys,
-  patchChatRoomLatestMessage,
-  useChatRoomMessages,
-  useChatRooms,
   type ChatMessageData,
   type CursorPagination,
   type CreateChatRoomRequest,
@@ -30,6 +11,13 @@ export {
   type GetChatRoomMessagesResponse,
   type GetChatRoomsParams,
   type GetChatRoomsResponse,
+} from './chat.api'
+
+export {
+  chatKeys,
+  patchChatRoomLatestMessage,
+  useChatRoomMessages,
+  useChatRooms,
   type ChatMessagesQueryParams,
   type ChatRoomsQueryParams,
-} from './api'
+} from './chat.queries'

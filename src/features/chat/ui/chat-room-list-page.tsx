@@ -1,24 +1,34 @@
 'use client'
 
 import * as React from 'react'
-import { useRouter, useSearchParams } from 'next/navigation'
+import { useRouter } from 'next/navigation'
 import { SearchIcon, RefreshCcwIcon } from 'lucide-react'
+import { useInView } from 'react-intersection-observer'
 import { Header, Button, EmptyState } from '@/shared'
 import { Input } from '@/components/ui/input'
-import { getMockChatRooms } from '../model'
+import { useChatRooms } from '../api'
 import { ChatRoomListItem } from './chat-room-list-item'
 
 function ChatRoomListPage() {
   const router = useRouter()
-  const searchParams = useSearchParams()
   const [keyword, setKeyword] = React.useState('')
+  const { ref, inView } = useInView({ rootMargin: '200px' })
 
-  const preview = searchParams.get('preview')
-  const isLoading = preview === 'loading'
-  const isError = preview === 'error'
-  const forceEmpty = preview === 'empty'
+  const {
+    rooms,
+    isLoading,
+    isError,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+    refetch,
+  } = useChatRooms({ size: 20 })
 
-  const rooms = React.useMemo(() => getMockChatRooms(), [])
+  React.useEffect(() => {
+    if (inView && hasNextPage && !isFetchingNextPage) {
+      void fetchNextPage()
+    }
+  }, [inView, hasNextPage, isFetchingNextPage, fetchNextPage])
 
   const filteredRooms = React.useMemo(() => {
     const normalized = keyword.trim().toLowerCase()
@@ -29,8 +39,6 @@ function ChatRoomListPage() {
       return target.toLowerCase().includes(normalized)
     })
   }, [rooms, keyword])
-
-  const visibleRooms = forceEmpty ? [] : filteredRooms
 
   return (
     <div className="bg-background min-h-screen">
@@ -64,13 +72,13 @@ function ChatRoomListPage() {
             </p>
             <Button
               variant="outline"
-              onClick={() => router.replace('/chat')}
+              onClick={() => void refetch()}
               leftIcon={<RefreshCcwIcon className="size-4" />}
             >
               다시 시도
             </Button>
           </div>
-        ) : visibleRooms.length === 0 ? (
+        ) : filteredRooms.length === 0 ? (
           <div className="px-4 py-6">
             <EmptyState
               title="채팅방이 없습니다"
@@ -79,13 +87,22 @@ function ChatRoomListPage() {
           </div>
         ) : (
           <div className="px-2 py-2 pb-8">
-            {visibleRooms.map((room) => (
+            {filteredRooms.map((room) => (
               <ChatRoomListItem
                 key={room.id}
                 room={room}
                 onPress={(roomId) => router.push(`/chat/${roomId}`)}
               />
             ))}
+            {hasNextPage && (
+              <div ref={ref} className="h-4 w-full" aria-hidden>
+                {isFetchingNextPage && (
+                  <div className="text-muted-foreground py-4 text-center text-sm">
+                    채팅방을 불러오고 있어요...
+                  </div>
+                )}
+              </div>
+            )}
           </div>
         )}
       </div>

@@ -1,10 +1,11 @@
 'use client'
 
 import * as React from 'react'
-import { useRouter, useSearchParams } from 'next/navigation'
-import { Header, Button } from '@/shared'
-import type { ChatMessage } from '../model'
-import { getMockRoomState } from '../model'
+import { useRouter } from 'next/navigation'
+import type { AxiosError } from 'axios'
+import { useInView } from 'react-intersection-observer'
+import { Header, Button, toast } from '@/shared'
+import { useChatRoomMessages, useChatRooms } from '../api'
 import { ChatMessageList } from './chat-message-list'
 import { ChatComposer } from './chat-composer'
 
@@ -14,29 +15,44 @@ interface ChatRoomPageProps {
 
 function ChatRoomPage({ roomId }: ChatRoomPageProps) {
   const router = useRouter()
-  const searchParams = useSearchParams()
   const messageEndRef = React.useRef<HTMLDivElement | null>(null)
-
-  const preview = searchParams.get('preview')
-  const isLoading = preview === 'loading'
-  const isError = preview === 'error'
-  const forceEmpty = preview === 'empty'
-
-  const roomState = React.useMemo(() => getMockRoomState(roomId), [roomId])
+  const { ref, inView } = useInView({ rootMargin: '200px' })
   const [draft, setDraft] = React.useState('')
-  const [messages, setMessages] = React.useState<ChatMessage[]>(
-    forceEmpty ? [] : (roomState?.messages ?? [])
+
+  const { rooms } = useChatRooms({ size: 20 })
+  const room = React.useMemo(
+    () => rooms.find((item) => item.id === roomId) || null,
+    [rooms, roomId]
   )
 
+  const {
+    messages,
+    isLoading,
+    isError,
+    error,
+    hasNextPage,
+    fetchNextPage,
+    isFetchingNextPage,
+    refetch,
+  } = useChatRoomMessages(roomId, {
+    size: 20,
+    other_user_id: room?.participant.id,
+  })
+
   React.useEffect(() => {
-    setMessages(forceEmpty ? [] : (roomState?.messages ?? []))
-  }, [roomId, roomState, forceEmpty])
+    if (inView && hasNextPage && !isFetchingNextPage) {
+      void fetchNextPage()
+    }
+  }, [inView, hasNextPage, isFetchingNextPage, fetchNextPage])
 
   React.useEffect(() => {
     messageEndRef.current?.scrollIntoView({ behavior: 'smooth' })
   }, [messages])
 
-  if (!roomState) {
+  const status = (error as AxiosError | null)?.response?.status
+  const isNotFound = status === 404
+
+  if (isNotFound) {
     return (
       <div className="bg-background min-h-screen">
         <Header
@@ -56,41 +72,25 @@ function ChatRoomPage({ roomId }: ChatRoomPageProps) {
     )
   }
 
-  const { room } = roomState
-  const participantLabel = [room.participant.company, room.participant.position]
+  const participantLabel = [room?.participant.company, room?.participant.position]
     .filter(Boolean)
     .join(' · ')
 
   const handleSendMessage = () => {
-    const content = draft.trim()
-    if (!content) return
-
-    const nextMessage: ChatMessage = {
-      id: `local-${Date.now()}`,
-      roomId: room.id,
-      senderId: 100,
-      senderName: '나',
-      content,
-      sentAt: new Date().toISOString(),
-      direction: 'sent',
-      isRead: false,
-    }
-
-    setMessages((prev) => [...prev, nextMessage])
-    setDraft('')
+    toast.info('실시간 채팅 기능은 준비 중입니다.')
   }
 
   return (
     <div className="bg-background min-h-screen">
       <Header
-        title={room.participant.name}
+        title={room?.participant.name || '채팅'}
         showClose
         onClose={() => router.replace('/chat')}
-        rightContent={
+        rightContent={room && (
           <span className="text-muted-foreground text-xs">
             {room.participant.isOnline ? '온라인' : '오프라인'}
           </span>
-        }
+        )}
       />
 
       <div className="flex min-h-screen flex-col pt-14">
@@ -115,7 +115,7 @@ function ChatRoomPage({ roomId }: ChatRoomPageProps) {
               </p>
               <Button
                 variant="outline"
-                onClick={() => router.replace(`/chat/${roomId}`)}
+                onClick={() => void refetch()}
               >
                 다시 시도
               </Button>
@@ -123,16 +123,28 @@ function ChatRoomPage({ roomId }: ChatRoomPageProps) {
           ) : (
             <>
               <ChatMessageList messages={messages} />
+              {hasNextPage && (
+                <div ref={ref} className="h-4 w-full" aria-hidden>
+                  {isFetchingNextPage && (
+                    <div className="text-muted-foreground py-4 text-center text-sm">
+                      이전 메시지를 불러오고 있어요...
+                    </div>
+                  )}
+                </div>
+              )}
               <div ref={messageEndRef} />
             </>
           )}
         </div>
 
+        <p className="text-muted-foreground px-4 pb-1 text-xs">
+          실시간 전송 기능은 STOMP 연동 단계에서 활성화됩니다.
+        </p>
         <ChatComposer
           value={draft}
           onChange={setDraft}
           onSend={handleSendMessage}
-          disabled={isLoading || isError}
+          disabled
         />
       </div>
     </div>
