@@ -1,7 +1,9 @@
+import { ChatRealtimeProvider } from '@/features/chat'
+
 export default function ChatLayout({
   children,
 }: {
   children: React.ReactNode
 }) {
-  return children
+  return <ChatRealtimeProvider>{children}</ChatRealtimeProvider>
 }

@@ -1,4 +1,5 @@
 import { apiClient } from '@/shared/api'
+import type { IssueWsTicketResponse } from '../model'
 
 export interface CreateChatRoomRequest {
   target_user_id: number
@@ -97,4 +98,16 @@ export async function getChatRoomMessages(
     }
   )
   return response.data
+}
+
+export async function issueWsTicket(): Promise<IssueWsTicketResponse> {
+  const response =
+    await apiClient.post<IssueWsTicketResponse>('/auth/ws-ticket')
+  return response.data
+}
+
+export async function markChatRoomRead(
+  roomId: string | number
+): Promise<void> {
+  await apiClient.post(`/chat/rooms/${roomId}/read`)
 }

@@ -2,6 +2,8 @@ export {
   createChatRoom,
   getChatRoomMessages,
   getChatRooms,
+  issueWsTicket,
+  markChatRoomRead,
   type ChatMessageData,
   type CursorPagination,
   type CreateChatRoomRequest,
@@ -16,6 +18,9 @@ export {
 export {
   chatKeys,
   patchChatRoomLatestMessage,
+  patchChatRoomNotification,
+  appendIncomingMessage,
+  setChatRoomUnreadCount,
   useChatRoomMessages,
   useChatRooms,
   type ChatMessagesQueryParams,
