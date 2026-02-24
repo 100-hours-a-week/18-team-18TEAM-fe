@@ -3,4 +3,9 @@ export type {
   ChatRoomSummary,
   ChatMessage,
   ChatRoomState,
+  ChatSocketMessageEvent,
+  ChatRoomNotificationEvent,
+  WsTicketData,
+  IssueWsTicketResponse,
+  SendChatMessagePayload,
 } from './chat.types'
