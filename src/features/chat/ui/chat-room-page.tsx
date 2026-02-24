@@ -4,8 +4,17 @@ import * as React from 'react'
 import { useRouter } from 'next/navigation'
 import type { AxiosError } from 'axios'
 import { useInView } from 'react-intersection-observer'
+import { useQueryClient } from '@tanstack/react-query'
 import { Header, Button, toast } from '@/shared'
-import { useChatRoomMessages, useChatRooms } from '../api'
+import { useMyInfo } from '@/features/user'
+import {
+  markChatRoomRead,
+  setChatRoomUnreadCount,
+  useChatRoomMessages,
+  useChatRooms,
+} from '../api'
+import type { ChatSocketMessageEvent } from '../model'
+import { useChatRoomRealtime } from '../realtime'
 import { ChatMessageList } from './chat-message-list'
 import { ChatComposer } from './chat-composer'
 
@@ -15,9 +24,22 @@ interface ChatRoomPageProps {
 
 function ChatRoomPage({ roomId }: ChatRoomPageProps) {
   const router = useRouter()
+  const queryClient = useQueryClient()
   const messageEndRef = React.useRef<HTMLDivElement | null>(null)
+  const readDebounceRef = React.useRef<ReturnType<typeof setTimeout> | null>(
+    null
+  )
   const { ref, inView } = useInView({ rootMargin: '200px' })
+
   const [draft, setDraft] = React.useState('')
+
+  const { data: myInfo } = useMyInfo()
+
+  const roomNumericId = React.useMemo(() => {
+    const parsed = Number(roomId)
+    if (!Number.isInteger(parsed) || parsed <= 0) return null
+    return parsed
+  }, [roomId])
 
   const { rooms } = useChatRooms({ size: 20 })
   const room = React.useMemo(
@@ -36,8 +58,46 @@ function ChatRoomPage({ roomId }: ChatRoomPageProps) {
     refetch,
   } = useChatRoomMessages(roomId, {
     size: 20,
+    my_user_id: myInfo?.id,
     other_user_id: room?.participant.id,
   })
+
+  const scheduleMarkRoomRead = React.useCallback(() => {
+    if (!roomNumericId) return
+
+    if (readDebounceRef.current) {
+      clearTimeout(readDebounceRef.current)
+    }
+
+    readDebounceRef.current = setTimeout(() => {
+      void (async () => {
+        try {
+          await markChatRoomRead(roomNumericId)
+          setChatRoomUnreadCount(queryClient, roomNumericId, 0)
+        } catch {
+          // 읽음 동기화 실패는 메시지 UX를 깨지 않기 위해 무시한다.
+        }
+      })()
+    }, 400)
+  }, [queryClient, roomNumericId])
+
+  const handleRoomMessage = React.useCallback(
+    (event: ChatSocketMessageEvent) => {
+      if (
+        typeof myInfo?.id === 'number' &&
+        event.sender_user_id === myInfo.id
+      ) {
+        return
+      }
+      scheduleMarkRoomRead()
+    },
+    [myInfo?.id, scheduleMarkRoomRead]
+  )
+
+  const { isConnected, publishMessage } = useChatRoomRealtime(
+    roomId,
+    handleRoomMessage
+  )
 
   React.useEffect(() => {
     if (inView && hasNextPage && !isFetchingNextPage) {
@@ -48,6 +108,20 @@ function ChatRoomPage({ roomId }: ChatRoomPageProps) {
   React.useEffect(() => {
     messageEndRef.current?.scrollIntoView({ behavior: 'smooth' })
   }, [messages])
+
+  React.useEffect(() => {
+    if ((room?.unreadCount ?? 0) > 0) {
+      scheduleMarkRoomRead()
+    }
+  }, [room?.unreadCount, scheduleMarkRoomRead])
+
+  React.useEffect(() => {
+    return () => {
+      if (readDebounceRef.current) {
+        clearTimeout(readDebounceRef.current)
+      }
+    }
+  }, [])
 
   const status = (error as AxiosError | null)?.response?.status
   const isNotFound = status === 404
@@ -77,7 +151,25 @@ function ChatRoomPage({ roomId }: ChatRoomPageProps) {
     .join(' · ')
 
   const handleSendMessage = () => {
-    toast.info('실시간 채팅 기능은 준비 중입니다.')
+    const content = draft.trim()
+    if (!content) return
+
+    if (!roomNumericId) {
+      toast.error('채팅방 정보를 확인할 수 없습니다.')
+      return
+    }
+
+    const published = publishMessage({
+      room_id: roomNumericId,
+      content,
+    })
+
+    if (!published) {
+      toast.error('채팅 연결 중입니다. 잠시 후 다시 시도해주세요.')
+      return
+    }
+
+    setDraft('')
   }
 
   return (
@@ -113,10 +205,7 @@ function ChatRoomPage({ roomId }: ChatRoomPageProps) {
               <p className="text-foreground text-sm font-medium">
                 메시지를 불러오지 못했습니다.
               </p>
-              <Button
-                variant="outline"
-                onClick={() => void refetch()}
-              >
+              <Button variant="outline" onClick={() => void refetch()}>
                 다시 시도
               </Button>
             </div>
@@ -137,14 +226,17 @@ function ChatRoomPage({ roomId }: ChatRoomPageProps) {
           )}
         </div>
 
-        <p className="text-muted-foreground px-4 pb-1 text-xs">
-          실시간 전송 기능은 STOMP 연동 단계에서 활성화됩니다.
-        </p>
+        {!isConnected && (
+          <p className="text-muted-foreground px-4 pb-1 text-xs">
+            채팅 서버에 연결 중입니다...
+          </p>
+        )}
+
         <ChatComposer
           value={draft}
           onChange={setDraft}
           onSend={handleSendMessage}
-          disabled
+          disabled={!isConnected || !roomNumericId}
         />
       </div>
     </div>
