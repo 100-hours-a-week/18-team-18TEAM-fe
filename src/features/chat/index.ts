@@ -11,14 +11,24 @@ export type {
   ChatRoomSummary,
   ChatMessage,
   ChatRoomState,
+  ChatSocketMessageEvent,
+  ChatRoomNotificationEvent,
+  WsTicketData,
+  IssueWsTicketResponse,
+  SendChatMessagePayload,
 } from './model'
 
 export {
   createChatRoom,
   getChatRoomMessages,
   getChatRooms,
+  issueWsTicket,
+  markChatRoomRead,
   chatKeys,
   patchChatRoomLatestMessage,
+  patchChatRoomNotification,
+  appendIncomingMessage,
+  setChatRoomUnreadCount,
   useChatRoomMessages,
   useChatRooms,
   type ChatMessageData,
@@ -33,3 +43,9 @@ export {
   type ChatMessagesQueryParams,
   type ChatRoomsQueryParams,
 } from './api'
+
+export {
+  ChatRealtimeProvider,
+  useChatRealtime,
+  useChatRoomRealtime,
+} from './realtime'
