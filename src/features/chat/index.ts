@@ -36,6 +36,7 @@ export {
   type CreateChatRoomRequest,
   type CreateChatRoomResponse,
   type ChatRoomSummaryData,
+  type GetChatRoomMessagesData,
   type GetChatRoomMessagesParams,
   type GetChatRoomMessagesResponse,
   type GetChatRoomsParams,

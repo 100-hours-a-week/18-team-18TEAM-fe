@@ -50,9 +50,14 @@ export interface GetChatRoomMessagesParams {
   size?: number
 }
 
+export interface GetChatRoomMessagesData {
+  messages: ChatMessageData[]
+  other_last_read_message_id: number | null
+}
+
 export interface GetChatRoomMessagesResponse {
   message: string
-  data: ChatMessageData[]
+  data: GetChatRoomMessagesData
   pagination: CursorPagination
 }
 

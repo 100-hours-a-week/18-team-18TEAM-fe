@@ -274,7 +274,7 @@ export function useChatRoomMessages(
   const messages = React.useMemo(() => {
     const flattened =
       query.data?.pages.flatMap((page) =>
-        page.data.map((message) =>
+        page.data.messages.map((message) =>
           toChatMessage(
             message,
             roomId,
@@ -362,11 +362,14 @@ export function appendIncomingMessage(
 
       const nextPages = previous.pages.map((page) => ({
         ...page,
-        data: [...page.data],
+        data: {
+          ...page.data,
+          messages: [...page.data.messages],
+        },
       }))
 
       const hasDuplicate = nextPages.some((page) =>
-        page.data.some((message) =>
+        page.data.messages.some((message) =>
           isDuplicateMessage(message, incoming, event)
         )
       )
@@ -375,7 +378,7 @@ export function appendIncomingMessage(
         return previous
       }
 
-      nextPages[0].data = [...nextPages[0].data, incoming]
+      nextPages[0].data.messages = [...nextPages[0].data.messages, incoming]
 
       return {
         ...previous,
