@@ -60,7 +60,9 @@ function ChatMessageList({
                   isSent ? 'justify-end' : 'justify-start'
                 )}
               >
-                {isSent && <span>{message.isRead ? '읽음' : '전송됨'}</span>}
+                {isSent && !message.isRead && (
+                  <span className="text-primary text-[11px] font-medium">1</span>
+                )}
                 <span>{formatMessageTime(message.sentAt)}</span>
               </div>
             </div>

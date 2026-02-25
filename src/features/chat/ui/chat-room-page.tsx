@@ -17,6 +17,7 @@ import type { ChatSocketMessageEvent } from '../model'
 import { useChatRoomRealtime } from '../realtime'
 import { ChatMessageList } from './chat-message-list'
 import { ChatComposer } from './chat-composer'
+import { useThrottleCallback } from './use-throttle-callback'
 
 interface ChatRoomPageProps {
   roomId: string
@@ -26,9 +27,6 @@ function ChatRoomPage({ roomId }: ChatRoomPageProps) {
   const router = useRouter()
   const queryClient = useQueryClient()
   const messageEndRef = React.useRef<HTMLDivElement | null>(null)
-  const readDebounceRef = React.useRef<ReturnType<typeof setTimeout> | null>(
-    null
-  )
   const { ref, inView } = useInView({ rootMargin: '200px' })
 
   const [draft, setDraft] = React.useState('')
@@ -62,24 +60,18 @@ function ChatRoomPage({ roomId }: ChatRoomPageProps) {
     other_user_id: room?.participant.id,
   })
 
-  const scheduleMarkRoomRead = React.useCallback(() => {
+  const scheduleMarkRoomRead = useThrottleCallback(() => {
     if (!roomNumericId) return
 
-    if (readDebounceRef.current) {
-      clearTimeout(readDebounceRef.current)
-    }
-
-    readDebounceRef.current = setTimeout(() => {
-      void (async () => {
-        try {
-          await markChatRoomRead(roomNumericId)
-          setChatRoomUnreadCount(queryClient, roomNumericId, 0)
-        } catch {
-          // 읽음 동기화 실패는 메시지 UX를 깨지 않기 위해 무시한다.
-        }
-      })()
-    }, 400)
-  }, [queryClient, roomNumericId])
+    void (async () => {
+      try {
+        await markChatRoomRead(roomNumericId)
+        setChatRoomUnreadCount(queryClient, roomNumericId, 0)
+      } catch {
+        // 읽음 동기화 실패는 메시지 UX를 깨지 않기 위해 무시한다.
+      }
+    })()
+  }, 300)
 
   const handleRoomMessage = React.useCallback(
     (event: ChatSocketMessageEvent) => {
@@ -114,14 +106,6 @@ function ChatRoomPage({ roomId }: ChatRoomPageProps) {
       scheduleMarkRoomRead()
     }
   }, [room?.unreadCount, scheduleMarkRoomRead])
-
-  React.useEffect(() => {
-    return () => {
-      if (readDebounceRef.current) {
-        clearTimeout(readDebounceRef.current)
-      }
-    }
-  }, [])
 
   const status = (error as AxiosError | null)?.response?.status
   const isNotFound = status === 404
