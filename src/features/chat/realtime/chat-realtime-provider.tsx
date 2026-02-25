@@ -3,8 +3,10 @@
 import * as React from 'react'
 import type { IMessage, StompSubscription } from '@stomp/stompjs'
 import { useQueryClient } from '@tanstack/react-query'
+import { useMyInfo } from '@/features/user'
 import { toast } from '@/shared'
 import type {
+  ChatReadReceiptEvent,
   ChatRoomNotificationEvent,
   ChatSocketMessageEvent,
   SendChatMessagePayload,
@@ -12,9 +14,11 @@ import type {
 import {
   appendIncomingMessage,
   patchChatRoomNotification,
+  updateOtherLastReadMessageId,
 } from '../api'
 import {
   CHAT_STOMP_NOTIFY_DEST,
+  CHAT_STOMP_READ_RECEIPT_DEST,
   CHAT_STOMP_ROOM_SUB_PREFIX,
   CHAT_STOMP_SEND_DEST,
   createChatStompClient,
@@ -141,6 +145,24 @@ function toNotificationEvent(
   }
 }
 
+function toReadReceiptEvent(frame: IMessage): ChatReadReceiptEvent | null {
+  const parsed = tryParseJson(frame.body)
+  const payload = extractPayload(parsed)
+  if (!payload) return null
+
+  const roomId = toPositiveInt(payload.room_id ?? payload.roomId)
+  const lastReadMessageId = toPositiveInt(
+    payload.last_read_message_id ?? payload.lastReadMessageId
+  )
+
+  if (!roomId || !lastReadMessageId) return null
+
+  return {
+    room_id: roomId,
+    last_read_message_id: lastReadMessageId,
+  }
+}
+
 function normalizeRoomId(roomId: string): string {
   return roomId.trim()
 }
@@ -151,10 +173,13 @@ export function ChatRealtimeProvider({
   children: React.ReactNode
 }) {
   const queryClient = useQueryClient()
+  const { data: myInfo } = useMyInfo()
+  const myUserIdRef = React.useRef<number | null>(null)
   const clientRef = React.useRef<ReturnType<typeof createChatStompClient> | null>(
     null
   )
   const notifySubscriptionRef = React.useRef<StompSubscription | null>(null)
+  const readReceiptSubscriptionRef = React.useRef<StompSubscription | null>(null)
   const roomSubscriptionsRef = React.useRef<Map<string, RoomSubscriptionState>>(
     new Map()
   )
@@ -181,16 +206,34 @@ export function ChatRealtimeProvider({
 
   const subscribeNotify = React.useCallback(() => {
     const client = clientRef.current
-    if (!client || !client.connected) return
+    const myUserId = myUserIdRef.current
+    if (!client?.connected || !myUserId) return
 
     notifySubscriptionRef.current?.unsubscribe()
 
     notifySubscriptionRef.current = client.subscribe(
-      CHAT_STOMP_NOTIFY_DEST,
+      `${CHAT_STOMP_NOTIFY_DEST}/${myUserId}`,
       (frame) => {
         const event = toNotificationEvent(frame)
         if (!event) return
         patchChatRoomNotification(queryClient, event)
+      }
+    )
+  }, [queryClient])
+
+  const subscribeReadReceipts = React.useCallback(() => {
+    const client = clientRef.current
+    const myUserId = myUserIdRef.current
+    if (!client?.connected || !myUserId) return
+
+    readReceiptSubscriptionRef.current?.unsubscribe()
+
+    readReceiptSubscriptionRef.current = client.subscribe(
+      `${CHAT_STOMP_READ_RECEIPT_DEST}/${myUserId}`,
+      (frame) => {
+        const event = toReadReceiptEvent(frame)
+        if (!event) return
+        updateOtherLastReadMessageId(queryClient, event.room_id, event.last_read_message_id)
       }
     )
   }, [queryClient])
@@ -247,11 +290,22 @@ export function ChatRealtimeProvider({
   }, [ensureRoomSubscription])
 
   React.useEffect(() => {
+    myUserIdRef.current = myInfo?.id ?? null
+  }, [myInfo?.id])
+
+  React.useEffect(() => {
+    if (!myInfo?.id || !connectedRef.current) return
+    subscribeNotify()
+    subscribeReadReceipts()
+  }, [myInfo?.id, subscribeNotify, subscribeReadReceipts])
+
+  React.useEffect(() => {
     const client = createChatStompClient({
       onConnect: () => {
         connectedRef.current = true
         setIsConnected(true)
         subscribeNotify()
+        subscribeReadReceipts()
         resubscribeRooms()
       },
       onDisconnect: () => {
@@ -259,6 +313,7 @@ export function ChatRealtimeProvider({
         setIsConnected(false)
 
         notifySubscriptionRef.current = null
+        readReceiptSubscriptionRef.current = null
         for (const roomState of roomSubscriptionsRef.current.values()) {
           roomState.subscription = null
         }
@@ -276,6 +331,9 @@ export function ChatRealtimeProvider({
       notifySubscriptionRef.current?.unsubscribe()
       notifySubscriptionRef.current = null
 
+      readReceiptSubscriptionRef.current?.unsubscribe()
+      readReceiptSubscriptionRef.current = null
+
       for (const roomState of roomSubscriptionsRef.current.values()) {
         roomState.subscription?.unsubscribe()
       }
@@ -284,7 +342,7 @@ export function ChatRealtimeProvider({
       void client.deactivate()
       clientRef.current = null
     }
-  }, [handleRealtimeError, resubscribeRooms, subscribeNotify])
+  }, [handleRealtimeError, resubscribeRooms, subscribeNotify, subscribeReadReceipts])
 
   const sendMessage = React.useCallback(
     (payload: SendChatMessagePayload): boolean => {
