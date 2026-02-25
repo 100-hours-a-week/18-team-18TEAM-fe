@@ -43,6 +43,7 @@ function toPositiveInt(value: unknown): number | null {
   return parsed
 }
 
+
 function toChatRoomSummary(room: ChatRoomSummaryData): ChatRoomSummary {
   return {
     id: String(room.room_id),
@@ -63,7 +64,8 @@ function toChatMessage(
   message: ChatMessageData,
   roomId: string,
   myUserId?: number,
-  otherUserId?: number
+  otherUserId?: number,
+  otherLastReadMessageId?: number | null
 ): ChatMessage {
   const isReceived =
     typeof myUserId === 'number'
@@ -71,6 +73,15 @@ function toChatMessage(
       : typeof otherUserId === 'number'
         ? message.sender_user_id === otherUserId
         : true
+
+  let isRead: boolean
+  if (isReceived) {
+    isRead = true
+  } else if (otherLastReadMessageId == null) {
+    isRead = false
+  } else {
+    isRead = message.message_id <= otherLastReadMessageId
+  }
 
   return {
     id: String(message.message_id),
@@ -80,7 +91,7 @@ function toChatMessage(
     content: message.content || '',
     sentAt: message.created_at || new Date(0).toISOString(),
     direction: isReceived ? 'received' : 'sent',
-    isRead: !isReceived,
+    isRead,
   }
 }
 
@@ -264,6 +275,7 @@ export function useChatRoomMessages(
         ...queryParams,
         cursorId: pageParam as number | undefined,
       }),
+
     initialPageParam: undefined as number | undefined,
     getNextPageParam: (lastPage) =>
       lastPage.pagination?.has_next ? lastPage.pagination.cursorId : undefined,
@@ -272,14 +284,19 @@ export function useChatRoomMessages(
   })
 
   const messages = React.useMemo(() => {
+    const pages = query.data?.pages
+    const otherLastReadMessageId =
+      pages?.[0]?.data.other_last_read_message_id ?? null
+
     const flattened =
-      query.data?.pages.flatMap((page) =>
+      pages?.flatMap((page) =>
         page.data.messages.map((message) =>
           toChatMessage(
             message,
             roomId,
             params.my_user_id,
-            params.other_user_id
+            params.other_user_id,
+            otherLastReadMessageId
           )
         )
       ) ?? []
@@ -435,6 +452,41 @@ export function setChatRoomUnreadCount(
       }))
 
       if (!found) return previous
+
+      return {
+        ...previous,
+        pages: nextPages,
+      }
+    }
+  )
+}
+
+export function updateOtherLastReadMessageId(
+  queryClient: QueryClient,
+  roomId: string | number,
+  lastReadMessageId: number
+) {
+  const roomKey = String(roomId)
+
+  queryClient.setQueriesData<InfiniteData<GetChatRoomMessagesResponse>>(
+    { queryKey: [...chatKeys.messages(), roomKey], exact: false },
+    (previous) => {
+      if (!previous || previous.pages.length === 0) return previous
+
+      const currentValue =
+        previous.pages[0].data.other_last_read_message_id ?? 0
+      if (lastReadMessageId <= currentValue) return previous
+
+      const nextPages = previous.pages.map((page, index) => {
+        if (index !== 0) return page
+        return {
+          ...page,
+          data: {
+            ...page.data,
+            other_last_read_message_id: lastReadMessageId,
+          },
+        }
+      })
 
       return {
         ...previous,

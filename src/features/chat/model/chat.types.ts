@@ -63,3 +63,8 @@ export interface SendChatMessagePayload {
   room_id: number
   content: string
 }
+
+export interface ChatReadReceiptEvent {
+  room_id: number
+  last_read_message_id: number
+}

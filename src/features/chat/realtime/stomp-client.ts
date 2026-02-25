@@ -5,7 +5,8 @@ import { issueWsTicket } from '../api'
 
 const DEFAULT_SEND_DEST = '/pub/chat/messages'
 const DEFAULT_ROOM_SUB_PREFIX = '/sub/chat/rooms'
-const DEFAULT_NOTIFY_DEST = '/user/queue/chat/notifications'
+const DEFAULT_NOTIFY_DEST = '/sub/chat/notifications'
+const DEFAULT_READ_RECEIPT_DEST = '/sub/chat/read'
 const DEFAULT_HEARTBEAT_MS = 10_000
 const DEFAULT_RECONNECT_DELAY_MS = 5_000
 
@@ -18,6 +19,9 @@ export const CHAT_STOMP_ROOM_SUB_PREFIX =
 
 export const CHAT_STOMP_NOTIFY_DEST =
   process.env.NEXT_PUBLIC_CHAT_STOMP_NOTIFY_DEST || DEFAULT_NOTIFY_DEST
+
+export const CHAT_STOMP_READ_RECEIPT_DEST =
+  process.env.NEXT_PUBLIC_CHAT_STOMP_READ_RECEIPT_DEST || DEFAULT_READ_RECEIPT_DEST
 
 function resolveChatWsBaseUrl(): string {
   const wsBaseUrl = process.env.NEXT_PUBLIC_CHAT_WS_BASE_URL
