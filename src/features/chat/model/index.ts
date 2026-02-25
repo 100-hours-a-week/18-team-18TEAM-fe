@@ -5,6 +5,7 @@ export type {
   ChatRoomState,
   ChatSocketMessageEvent,
   ChatRoomNotificationEvent,
+  ChatReadReceiptEvent,
   WsTicketData,
   IssueWsTicketResponse,
   SendChatMessagePayload,
