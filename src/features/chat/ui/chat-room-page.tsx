@@ -27,6 +27,9 @@ function ChatRoomPage({ roomId }: ChatRoomPageProps) {
   const router = useRouter()
   const queryClient = useQueryClient()
   const messageEndRef = React.useRef<HTMLDivElement | null>(null)
+  const scrollContainerRef = React.useRef<HTMLDivElement>(null)
+  const isInitialScrollRef = React.useRef(true)
+  const prevFirstMessageIdRef = React.useRef<string | undefined>(undefined)
   const { ref, inView } = useInView({ rootMargin: '200px' })
 
   const [draft, setDraft] = React.useState('')
@@ -98,8 +101,32 @@ function ChatRoomPage({ roomId }: ChatRoomPageProps) {
   }, [inView, hasNextPage, isFetchingNextPage, fetchNextPage])
 
   React.useEffect(() => {
-    messageEndRef.current?.scrollIntoView({ behavior: 'smooth' })
-  }, [messages])
+    if (!messages.length) return
+
+    const firstId = messages[0]?.id
+    const prevFirstId = prevFirstMessageIdRef.current
+    prevFirstMessageIdRef.current = firstId
+
+    // Case A: 최초 진입 → 맨 아래로 즉시 스크롤
+    if (isInitialScrollRef.current && !isLoading) {
+      messageEndRef.current?.scrollIntoView({ behavior: 'instant' })
+      isInitialScrollRef.current = false
+      return
+    }
+
+    // Case B: 히스토리 로드 (첫 메시지 ID가 바뀜 = 위에 새 메시지 prepend)
+    // → 브라우저 overflow-anchor가 위치를 유지하므로 아무것도 하지 않음
+    if (prevFirstId !== undefined && firstId !== prevFirstId) return
+
+    // Case C: 새 WebSocket 메시지 (마지막에 append) → 아래 근방이면 자동 스크롤
+    const container = scrollContainerRef.current
+    if (!container) return
+    const isNearBottom =
+      container.scrollHeight - container.scrollTop - container.clientHeight < 150
+    if (isNearBottom) {
+      messageEndRef.current?.scrollIntoView({ behavior: 'smooth' })
+    }
+  }, [messages, isLoading])
 
   React.useEffect(() => {
     if ((room?.unreadCount ?? 0) > 0) {
@@ -176,7 +203,7 @@ function ChatRoomPage({ roomId }: ChatRoomPageProps) {
           </p>
         </div>
 
-        <div className="flex-1 overflow-y-auto px-4 py-4">
+        <div ref={scrollContainerRef} className="flex-1 overflow-y-auto px-4 py-4">
           {isLoading ? (
             <div className="flex h-full flex-col items-center justify-center gap-3">
               <div className="border-primary size-8 animate-spin rounded-full border-4 border-t-transparent" />
@@ -195,16 +222,13 @@ function ChatRoomPage({ roomId }: ChatRoomPageProps) {
             </div>
           ) : (
             <>
-              <ChatMessageList messages={messages} />
-              {hasNextPage && (
-                <div ref={ref} className="h-4 w-full" aria-hidden>
-                  {isFetchingNextPage && (
-                    <div className="text-muted-foreground py-4 text-center text-sm">
-                      이전 메시지를 불러오고 있어요...
-                    </div>
-                  )}
+              {hasNextPage && <div ref={ref} className="h-1 w-full" aria-hidden />}
+              {isFetchingNextPage && (
+                <div className="text-muted-foreground py-4 text-center text-sm">
+                  이전 메시지를 불러오고 있어요...
                 </div>
               )}
+              <ChatMessageList messages={messages} />
               <div ref={messageEndRef} />
             </>
           )}
