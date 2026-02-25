@@ -22,6 +22,7 @@ export {
   patchChatRoomNotification,
   appendIncomingMessage,
   setChatRoomUnreadCount,
+  updateOtherLastReadMessageId,
   useChatRoomMessages,
   useChatRooms,
   type ChatMessagesQueryParams,
