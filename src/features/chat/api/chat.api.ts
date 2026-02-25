@@ -1,6 +1,14 @@
 import { apiClient } from '@/shared/api'
 import type { IssueWsTicketResponse } from '../model'
 
+const BIGINT_ID_PATTERN =
+  /"(message_id|last_read_message_id|other_last_read_message_id|cursorId)"\s*:\s*(\d+)/g
+
+export function safeParseChatJson(text: string): unknown {
+  const safe = text.replace(BIGINT_ID_PATTERN, '"$1":"$2"')
+  return JSON.parse(safe)
+}
+
 export interface CreateChatRoomRequest {
   target_user_id: number
 }
@@ -37,7 +45,7 @@ export interface GetChatRoomsResponse {
 }
 
 export interface ChatMessageData {
-  message_id: number
+  message_id: string
   room_id: number
   sender_user_id: number
   sender_name: string
@@ -52,7 +60,7 @@ export interface GetChatRoomMessagesParams {
 
 export interface GetChatRoomMessagesData {
   messages: ChatMessageData[]
-  other_last_read_message_id: number | null
+  other_last_read_message_id: string | null
 }
 
 export interface GetChatRoomMessagesResponse {
@@ -100,6 +108,10 @@ export async function getChatRoomMessages(
     `/chat/rooms/${roomId}/messages`,
     {
       params: toCursorParams(params),
+      transformResponse: [
+        (data: unknown) =>
+          typeof data === 'string' ? safeParseChatJson(data) : data,
+      ],
     }
   )
   return response.data

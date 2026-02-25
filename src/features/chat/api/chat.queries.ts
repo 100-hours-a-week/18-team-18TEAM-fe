@@ -65,7 +65,7 @@ function toChatMessage(
   roomId: string,
   myUserId?: number,
   otherUserId?: number,
-  otherLastReadMessageId?: number | null
+  otherLastReadMessageId?: string | null
 ): ChatMessage {
   const isReceived =
     typeof myUserId === 'number'
@@ -80,11 +80,12 @@ function toChatMessage(
   } else if (otherLastReadMessageId == null) {
     isRead = false
   } else {
-    isRead = message.message_id <= otherLastReadMessageId
+    isRead =
+      BigInt(message.message_id) <= BigInt(otherLastReadMessageId)
   }
 
   return {
-    id: String(message.message_id),
+    id: message.message_id,
     roomId,
     senderId: message.sender_user_id,
     senderName: message.sender_name || '알 수 없음',
@@ -104,9 +105,7 @@ function toSocketMessageData(
   if (!roomId || !senderId) return null
 
   return {
-    message_id:
-      toPositiveInt(event.message_id) ??
-      Math.max(1, Date.now() % Number.MAX_SAFE_INTEGER),
+    message_id: event.message_id ?? String(Date.now()),
     room_id: roomId,
     sender_user_id: senderId,
     sender_name: event.sender_name || '알 수 없음',
@@ -203,7 +202,7 @@ function isDuplicateMessage(
   incoming: ChatMessageData,
   originalEvent: ChatSocketMessageEvent
 ): boolean {
-  if (toPositiveInt(originalEvent.message_id)) {
+  if (originalEvent.message_id) {
     return existing.message_id === incoming.message_id
   }
 
@@ -301,7 +300,15 @@ export function useChatRoomMessages(
         )
       ) ?? []
 
-    return [...flattened].sort(
+    // ID 기반 중복 제거 (첫 번째 등장만 유지)
+    const seen = new Set<string>()
+    const unique = flattened.filter((msg) => {
+      if (seen.has(msg.id)) return false
+      seen.add(msg.id)
+      return true
+    })
+
+    return unique.sort(
       (a, b) => toTimestamp(a.sentAt) - toTimestamp(b.sentAt)
     )
   }, [query.data, roomId, params.my_user_id, params.other_user_id])
@@ -464,7 +471,7 @@ export function setChatRoomUnreadCount(
 export function updateOtherLastReadMessageId(
   queryClient: QueryClient,
   roomId: string | number,
-  lastReadMessageId: number
+  lastReadMessageId: string
 ) {
   const roomKey = String(roomId)
 
@@ -474,8 +481,12 @@ export function updateOtherLastReadMessageId(
       if (!previous || previous.pages.length === 0) return previous
 
       const currentValue =
-        previous.pages[0].data.other_last_read_message_id ?? 0
-      if (lastReadMessageId <= currentValue) return previous
+        previous.pages[0].data.other_last_read_message_id
+      if (
+        currentValue != null &&
+        BigInt(lastReadMessageId) <= BigInt(currentValue)
+      )
+        return previous
 
       const nextPages = previous.pages.map((page, index) => {
         if (index !== 0) return page

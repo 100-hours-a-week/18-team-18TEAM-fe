@@ -14,6 +14,7 @@ import type {
 import {
   appendIncomingMessage,
   patchChatRoomNotification,
+  safeParseChatJson,
   updateOtherLastReadMessageId,
 } from '../api'
 import {
@@ -49,10 +50,16 @@ function toPositiveInt(value: unknown): number | null {
 
 function tryParseJson(value: string): unknown {
   try {
-    return JSON.parse(value)
+    return safeParseChatJson(value)
   } catch {
     return null
   }
+}
+
+function toIdString(value: unknown): string | null {
+  const str = String(value ?? '')
+  if (!/^\d+$/.test(str) || str === '0') return null
+  return str
 }
 
 function extractPayload(input: unknown): Record<string, unknown> | null {
@@ -80,7 +87,7 @@ function toSocketMessageEvent(frame: IMessage): ChatSocketMessageEvent | null {
 
   return {
     room_id: roomId,
-    message_id: toPositiveInt(payload.message_id ?? payload.messageId) ||
+    message_id: toIdString(payload.message_id ?? payload.messageId) ??
       undefined,
     sender_user_id: senderId,
     sender_name:
@@ -151,7 +158,7 @@ function toReadReceiptEvent(frame: IMessage): ChatReadReceiptEvent | null {
   if (!payload) return null
 
   const roomId = toPositiveInt(payload.room_id ?? payload.roomId)
-  const lastReadMessageId = toPositiveInt(
+  const lastReadMessageId = toIdString(
     payload.last_read_message_id ?? payload.lastReadMessageId
   )
 

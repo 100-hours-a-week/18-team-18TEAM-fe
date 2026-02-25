@@ -33,7 +33,7 @@ export interface ChatRoomState {
 
 export interface ChatSocketMessageEvent {
   room_id: number
-  message_id?: number
+  message_id?: string
   sender_user_id: number
   sender_name?: string
   content: string
@@ -66,5 +66,5 @@ export interface SendChatMessagePayload {
 
 export interface ChatReadReceiptEvent {
   room_id: number
-  last_read_message_id: number
+  last_read_message_id: string
 }

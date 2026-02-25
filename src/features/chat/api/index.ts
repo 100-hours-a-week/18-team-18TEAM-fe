@@ -4,6 +4,7 @@ export {
   getChatRooms,
   issueWsTicket,
   markChatRoomRead,
+  safeParseChatJson,
   type ChatMessageData,
   type CursorPagination,
   type CreateChatRoomRequest,
