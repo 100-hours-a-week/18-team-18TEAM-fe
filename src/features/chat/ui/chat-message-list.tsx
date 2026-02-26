@@ -61,7 +61,9 @@ function ChatMessageList({
                 )}
               >
                 {isSent && !message.isRead && (
-                  <span className="text-primary text-[11px] font-medium">1</span>
+                  <span className="text-primary text-[11px] font-medium">
+                    1
+                  </span>
                 )}
                 <span>{formatMessageTime(message.sentAt)}</span>
               </div>

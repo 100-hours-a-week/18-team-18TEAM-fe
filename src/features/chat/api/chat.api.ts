@@ -123,8 +123,6 @@ export async function issueWsTicket(): Promise<IssueWsTicketResponse> {
   return response.data
 }
 
-export async function markChatRoomRead(
-  roomId: string | number
-): Promise<void> {
+export async function markChatRoomRead(roomId: string | number): Promise<void> {
   await apiClient.post(`/chat/rooms/${roomId}/read`)
 }

@@ -122,7 +122,8 @@ function ChatRoomPage({ roomId }: ChatRoomPageProps) {
     const container = scrollContainerRef.current
     if (!container) return
     const isNearBottom =
-      container.scrollHeight - container.scrollTop - container.clientHeight < 150
+      container.scrollHeight - container.scrollTop - container.clientHeight <
+      150
     if (isNearBottom) {
       messageEndRef.current?.scrollIntoView({ behavior: 'smooth' })
     }
@@ -157,7 +158,10 @@ function ChatRoomPage({ roomId }: ChatRoomPageProps) {
     )
   }
 
-  const participantLabel = [room?.participant.company, room?.participant.position]
+  const participantLabel = [
+    room?.participant.company,
+    room?.participant.position,
+  ]
     .filter(Boolean)
     .join(' · ')
 
@@ -189,11 +193,13 @@ function ChatRoomPage({ roomId }: ChatRoomPageProps) {
         title={room?.participant.name || '채팅'}
         showClose
         onClose={() => router.replace('/chat')}
-        rightContent={room && (
-          <span className="text-muted-foreground text-xs">
-            {room.participant.isOnline ? '온라인' : '오프라인'}
-          </span>
-        )}
+        rightContent={
+          room && (
+            <span className="text-muted-foreground text-xs">
+              {room.participant.isOnline ? '온라인' : '오프라인'}
+            </span>
+          )
+        }
       />
 
       <div className="flex min-h-screen flex-col pt-14">
@@ -203,7 +209,10 @@ function ChatRoomPage({ roomId }: ChatRoomPageProps) {
           </p>
         </div>
 
-        <div ref={scrollContainerRef} className="flex-1 overflow-y-auto px-4 py-4">
+        <div
+          ref={scrollContainerRef}
+          className="flex-1 overflow-y-auto px-4 py-4"
+        >
           {isLoading ? (
             <div className="flex h-full flex-col items-center justify-center gap-3">
               <div className="border-primary size-8 animate-spin rounded-full border-4 border-t-transparent" />
@@ -222,7 +231,9 @@ function ChatRoomPage({ roomId }: ChatRoomPageProps) {
             </div>
           ) : (
             <>
-              {hasNextPage && <div ref={ref} className="h-1 w-full" aria-hidden />}
+              {hasNextPage && (
+                <div ref={ref} className="h-1 w-full" aria-hidden />
+              )}
               {isFetchingNextPage && (
                 <div className="text-muted-foreground py-4 text-center text-sm">
                   이전 메시지를 불러오고 있어요...

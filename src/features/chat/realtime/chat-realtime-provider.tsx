@@ -38,9 +38,8 @@ interface ChatRealtimeContextValue {
   subscribeRoom: (roomId: string, listener: RoomMessageListener) => () => void
 }
 
-const ChatRealtimeContext = React.createContext<ChatRealtimeContextValue | null>(
-  null
-)
+const ChatRealtimeContext =
+  React.createContext<ChatRealtimeContextValue | null>(null)
 
 function toPositiveInt(value: unknown): number | null {
   const parsed = Number(value)
@@ -79,16 +78,14 @@ function toSocketMessageEvent(frame: IMessage): ChatSocketMessageEvent | null {
   if (!payload) return null
 
   const roomId = toPositiveInt(payload.room_id ?? payload.roomId)
-  const senderId = toPositiveInt(
-    payload.sender_user_id ?? payload.senderUserId
-  )
+  const senderId = toPositiveInt(payload.sender_user_id ?? payload.senderUserId)
 
   if (!roomId || !senderId) return null
 
   return {
     room_id: roomId,
-    message_id: toIdString(payload.message_id ?? payload.messageId) ??
-      undefined,
+    message_id:
+      toIdString(payload.message_id ?? payload.messageId) ?? undefined,
     sender_user_id: senderId,
     sender_name:
       typeof payload.sender_name === 'string'
@@ -96,8 +93,7 @@ function toSocketMessageEvent(frame: IMessage): ChatSocketMessageEvent | null {
         : typeof payload.senderName === 'string'
           ? payload.senderName
           : undefined,
-    content:
-      typeof payload.content === 'string' ? payload.content : '',
+    content: typeof payload.content === 'string' ? payload.content : '',
     created_at:
       typeof payload.created_at === 'string'
         ? payload.created_at
@@ -135,8 +131,8 @@ function toNotificationEvent(
         : typeof payload.latestMessageCreatedAt === 'string'
           ? payload.latestMessageCreatedAt
           : new Date().toISOString(),
-    other_user_id: toPositiveInt(payload.other_user_id ?? payload.otherUserId) ||
-      undefined,
+    other_user_id:
+      toPositiveInt(payload.other_user_id ?? payload.otherUserId) || undefined,
     other_user_name:
       typeof payload.other_user_name === 'string'
         ? payload.other_user_name
@@ -182,11 +178,13 @@ export function ChatRealtimeProvider({
   const queryClient = useQueryClient()
   const { data: myInfo } = useMyInfo()
   const myUserIdRef = React.useRef<number | null>(null)
-  const clientRef = React.useRef<ReturnType<typeof createChatStompClient> | null>(
+  const clientRef = React.useRef<ReturnType<
+    typeof createChatStompClient
+  > | null>(null)
+  const notifySubscriptionRef = React.useRef<StompSubscription | null>(null)
+  const readReceiptSubscriptionRef = React.useRef<StompSubscription | null>(
     null
   )
-  const notifySubscriptionRef = React.useRef<StompSubscription | null>(null)
-  const readReceiptSubscriptionRef = React.useRef<StompSubscription | null>(null)
   const roomSubscriptionsRef = React.useRef<Map<string, RoomSubscriptionState>>(
     new Map()
   )
@@ -201,9 +199,7 @@ export function ChatRealtimeProvider({
     const now = Date.now()
     const last = lastErrorRef.current
     const shouldToast =
-      !last ||
-      last.message !== message ||
-      now - last.at > 5_000
+      !last || last.message !== message || now - last.at > 5_000
 
     if (shouldToast) {
       toast.error('채팅 연결에 문제가 발생했습니다.')
@@ -240,7 +236,11 @@ export function ChatRealtimeProvider({
       (frame) => {
         const event = toReadReceiptEvent(frame)
         if (!event) return
-        updateOtherLastReadMessageId(queryClient, event.room_id, event.last_read_message_id)
+        updateOtherLastReadMessageId(
+          queryClient,
+          event.room_id,
+          event.last_read_message_id
+        )
       }
     )
   }, [queryClient])
@@ -264,9 +264,8 @@ export function ChatRealtimeProvider({
 
           appendIncomingMessage(queryClient, event)
 
-          const currentRoomState = roomSubscriptionsRef.current.get(
-            normalizedRoomId
-          )
+          const currentRoomState =
+            roomSubscriptionsRef.current.get(normalizedRoomId)
           if (!currentRoomState) return
 
           for (const listener of currentRoomState.listeners) {
@@ -349,7 +348,12 @@ export function ChatRealtimeProvider({
       void client.deactivate()
       clientRef.current = null
     }
-  }, [handleRealtimeError, resubscribeRooms, subscribeNotify, subscribeReadReceipts])
+  }, [
+    handleRealtimeError,
+    resubscribeRooms,
+    subscribeNotify,
+    subscribeReadReceipts,
+  ])
 
   const sendMessage = React.useCallback(
     (payload: SendChatMessagePayload): boolean => {

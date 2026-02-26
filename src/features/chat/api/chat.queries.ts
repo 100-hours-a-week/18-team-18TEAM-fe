@@ -43,7 +43,6 @@ function toPositiveInt(value: unknown): number | null {
   return parsed
 }
 
-
 function toChatRoomSummary(room: ChatRoomSummaryData): ChatRoomSummary {
   return {
     id: String(room.room_id),
@@ -54,8 +53,7 @@ function toChatRoomSummary(room: ChatRoomSummaryData): ChatRoomSummary {
       isOnline: false,
     },
     lastMessagePreview: room.latest_message_content || '',
-    lastMessageAt:
-      room.latest_message_created_at || new Date(0).toISOString(),
+    lastMessageAt: room.latest_message_created_at || new Date(0).toISOString(),
     unreadCount: room.unread_count ?? 0,
   }
 }
@@ -80,8 +78,7 @@ function toChatMessage(
   } else if (otherLastReadMessageId == null) {
     isRead = false
   } else {
-    isRead =
-      BigInt(message.message_id) <= BigInt(otherLastReadMessageId)
+    isRead = BigInt(message.message_id) <= BigInt(otherLastReadMessageId)
   }
 
   return {
@@ -308,9 +305,7 @@ export function useChatRoomMessages(
       return true
     })
 
-    return unique.sort(
-      (a, b) => toTimestamp(a.sentAt) - toTimestamp(b.sentAt)
-    )
+    return unique.sort((a, b) => toTimestamp(a.sentAt) - toTimestamp(b.sentAt))
   }, [query.data, roomId, params.my_user_id, params.other_user_id])
 
   return {
@@ -480,8 +475,7 @@ export function updateOtherLastReadMessageId(
     (previous) => {
       if (!previous || previous.pages.length === 0) return previous
 
-      const currentValue =
-        previous.pages[0].data.other_last_read_message_id
+      const currentValue = previous.pages[0].data.other_last_read_message_id
       if (
         currentValue != null &&
         BigInt(lastReadMessageId) <= BigInt(currentValue)
