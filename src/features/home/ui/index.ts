@@ -10,6 +10,7 @@ export { SearchInput, type SearchInputProps } from './search-input'
 export { MyCardButton, type MyCardButtonProps } from './my-card-button'
 export { FAB, type FABProps } from './fab'
 export { FABMenu, type FABMenuProps, type FABMenuItem } from './fab-menu'
+export { OcrModeDialog, type OcrModeDialogProps } from './ocr-mode-dialog'
 export {
   EmptyCardPlaceholder,
   type EmptyCardPlaceholderProps,
