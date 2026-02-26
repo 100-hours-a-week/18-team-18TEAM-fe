@@ -2,7 +2,12 @@
 
 import * as React from 'react'
 import { useRouter } from 'next/navigation'
-import { CameraIcon, RefreshCwIcon, ScanIcon, LightbulbIcon } from 'lucide-react'
+import {
+  CameraIcon,
+  RefreshCwIcon,
+  ScanIcon,
+  LightbulbIcon,
+} from 'lucide-react'
 import { useAtom } from 'jotai'
 import { Header, Button, Card, CardContent } from '@/shared'
 import { CameraPermissionError, QrScanFailure } from '@/features/qr-scan'

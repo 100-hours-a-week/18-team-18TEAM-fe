@@ -13,8 +13,4 @@ export type {
 } from './model'
 
 // UI
-export {
-  OcrPermissionPage,
-  OcrFailurePage,
-  OcrResultPage,
-} from './ui'
+export { OcrPermissionPage, OcrFailurePage, OcrResultPage } from './ui'

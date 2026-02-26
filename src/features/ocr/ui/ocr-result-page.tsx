@@ -148,11 +148,7 @@ function OcrResultPage() {
         return
       }
 
-      if (
-        data.start_date &&
-        data.end_date &&
-        data.start_date > data.end_date
-      ) {
+      if (data.start_date && data.end_date && data.start_date > data.end_date) {
         setError('end_date', { message: '종료일은 시작일 이후여야 합니다.' })
         return
       }

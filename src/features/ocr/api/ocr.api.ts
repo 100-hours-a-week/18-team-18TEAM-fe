@@ -4,7 +4,11 @@ import type {
   OcrStartResponse,
   OcrSubmitRequest,
 } from '../model'
-import { createMockOcrJob, getMockOcrJob, updateMockOcrJob } from './ocr.mock-store'
+import {
+  createMockOcrJob,
+  getMockOcrJob,
+  updateMockOcrJob,
+} from './ocr.mock-store'
 
 function wait(ms: number) {
   return new Promise((resolve) => {

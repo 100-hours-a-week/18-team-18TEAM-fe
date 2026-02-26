@@ -17,7 +17,11 @@ interface OcrModeDialogProps {
   onSelectMode: (mode: OcrMode) => void
 }
 
-function OcrModeDialog({ open, onOpenChange, onSelectMode }: OcrModeDialogProps) {
+function OcrModeDialog({
+  open,
+  onOpenChange,
+  onSelectMode,
+}: OcrModeDialogProps) {
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent>

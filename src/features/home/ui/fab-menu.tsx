@@ -19,7 +19,13 @@ interface FABMenuProps {
   onScanOCR?: () => void
 }
 
-function FABMenu({ open, onClose, onShareCard, onScanQR, onScanOCR }: FABMenuProps) {
+function FABMenu({
+  open,
+  onClose,
+  onShareCard,
+  onScanQR,
+  onScanOCR,
+}: FABMenuProps) {
   const menuItems: FABMenuItem[] = [
     {
       id: 'share',
@@ -35,10 +41,10 @@ function FABMenu({ open, onClose, onShareCard, onScanQR, onScanOCR }: FABMenuPro
     },
     {
       id: 'ocr',
-      icon: <Camera className='size-5' />,
+      icon: <Camera className="size-5" />,
       label: '종이명함 추가',
       onClick: onScanOCR,
-    }
+    },
   ]
 
   if (!open) return null
