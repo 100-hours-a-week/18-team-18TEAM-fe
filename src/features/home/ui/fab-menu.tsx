@@ -1,7 +1,7 @@
 'use client'
 
 import * as React from 'react'
-import { QrCodeIcon, ShareIcon } from 'lucide-react'
+import { QrCodeIcon, ShareIcon, Camera } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
 interface FABMenuItem {
@@ -16,9 +16,10 @@ interface FABMenuProps {
   onClose: () => void
   onShareCard?: () => void
   onScanQR?: () => void
+  onScanOCR?: () => void
 }
 
-function FABMenu({ open, onClose, onShareCard, onScanQR }: FABMenuProps) {
+function FABMenu({ open, onClose, onShareCard, onScanQR, onScanOCR }: FABMenuProps) {
   const menuItems: FABMenuItem[] = [
     {
       id: 'share',
@@ -32,6 +33,12 @@ function FABMenu({ open, onClose, onShareCard, onScanQR }: FABMenuProps) {
       label: 'QR 코드 스캔',
       onClick: onScanQR,
     },
+    {
+      id: 'ocr',
+      icon: <Camera className='size-5' />,
+      label: '종이명함 추가',
+      onClick: onScanOCR,
+    }
   ]
 
   if (!open) return null
