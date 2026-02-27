@@ -1,6 +1,12 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+HOOK_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+if [[ -f "${HOOK_DIR}/env.sh" ]]; then
+  # shellcheck disable=SC1091
+  source "${HOOK_DIR}/env.sh"
+fi
+
 APP_HOME="/home/ubuntu"
 STATE_DIR="${APP_HOME}/artifact/fe-container"
 CURRENT_RELEASE_FILE="${STATE_DIR}/.current_release"
