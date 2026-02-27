@@ -1,0 +1,30 @@
+# VCS
+.git
+.gitignore
+.github
+
+# Local build artifacts
+.next
+node_modules
+coverage
+dist
+out
+
+# CI/CD and docs (not required for app build)
+deploy
+docs
+CHANGELOG.md
+README.md
+
+# Tooling / editor
+.vscode
+.idea
+
+# Optional runtime-independent files
+*.log
+.DS_Store
+
+# Test and reports
+__tests__
+*.spec.*
+*.test.*
