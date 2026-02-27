@@ -194,13 +194,13 @@ function OcrPermissionPage() {
 
     try {
       setStatus('submitting')
-      const { jobId } = await startOcrJob({
+      const { task_id } = await startOcrJob({
         mode,
         capturedImageUrl: ocrFlow.capturedImageUrl,
       })
 
       cleanupCamera()
-      router.push(`/ocr/result?jobId=${encodeURIComponent(jobId)}`)
+      router.push(`/ocr/result?task_id=${encodeURIComponent(task_id)}`)
     } catch (error) {
       console.error('Failed to start OCR job:', error)
       setStatus('failure')
