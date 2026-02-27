@@ -69,6 +69,21 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ secrets.AWS_REGION }}
 
+      - name: Debug AWS Identity
+        shell: bash
+        run: |
+          set -euo pipefail
+          echo "AWS_REGION=${{ secrets.AWS_REGION }}"
+          aws --version
+          aws sts get-caller-identity
+
+      - name: Debug ECR Auth
+        shell: bash
+        run: |
+          set -euo pipefail
+          aws ecr get-login-password --region "${{ secrets.AWS_REGION }}" >/dev/null
+          echo "ecr:GetAuthorizationToken OK"
+
       - name: Install Buildah
         shell: bash
         run: |
