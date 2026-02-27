@@ -6,7 +6,7 @@ export interface OcrFlowUiState {
 }
 
 export interface OcrJobResult {
-  jobId: string
+  task_id: string
   mode: OcrMode
   capturedImageUrl: string | null
   name: string
@@ -27,7 +27,7 @@ export interface OcrStartRequest {
 }
 
 export interface OcrStartResponse {
-  jobId: string
+  task_id: string
 }
 
 export interface OcrSubmitRequest {
@@ -41,4 +41,30 @@ export interface OcrSubmitRequest {
   is_progress: boolean
   start_date: string
   end_date: string
+}
+
+export type OcrTaskStatus = 'pending' | 'running' | 'completed' | 'failed'
+
+export interface OcrTaskAiResult {
+  is_business_card: boolean
+  name?: string | null
+  email?: string | null
+  company?: string | null
+  job_title?: string | null
+  department?: string | null
+  company_phone?: string | null
+  mobile_phone?: string | null
+}
+
+export interface OcrPollBffResponse {
+  task_id: string
+  task_type: string | null
+  status: OcrTaskStatus
+  progress: unknown | null
+  created_at: string | null
+  started_at: string | null
+  completed_at: string | null
+  mode: OcrMode
+  result: OcrTaskAiResult | null
+  error: string | null
 }
