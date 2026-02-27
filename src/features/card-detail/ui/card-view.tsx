@@ -2,17 +2,20 @@
 
 import * as React from 'react'
 import { useRouter } from 'next/navigation'
+import { useQueryClient } from '@tanstack/react-query'
 import {
   SettingsIcon,
   EditIcon,
   UserIcon,
   HexagonIcon,
   StarIcon,
+  MessageCircleIcon,
 } from 'lucide-react'
 import {
   Header,
   BottomNav,
   AlertDialog,
+  IconButton,
   toast,
   type MenuItem,
   type BottomNavItem,
@@ -31,6 +34,7 @@ import {
   useDeleteCareer,
 } from '@/features/career-edit'
 import type { UserInfo } from '@/features/user/model'
+import { createChatRoom, patchChatRoomLatestMessage } from '@/features/chat/api'
 import { GlassCardPreview } from './glass-card-preview'
 import { CardInfoSection } from './card-info-section'
 
@@ -116,10 +120,18 @@ function CardView({
   isOwner = false,
 }: CardViewProps) {
   const router = useRouter()
+  const queryClient = useQueryClient()
   const [isFlip, setIsFlip] = React.useState(false)
+  const [isCreatingDmRoom, setIsCreatingDmRoom] = React.useState(false)
   const [activeTab, setActiveTab] = React.useState<NavTab | undefined>(
     undefined
   )
+  const targetUserId = React.useMemo(() => {
+    if (!userId) return null
+    const parsed = Number(userId)
+    if (!Number.isInteger(parsed) || parsed <= 0) return null
+    return parsed
+  }, [userId])
 
   // 경력 API 연동 - isOwner면 내 경력, 아니면 해당 유저 경력 조회
   const { data: myCareersData } = useCareers()
@@ -191,6 +203,32 @@ function CardView({
     if (profileData?.tel) {
       window.location.href = `tel:${profileData.tel}`
     }
+  }
+
+  const handleMessageClick = async () => {
+    if (isCreatingDmRoom) return
+
+    if (!targetUserId) {
+      toast.error('상대 사용자 정보를 확인할 수 없습니다.')
+      return
+    }
+
+    try {
+      setIsCreatingDmRoom(true)
+      const response = await createChatRoom({
+        target_user_id: targetUserId,
+      })
+      patchChatRoomLatestMessage(queryClient, response.data)
+      router.push(`/chat/${response.data.room_id}`)
+    } catch {
+      toast.error('채팅방 생성에 실패했습니다.')
+    } finally {
+      setIsCreatingDmRoom(false)
+    }
+  }
+
+  const handleMessageClickPress = () => {
+    void handleMessageClick()
   }
 
   const handleTabChange = (tab: NavTab) => {
@@ -321,6 +359,19 @@ function CardView({
 
       {/* 이미지 + GlassCard 영역 */}
       <div className="relative overflow-hidden">
+        {!isOwner && targetUserId && (
+          <IconButton
+            variant="primary"
+            size="lg"
+            onClick={handleMessageClickPress}
+            disabled={isCreatingDmRoom}
+            aria-label="1:1 채팅 시작"
+            className="absolute top-4 right-4 z-20 shadow-lg"
+          >
+            <MessageCircleIcon className="size-6" />
+          </IconButton>
+        )}
+
         {/* 프로필 이미지 영역 */}
         <div className="h-[526px] w-full bg-gradient-to-b from-gray-700 to-gray-900">
           {profileData.avatarSrc ? (

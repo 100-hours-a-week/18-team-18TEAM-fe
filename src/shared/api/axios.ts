@@ -8,7 +8,7 @@ declare module 'axios' {
 }
 
 export const apiClient = axios.create({
-  baseURL: '/api',
+  baseURL: '/bff',
   withCredentials: true,
   headers: {
     'Content-Type': 'application/json',
