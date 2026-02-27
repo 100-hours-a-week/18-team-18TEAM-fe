@@ -17,5 +17,9 @@ fi
 : "${APP_STAGE:?APP_STAGE is required}"
 : "${IMAGE_URI:?IMAGE_URI is required}"
 
+export RELEASE_ID
+export APP_STAGE
+export IMAGE_URI
+
 chmod +x "${HOOK_DIR}/deploy-fe-container.sh"
 exec "${HOOK_DIR}/deploy-fe-container.sh"
