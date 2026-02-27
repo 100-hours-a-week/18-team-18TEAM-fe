@@ -1,25 +1,28 @@
-FROM node:20-alpine AS deps
+# syntax=docker/dockerfile:1
+
+FROM node:20-alpine AS base
 WORKDIR /app
 
 RUN apk add --no-cache libc6-compat \
   && corepack enable \
   && corepack prepare pnpm@9 --activate
+
+FROM base AS deps
 
 COPY package.json pnpm-lock.yaml ./
-RUN pnpm install --frozen-lockfile
+RUN pnpm fetch --frozen-lockfile
 
-FROM node:20-alpine AS builder
-WORKDIR /app
+FROM base AS builder
 
-RUN apk add --no-cache libc6-compat \
-  && corepack enable \
-  && corepack prepare pnpm@9 --activate
+COPY --from=deps /root/.local/share/pnpm/store /root/.local/share/pnpm/store
+COPY package.json pnpm-lock.yaml ./
+RUN pnpm install --frozen-lockfile --offline
 
-COPY --from=deps /app/node_modules ./node_modules
-COPY package.json pnpm-lock.yaml next.config.ts next-env.d.ts tsconfig.json postcss.config.mjs ./
+COPY next.config.ts tsconfig.json postcss.config.mjs ./
 COPY public ./public
 COPY src ./src
 
+# CI/CD에서 secrets로 생성한 .env를 빌드 시점에만 사용
 COPY .env ./.env
 
 RUN pnpm build
