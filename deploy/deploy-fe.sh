@@ -6,10 +6,10 @@ APP_HOME=/home/ubuntu
 SERVICE_UNIT="bizkit-fe.service"
 HEALTH_CHECK_URL="http://127.0.0.1:3000/"
 
-ARTIFACT_DIR="${APP_HOME}/artifact/fe" #임시 저장
-RELEASES_DIR="${ARTIFACT_DIR}/releases" #버전별 관리
+ARTIFACT_DIR="${APP_HOME}/artifact/fe"
+RELEASES_DIR="${ARTIFACT_DIR}/releases" 
 CURRENT_LINK="${ARTIFACT_DIR}/current"
-BACKUP_DIR="${APP_HOME}/backup/fe" #백업
+BACKUP_DIR="${APP_HOME}/backup/fe"
 
 CURRENT_FILE="${ARTIFACT_DIR}/.current_version"
 
