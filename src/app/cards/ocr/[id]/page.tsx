@@ -19,7 +19,11 @@ export default function OcrCardPage() {
   const params = useParams()
   const cardId = params.id as string
 
-  const { data: card, isLoading, isError } = useCareer(cardId, {
+  const {
+    data: card,
+    isLoading,
+    isError,
+  } = useCareer(cardId, {
     enabled: Boolean(cardId),
   })
 

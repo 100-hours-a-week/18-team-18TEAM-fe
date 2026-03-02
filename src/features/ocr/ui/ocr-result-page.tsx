@@ -175,7 +175,9 @@ function OcrResultPage() {
       if (mode === 'SELF') {
         await Promise.all([
           queryClient.invalidateQueries({ queryKey: careerKeys.lists() }),
-          queryClient.invalidateQueries({ queryKey: qrShareKeys.myLatestCard() }),
+          queryClient.invalidateQueries({
+            queryKey: qrShareKeys.myLatestCard(),
+          }),
         ])
 
         await Promise.allSettled([
