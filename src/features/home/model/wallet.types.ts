@@ -1,7 +1,7 @@
 export interface WalletCard {
   id: number
   uuid: string
-  user_id: number
+  user_id: number | null
   name: string
   email: string
   phone_number: string

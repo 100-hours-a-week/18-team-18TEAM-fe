@@ -1,7 +1,8 @@
 'use client'
 
 import Image from 'next/image'
-import { useRouter } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
+import { Suspense } from 'react'
 import { PlusCircleIcon } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Header } from '@/shared'
@@ -10,8 +11,9 @@ import { useMyLatestCard, toProfileDataFromCard } from '@/features/qr-share'
 import { CardView } from '@/features/card-detail/ui'
 import { cn } from '@/lib/utils'
 
-export default function MyCardPage() {
+function MyCardPageContent() {
   const router = useRouter()
+  const searchParams = useSearchParams()
   const {
     data: cardData,
     isLoading: isCardLoading,
@@ -20,6 +22,11 @@ export default function MyCardPage() {
   const { data: userInfo, isLoading: isUserLoading } = useMyInfo()
 
   const isLoading = isCardLoading || isUserLoading
+  const tab = searchParams.get('tab')
+  const initialActiveTab =
+    tab === 'user-detail' || tab === 'charts' || tab === 'reviews'
+      ? tab
+      : undefined
 
   if (isLoading) {
     return (
@@ -94,6 +101,23 @@ export default function MyCardPage() {
       userInfo={{ description: cardData.description } as any}
       showMenu={true}
       isOwner={true}
+      initialActiveTab={initialActiveTab}
     />
+  )
+}
+
+function MyCardPageFallback() {
+  return (
+    <div className="bg-background flex min-h-screen items-center justify-center">
+      <p className="text-muted-foreground">로딩 중...</p>
+    </div>
+  )
+}
+
+export default function MyCardPage() {
+  return (
+    <Suspense fallback={<MyCardPageFallback />}>
+      <MyCardPageContent />
+    </Suspense>
   )
 }

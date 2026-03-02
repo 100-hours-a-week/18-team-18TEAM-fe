@@ -36,7 +36,7 @@ import {
 export const runtime = 'nodejs'
 
 type RouteParams = { path: string[] }
-type RouteContext = { params: Promise<RouteParams> | RouteParams }
+type RouteContext = { params: Promise<RouteParams> }
 
 function hasRequestBody(method: string): boolean {
   return !['GET', 'HEAD'].includes(method.toUpperCase())

@@ -108,23 +108,27 @@ interface CardViewProps {
   profileData: ProfileData
   userInfo?: UserInfo
   userId?: string
+  careerItemsOverride?: CareerItem[]
   showMenu?: boolean
   isOwner?: boolean
+  initialActiveTab?: NavTab
 }
 
 function CardView({
   profileData,
   userInfo,
   userId,
+  careerItemsOverride,
   showMenu = false,
   isOwner = false,
+  initialActiveTab,
 }: CardViewProps) {
   const router = useRouter()
   const queryClient = useQueryClient()
   const [isFlip, setIsFlip] = React.useState(false)
   const [isCreatingDmRoom, setIsCreatingDmRoom] = React.useState(false)
   const [activeTab, setActiveTab] = React.useState<NavTab | undefined>(
-    undefined
+    initialActiveTab
   )
   const targetUserId = React.useMemo(() => {
     if (!userId) return null
@@ -142,7 +146,7 @@ function CardView({
   const deleteCareerMutation = useDeleteCareer()
 
   // API 응답을 CareerItem 형식으로 변환
-  const careerItems: CareerItem[] = React.useMemo(() => {
+  const careerItemsFromApi: CareerItem[] = React.useMemo(() => {
     if (!careersData) return []
     return careersData.map((career) => ({
       id: String(career.id),
@@ -154,6 +158,8 @@ function CardView({
       description: career.department || undefined,
     }))
   }, [careersData])
+
+  const careerItems = careerItemsOverride ?? careerItemsFromApi
 
   // AI 설명 (API의 description 필드 사용)
   const aiDescription = userInfo?.description || ''

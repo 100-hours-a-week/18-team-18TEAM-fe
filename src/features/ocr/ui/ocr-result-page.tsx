@@ -2,11 +2,16 @@
 
 import * as React from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
+import { useQueryClient } from '@tanstack/react-query'
+import { AxiosError } from 'axios'
 import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Controller, useForm } from 'react-hook-form'
 import { Switch } from '@/components/ui/switch'
 import { Label } from '@/components/ui/label'
+import { getCareers, careerKeys } from '@/features/career-edit'
+import { walletKeys } from '@/features/home/api'
+import { getMyLatestCard, qrShareKeys } from '@/features/qr-share/api'
 import { Button, DateRangePicker, Field, Header, toast } from '@/shared'
 import { getOcrJobResult, submitOcrResult } from '../api'
 import { ocrFlowAtom, type OcrJobResult, type OcrMode } from '../model'
@@ -48,6 +53,7 @@ function toFormData(result: OcrJobResult): OcrResultFormData {
 function OcrResultPage() {
   const router = useRouter()
   const searchParams = useSearchParams()
+  const queryClient = useQueryClient()
   const taskId = searchParams.get('task_id')
 
   const [ocrFlow, setOcrFlow] = useAtom(ocrFlowAtom)
@@ -165,7 +171,48 @@ function OcrResultPage() {
       })
       toast.success('명함 정보가 저장되었습니다.')
       setOcrFlow({ mode: null, capturedImageUrl: null })
-      router.replace(mode === 'SELF' ? '/my-card' : '/home')
+
+      if (mode === 'SELF') {
+        await Promise.all([
+          queryClient.invalidateQueries({ queryKey: careerKeys.lists() }),
+          queryClient.invalidateQueries({
+            queryKey: qrShareKeys.myLatestCard(),
+          }),
+        ])
+
+        await Promise.allSettled([
+          queryClient.fetchQuery({
+            queryKey: careerKeys.list(),
+            queryFn: async () => {
+              const response = await getCareers()
+              return response.data
+            },
+          }),
+          queryClient.fetchQuery({
+            queryKey: qrShareKeys.myLatestCard(),
+            queryFn: async () => {
+              try {
+                const response = await getMyLatestCard()
+                return response.data ?? null
+              } catch (error) {
+                if (
+                  error instanceof AxiosError &&
+                  error.response?.status === 404
+                ) {
+                  return null
+                }
+                throw error
+              }
+            },
+          }),
+        ])
+
+        router.replace('/my-card?tab=user-detail')
+        return
+      }
+
+      await queryClient.invalidateQueries({ queryKey: walletKeys.all })
+      router.replace('/home')
     } catch (error) {
       console.error('Failed to submit OCR result:', error)
       toast.error('명함 저장 중 오류가 발생했습니다.')
