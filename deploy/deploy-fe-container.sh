@@ -23,17 +23,29 @@ HEALTH_CHECK_URL="${HEALTH_CHECK_URL:-http://127.0.0.1:3000/}"
 CONTAINER_PORT="${CONTAINER_PORT:-3000}"
 HOST_PORT="${HOST_PORT:-3000}"
 PODMAN_NETWORK="${PODMAN_NETWORK:-podman}"
-REDIS_URL="${REDIS_URL:-}"
+RUNTIME_ENV_FILE="${RUNTIME_ENV_FILE:-${HOOK_DIR}/runtime.env}"
 
 : "${RELEASE_ID:?RELEASE_ID is required}"
 : "${APP_STAGE:?APP_STAGE is required}"
 : "${IMAGE_URI:?IMAGE_URI is required}"
-: "${REDIS_URL:?REDIS_URL is required}"
 
 NETWORK_ARGS=()
 if [[ "${APP_STAGE}" == "dev" || "${APP_STAGE}" == "development" ]]; then
   NETWORK_ARGS=(--network "${PODMAN_NETWORK}")
 fi
+
+CONTAINER_ENV_ARGS=()
+if [[ -f "${RUNTIME_ENV_FILE}" ]]; then
+  # shellcheck disable=SC1090
+  set -a && source "${RUNTIME_ENV_FILE}" && set +a
+  while IFS= read -r key; do
+    CONTAINER_ENV_ARGS+=(-e "${key}=${!key-}")
+  done < <(grep -E '^[A-Za-z_][A-Za-z0-9_]*=' "${RUNTIME_ENV_FILE}" | cut -d= -f1)
+fi
+if [[ -n "${REDIS_URL:-}" ]]; then
+  CONTAINER_ENV_ARGS+=(-e "REDIS_URL=${REDIS_URL}")
+fi
+: "${REDIS_URL:?REDIS_URL is required (set in runtime.env or env.sh)}"
 
 for cmd in podman aws curl runuser systemctl; do
   if ! command -v "${cmd}" >/dev/null 2>&1; then
@@ -90,7 +102,7 @@ as_ubuntu podman create \
   --replace \
   "${NETWORK_ARGS[@]}" \
   -p "${HOST_PORT}:${CONTAINER_PORT}" \
-  -e "REDIS_URL=${REDIS_URL}" \
+  "${CONTAINER_ENV_ARGS[@]}" \
   "${IMAGE_URI}"
 
 as_ubuntu bash -lc "mkdir -p '${UBUNTU_HOME}/.config/systemd/user' && cd '${UBUNTU_HOME}/.config/systemd/user' && podman generate systemd --new --name '${CONTAINER_NAME}' --files --restart-policy always"
@@ -128,7 +140,7 @@ if [[ -n "${PREV_IMAGE_URI}" ]]; then
     --replace \
     "${NETWORK_ARGS[@]}" \
     -p "${HOST_PORT}:${CONTAINER_PORT}" \
-    -e "REDIS_URL=${REDIS_URL}" \
+    "${CONTAINER_ENV_ARGS[@]}" \
     "${PREV_IMAGE_URI}"
 
   as_ubuntu bash -lc "cd '${UBUNTU_HOME}/.config/systemd/user' && podman generate systemd --new --name '${CONTAINER_NAME}' --files --restart-policy always"
