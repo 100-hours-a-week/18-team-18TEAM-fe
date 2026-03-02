@@ -1,7 +1,10 @@
 import type { NextRequest } from 'next/server'
 import { NextResponse } from 'next/server'
 import { forwardToAi } from '@/server/bff/ai-client'
-import { toProxyHeaders, type ForwardRequestBody } from '@/server/bff/spring-client'
+import {
+  toProxyHeaders,
+  type ForwardRequestBody,
+} from '@/server/bff/spring-client'
 import {
   createOcrJob,
   getOcrJob,
@@ -153,7 +156,10 @@ function toOcrTaskAiResult(payload: JsonRecord): OcrTaskAiResult {
       'company_phone',
       'companyPhone',
     ]),
-    mobile_phone: pickNullableString(candidates, ['mobile_phone', 'mobilePhone']),
+    mobile_phone: pickNullableString(candidates, [
+      'mobile_phone',
+      'mobilePhone',
+    ]),
   }
 }
 
@@ -166,7 +172,9 @@ async function parseJsonRecord(response: Response): Promise<JsonRecord | null> {
   }
 }
 
-function parseBodyJson(body: ForwardRequestBody | undefined): JsonRecord | null {
+function parseBodyJson(
+  body: ForwardRequestBody | undefined
+): JsonRecord | null {
   if (typeof body !== 'string') return null
 
   try {
@@ -208,7 +216,8 @@ async function handleOcrStart(
 
   const mode = toOcrMode(requestPayload.mode)
   const imageUrlValue =
-    (typeof requestPayload.image_url === 'string' && requestPayload.image_url) ||
+    (typeof requestPayload.image_url === 'string' &&
+      requestPayload.image_url) ||
     (typeof requestPayload.imageUrl === 'string' && requestPayload.imageUrl) ||
     null
 
@@ -306,16 +315,16 @@ async function handleOcrPoll(
   const error = pickNullableString(statusCandidates, ['error', 'message'])
 
   if (status !== 'completed') {
-    const nextError = status === 'failed' ? error ?? 'OCR 처리에 실패했습니다.' : null
-    const updated =
-      (await updateOcrJob(taskId, {
-        status,
-        error: nextError,
-      })) ?? {
-        ...job,
-        status,
-        error: nextError,
-      }
+    const nextError =
+      status === 'failed' ? (error ?? 'OCR 처리에 실패했습니다.') : null
+    const updated = (await updateOcrJob(taskId, {
+      status,
+      error: nextError,
+    })) ?? {
+      ...job,
+      status,
+      error: nextError,
+    }
 
     return NextResponse.json(toPollResponse(updated), { status: 200 })
   }
@@ -337,17 +346,16 @@ async function handleOcrPoll(
   }
 
   const result = toOcrTaskAiResult(resultPayload)
-  const updated =
-    (await updateOcrJob(taskId, {
-      status: 'completed',
-      result,
-      error: null,
-    })) ?? {
-      ...job,
-      status: 'completed' as const,
-      result,
-      error: null,
-    }
+  const updated = (await updateOcrJob(taskId, {
+    status: 'completed',
+    result,
+    error: null,
+  })) ?? {
+    ...job,
+    status: 'completed' as const,
+    result,
+    error: null,
+  }
 
   return NextResponse.json(toPollResponse(updated), { status: 200 })
 }
