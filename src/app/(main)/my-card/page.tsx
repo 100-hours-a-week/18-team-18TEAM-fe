@@ -2,6 +2,7 @@
 
 import Image from 'next/image'
 import { useRouter, useSearchParams } from 'next/navigation'
+import { Suspense } from 'react'
 import { PlusCircleIcon } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Header } from '@/shared'
@@ -10,7 +11,7 @@ import { useMyLatestCard, toProfileDataFromCard } from '@/features/qr-share'
 import { CardView } from '@/features/card-detail/ui'
 import { cn } from '@/lib/utils'
 
-export default function MyCardPage() {
+function MyCardPageContent() {
   const router = useRouter()
   const searchParams = useSearchParams()
   const {
@@ -102,5 +103,21 @@ export default function MyCardPage() {
       isOwner={true}
       initialActiveTab={initialActiveTab}
     />
+  )
+}
+
+function MyCardPageFallback() {
+  return (
+    <div className="bg-background flex min-h-screen items-center justify-center">
+      <p className="text-muted-foreground">로딩 중...</p>
+    </div>
+  )
+}
+
+export default function MyCardPage() {
+  return (
+    <Suspense fallback={<MyCardPageFallback />}>
+      <MyCardPageContent />
+    </Suspense>
   )
 }
