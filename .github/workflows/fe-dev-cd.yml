@@ -146,8 +146,15 @@ jobs:
           IMAGE_URI='${{ env.IMAGE_URI }}'
           EOF_ENV
 
-          echo "[debug] bundle/deploy/env.sh"
-          cat bundle/deploy/env.sh
+          # Runtime envs for container start (secret format: KEY='value' per line)
+          cat << 'EOF_RUNTIME' >> bundle/deploy/env.sh
+          ${{ secrets.FE_RUNTIME_ENV_DEV }}
+          EOF_RUNTIME
+
+          chmod 600 bundle/deploy/env.sh
+          echo "[debug] env keys in bundle/deploy/env.sh"
+          grep -E "^[A-Za-z_][A-Za-z0-9_]*=" bundle/deploy/env.sh | cut -d= -f1 || true
+          grep -q "^REDIS_URL=" bundle/deploy/env.sh || { echo "REDIS_URL is missing in FE_RUNTIME_ENV_DEV" >&2; exit 1; }
 
           (cd bundle && zip -r ../bundle.zip .)
           unzip -l bundle.zip
