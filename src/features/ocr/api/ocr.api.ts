@@ -1,6 +1,7 @@
 import { apiClient } from '@/shared/api'
 import type {
   OcrJobResult,
+  OcrMode,
   OcrPollBffResponse,
   OcrStartRequest,
   OcrStartResponse,
@@ -20,6 +21,30 @@ interface GetPresignedUrlResponse {
   url: string
   key: string
   expiresInSeconds: number
+}
+
+interface SelfCareerRequest {
+  name?: string | null
+  email: string
+  phone_number: string
+  lined_number?: string | null
+  company?: string | null
+  position?: string | null
+  department?: string | null
+  start_date: string
+  end_date?: string | null
+  is_progress: boolean
+  ai_image_key?: string | null
+}
+
+interface PaperCardCreateRequest {
+  name: string
+  email: string
+  company: string
+  position?: string
+  department?: string
+  phone_number?: string
+  lined_number?: string
 }
 
 async function base64ToFile(base64: string, fileName: string): Promise<File> {
@@ -55,6 +80,45 @@ function wait(ms: number): Promise<void> {
   return new Promise((resolve) => setTimeout(resolve, ms))
 }
 
+function emptyToNull(value?: string | null): string | null | undefined {
+  if (value === undefined || value === null) return undefined
+  return value.trim() === '' ? null : value
+}
+
+function emptyToUndefined(value?: string | null): string | undefined {
+  if (value === undefined || value === null) return undefined
+  const trimmed = value.trim()
+  return trimmed === '' ? undefined : trimmed
+}
+
+function toSelfCareerRequest(data: OcrSubmitRequest): SelfCareerRequest {
+  return {
+    name: emptyToNull(data.name),
+    email: data.email.trim(),
+    phone_number: data.phone_number.trim(),
+    lined_number: emptyToNull(data.lined_number),
+    company: emptyToNull(data.company),
+    department: emptyToNull(data.department),
+    position: emptyToNull(data.position),
+    start_date: data.start_date,
+    end_date: data.is_progress ? null : emptyToNull(data.end_date),
+    is_progress: data.is_progress,
+    ai_image_key: null,
+  }
+}
+
+function toPaperCardRequest(data: OcrSubmitRequest): PaperCardCreateRequest {
+  return {
+    name: data.name.trim(),
+    email: data.email.trim(),
+    company: data.company.trim(),
+    position: emptyToUndefined(data.position),
+    department: emptyToUndefined(data.department),
+    phone_number: emptyToUndefined(data.phone_number),
+    lined_number: emptyToUndefined(data.lined_number),
+  }
+}
+
 function mapBffResultToOcrJobResult(
   bffResponse: OcrPollBffResponse
 ): OcrJobResult {
@@ -62,7 +126,7 @@ function mapBffResultToOcrJobResult(
   return {
     task_id: bffResponse.task_id,
     mode: bffResponse.mode,
-    capturedImageUrl: null,
+    capturedImageUrl: bffResponse.image_url ?? null,
     name: ai?.name ?? '',
     email: ai?.email ?? '',
     company: ai?.company ?? '',
@@ -91,7 +155,10 @@ export async function startOcrJob(
     mode: request.mode,
   })
 
-  return { task_id: response.data.task_id }
+  return {
+    task_id: response.data.task_id,
+    status: response.data.status,
+  }
 }
 
 export async function getOcrJobResult(task_id: string): Promise<OcrJobResult> {
@@ -121,7 +188,13 @@ export async function getOcrJobResult(task_id: string): Promise<OcrJobResult> {
 
 export async function submitOcrResult(
   _task_id: string,
-  _data: OcrSubmitRequest
+  mode: OcrMode,
+  data: OcrSubmitRequest
 ): Promise<void> {
-  // TODO: 실제 엔드포인트 연결 예정
+  if (mode === 'SELF') {
+    await apiClient.post('/cards/me', toSelfCareerRequest(data))
+    return
+  }
+
+  await apiClient.post('/wallets/paper-cards', toPaperCardRequest(data))
 }

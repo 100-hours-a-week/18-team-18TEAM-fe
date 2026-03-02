@@ -155,7 +155,7 @@ function OcrResultPage() {
     }
 
     try {
-      await submitOcrResult(taskId, {
+      await submitOcrResult(taskId, mode, {
         ...data,
         lined_number: data.lined_number ?? '',
         position: data.position ?? '',

@@ -28,6 +28,7 @@ export interface OcrStartRequest {
 
 export interface OcrStartResponse {
   task_id: string
+  status: OcrTaskStatus
 }
 
 export interface OcrSubmitRequest {
@@ -58,13 +59,9 @@ export interface OcrTaskAiResult {
 
 export interface OcrPollBffResponse {
   task_id: string
-  task_type: string | null
   status: OcrTaskStatus
-  progress: unknown | null
-  created_at: string | null
-  started_at: string | null
-  completed_at: string | null
   mode: OcrMode
+  image_url: string
   result: OcrTaskAiResult | null
   error: string | null
 }
