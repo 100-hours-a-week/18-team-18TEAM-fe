@@ -71,6 +71,15 @@ export default function HomePage() {
     setKeyword(value)
   }
 
+  const handleCardPress = (cardId: number, userId: number | null) => {
+    if (userId !== null) {
+      router.push(`/user/${userId}`)
+      return
+    }
+
+    router.push(`/cards/ocr/${cardId}`)
+  }
+
   return (
     <div className="flex min-h-dvh flex-col">
       {/* 헤더: 로고 + 프로필 버튼 */}
@@ -132,7 +141,7 @@ export default function HomePage() {
                 email={card.email}
                 lined_number={card.lined_number}
                 colorIndex={index}
-                onPress={() => router.push(`/user/${card.user_id}`)}
+                onPress={() => handleCardPress(card.id, card.user_id)}
                 onDelete={() => handleDelete(card.id)}
               />
             ))}
