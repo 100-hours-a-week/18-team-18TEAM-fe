@@ -48,7 +48,7 @@ function toFormData(result: OcrJobResult): OcrResultFormData {
 function OcrResultPage() {
   const router = useRouter()
   const searchParams = useSearchParams()
-  const jobId = searchParams.get('jobId')
+  const taskId = searchParams.get('task_id')
 
   const [ocrFlow, setOcrFlow] = useAtom(ocrFlowAtom)
   const [result, setResult] = React.useState<OcrJobResult | null>(null)
@@ -82,7 +82,7 @@ function OcrResultPage() {
   })
 
   React.useEffect(() => {
-    if (!jobId) {
+    if (!taskId) {
       router.replace('/ocr')
       return
     }
@@ -92,7 +92,7 @@ function OcrResultPage() {
     const fetchResult = async () => {
       try {
         setIsLoadingResult(true)
-        const response = await getOcrJobResult(jobId)
+        const response = await getOcrJobResult(taskId)
 
         if (!isMounted) return
 
@@ -113,7 +113,7 @@ function OcrResultPage() {
     return () => {
       isMounted = false
     }
-  }, [jobId, reset, router])
+  }, [taskId, reset, router])
 
   const mode: OcrMode | null = result?.mode ?? ocrFlow.mode
   const isSelfMode = mode === 'SELF'
@@ -125,7 +125,7 @@ function OcrResultPage() {
   }
 
   const onSubmit = async (data: OcrResultFormData) => {
-    if (!jobId) {
+    if (!taskId) {
       toast.error('OCR 작업 정보를 찾을 수 없습니다.')
       router.replace('/ocr')
       return
@@ -155,7 +155,7 @@ function OcrResultPage() {
     }
 
     try {
-      await submitOcrResult(jobId, {
+      await submitOcrResult(taskId, mode, {
         ...data,
         lined_number: data.lined_number ?? '',
         position: data.position ?? '',

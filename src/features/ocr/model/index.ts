@@ -7,4 +7,7 @@ export type {
   OcrStartRequest,
   OcrStartResponse,
   OcrSubmitRequest,
+  OcrTaskStatus,
+  OcrTaskAiResult,
+  OcrPollBffResponse,
 } from './types'

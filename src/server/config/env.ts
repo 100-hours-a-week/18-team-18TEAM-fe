@@ -1,5 +1,6 @@
 export interface ServerEnv {
   springApiBaseUrl: string
+  aiApiBaseUrl: string
   redisUrl: string
   redisNamespace: string
   sessionCookieSecure: boolean
@@ -49,6 +50,7 @@ export function getServerEnv(): ServerEnv {
 
   return {
     springApiBaseUrl: trimTrailingSlash(springApiBaseUrl),
+    aiApiBaseUrl: trimTrailingSlash(process.env.AI_API_BASE_URL || ''),
     redisUrl,
     redisNamespace: process.env.REDIS_NAMESPACE || DEFAULT_REDIS_NAMESPACE,
     sessionCookieSecure: readBoolean(

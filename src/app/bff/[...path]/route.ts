@@ -1,5 +1,6 @@
 import type { NextRequest } from 'next/server'
 import { NextResponse } from 'next/server'
+import { isAiPath, proxyAiRequest } from '@/server/bff/ai-router'
 import {
   buildSessionFingerprint,
   extractTokenPairFromBody,
@@ -79,6 +80,51 @@ async function toProxyResponse(upstream: Response): Promise<NextResponse> {
 async function resolveApiPath(context: RouteContext): Promise<string> {
   const params = await Promise.resolve(context.params)
   return `/${params.path.join('/')}`
+}
+
+async function handleAiProxy(
+  request: NextRequest,
+  env: ReturnType<typeof getServerEnv>,
+  apiPath: string,
+  search: string,
+  method: string,
+  body: ForwardRequestBody | undefined,
+  sessionId: string | null,
+  session: SessionRecord | null
+): Promise<NextResponse> {
+  if (!sessionId || !session) {
+    const unauthorized = jsonError(401, 'Unauthorized')
+    clearSessionCookie(unauthorized)
+    return unauthorized
+  }
+
+  const issuedAtMs = parseIsoToMs(session.issuedAt)
+  const maxLifetimeMs = env.maxSessionLifetime * 1000
+  if (!issuedAtMs || Date.now() - issuedAtMs > maxLifetimeMs) {
+    await deleteSession(sessionId)
+    const unauthorized = jsonError(401, 'Unauthorized')
+    clearSessionCookie(unauthorized)
+    return unauthorized
+  }
+
+  const response = await proxyAiRequest({
+    request,
+    apiPath,
+    search,
+    method,
+    body,
+    sessionUserId: session.userId,
+  })
+
+  if (response.ok) {
+    try {
+      await touchSession(sessionId)
+    } catch {
+      // 응답 성공을 깨지 않기 위해 TTL 갱신 실패는 무시한다.
+    }
+  }
+
+  return response
 }
 
 async function handleKakaoLogin(
@@ -184,10 +230,21 @@ async function handleProxyRequest(
   }
 
   const body = await readReusableBody(request, method)
-
-  const authPolicy = resolveAuthPolicy(apiPath)
   const sessionId = getSessionId(request)
   const session = sessionId ? await getSession(sessionId) : null
+
+  if (isAiPath(apiPath)) {
+    return handleAiProxy(
+      request,
+      env,
+      apiPath,
+      search,
+      method,
+      body,
+      sessionId,
+      session
+    )
+  }
 
   if (apiPath === '/auth/login/kakao') {
     return handleKakaoLogin(request, body)
@@ -196,6 +253,8 @@ async function handleProxyRequest(
   if (apiPath === '/auth/logout') {
     return handleLogout(request, apiPath, search, sessionId, session, body)
   }
+
+  const authPolicy = resolveAuthPolicy(apiPath)
 
   if (authPolicy === 'normal' && !session) {
     const unauthorized = jsonError(401, 'Unauthorized')
