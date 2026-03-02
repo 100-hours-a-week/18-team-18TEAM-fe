@@ -111,6 +111,7 @@ interface CardViewProps {
   careerItemsOverride?: CareerItem[]
   showMenu?: boolean
   isOwner?: boolean
+  initialActiveTab?: NavTab
 }
 
 function CardView({
@@ -120,13 +121,14 @@ function CardView({
   careerItemsOverride,
   showMenu = false,
   isOwner = false,
+  initialActiveTab,
 }: CardViewProps) {
   const router = useRouter()
   const queryClient = useQueryClient()
   const [isFlip, setIsFlip] = React.useState(false)
   const [isCreatingDmRoom, setIsCreatingDmRoom] = React.useState(false)
   const [activeTab, setActiveTab] = React.useState<NavTab | undefined>(
-    undefined
+    initialActiveTab
   )
   const targetUserId = React.useMemo(() => {
     if (!userId) return null
