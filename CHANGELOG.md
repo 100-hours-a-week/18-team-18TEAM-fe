@@ -1,3 +1,9 @@
+## [1.4.1](https://github.com/100-hours-a-week/18-team-18TEAM-fe/compare/v1.4.0...v1.4.1) (2026-03-02)
+
+### Bug Fixes
+
+* amd 기반으로 변경 ([76fa6c1](https://github.com/100-hours-a-week/18-team-18TEAM-fe/commit/76fa6c19509c1d9acfc6695cdf4db88e1937f602))
+
 ## [1.4.0](https://github.com/100-hours-a-week/18-team-18TEAM-fe/compare/v1.3.0...v1.4.0) (2026-03-02)
 
 ### Features
