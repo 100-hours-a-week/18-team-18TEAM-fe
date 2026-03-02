@@ -2,6 +2,8 @@
 
 import * as React from 'react'
 import Image from 'next/image'
+import { MessageCircleIcon } from 'lucide-react'
+import { useAtom } from 'jotai'
 import {
   SearchInput,
   MyCardButton,
@@ -10,14 +12,18 @@ import {
   EmptyCardPlaceholder,
   FAB,
   FABMenu,
+  OcrModeDialog,
 } from '@/features/home/ui'
 import { useWallets, useDeleteWalletCard } from '@/features/home/api'
 import { useRouter } from 'next/navigation'
-import { toast } from '@/shared'
+import { IconButton, toast } from '@/shared'
+import { ocrFlowAtom, type OcrMode } from '@/features/ocr'
 
 export default function HomePage() {
   const [fabOpen, setFabOpen] = React.useState(false)
   const [keyword, setKeyword] = React.useState('')
+  const [isOcrModeDialogOpen, setIsOcrModeDialogOpen] = React.useState(false)
+  const [, setOcrFlow] = useAtom(ocrFlowAtom)
   const router = useRouter()
 
   const { data, isLoading, fetchNextPage, hasNextPage, isFetchingNextPage } =
@@ -39,6 +45,19 @@ export default function HomePage() {
     router.push('/my-card/edit')
   }
 
+  const handleScanOCR = () => {
+    setIsOcrModeDialogOpen(true)
+  }
+
+  const handleSelectOcrMode = (mode: OcrMode) => {
+    setOcrFlow({
+      mode,
+      capturedImageUrl: null,
+    })
+    setIsOcrModeDialogOpen(false)
+    router.push('/ocr')
+  }
+
   const handleDelete = async (cardId: number) => {
     try {
       await deleteCard.mutateAsync(cardId)
@@ -52,6 +71,15 @@ export default function HomePage() {
     setKeyword(value)
   }
 
+  const handleCardPress = (cardId: number, userId: number | null) => {
+    if (userId !== null) {
+      router.push(`/user/${userId}`)
+      return
+    }
+
+    router.push(`/cards/ocr/${cardId}`)
+  }
+
   return (
     <div className="flex min-h-dvh flex-col">
       {/* 헤더: 로고 + 프로필 버튼 */}
@@ -63,7 +91,15 @@ export default function HomePage() {
           height={47}
           priority
         />
-        <div className="absolute right-6">
+        <div className="absolute right-6 flex items-center gap-2">
+          <IconButton
+            variant="surface"
+            size="default"
+            aria-label="채팅방 목록으로 이동"
+            onClick={() => router.push('/chat')}
+          >
+            <MessageCircleIcon className="size-5" />
+          </IconButton>
           <MyCardButton onClick={() => router.push('/my-card')} />
         </div>
       </header>
@@ -105,7 +141,7 @@ export default function HomePage() {
                 email={card.email}
                 lined_number={card.lined_number}
                 colorIndex={index}
-                onPress={() => router.push(`/user/${card.user_id}`)}
+                onPress={() => handleCardPress(card.id, card.user_id)}
                 onDelete={() => handleDelete(card.id)}
               />
             ))}
@@ -120,6 +156,13 @@ export default function HomePage() {
         onClose={() => setFabOpen(false)}
         onShareCard={handleShareCard}
         onScanQR={handleScanQR}
+        onScanOCR={handleScanOCR}
+      />
+
+      <OcrModeDialog
+        open={isOcrModeDialogOpen}
+        onOpenChange={setIsOcrModeDialogOpen}
+        onSelectMode={handleSelectOcrMode}
       />
     </div>
   )

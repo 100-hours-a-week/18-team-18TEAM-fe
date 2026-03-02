@@ -7,7 +7,6 @@ files:
     overwrite: true
 
 permissions:
-
   - object: /home/ubuntu/deploy
     pattern: "**"
     owner: ubuntu
@@ -16,16 +15,16 @@ permissions:
 
 hooks:
   ApplicationStop:
-    - location: deploy/stop.sh
+    - location: deploy/stop-container.sh
       timeout: 60
       runas: root
 
   ApplicationStart:
-    - location: deploy/start.sh
+    - location: deploy/start-container.sh
       timeout: 300
       runas: root
- 
+
   ValidateService:
-    - location: deploy/validate.sh
+    - location: deploy/validate-container.sh
       timeout: 60
       runas: root
