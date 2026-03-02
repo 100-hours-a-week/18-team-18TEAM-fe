@@ -113,6 +113,7 @@ async function handleAiProxy(
     search,
     method,
     body,
+    sessionUserId: session.userId,
   })
 
   if (response.ok) {

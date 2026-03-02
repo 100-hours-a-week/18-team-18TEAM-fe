@@ -2,31 +2,27 @@ import type { NextRequest } from 'next/server'
 import { NextResponse } from 'next/server'
 import { forwardToAi } from '@/server/bff/ai-client'
 import { toProxyHeaders, type ForwardRequestBody } from '@/server/bff/spring-client'
+import {
+  createOcrJob,
+  getOcrJob,
+  updateOcrJob,
+  type OcrMode,
+  type OcrTaskAiResult,
+  type OcrTaskStatus,
+} from '@/server/ocr/job-store'
 
-type OcrTaskStatus = 'pending' | 'running' | 'completed' | 'failed'
-type OcrMode = 'SELF' | 'OTHER'
 type JsonRecord = Record<string, unknown>
 
-interface OcrTaskAiResult {
-  is_business_card: boolean
-  name?: string | null
-  email?: string | null
-  company?: string | null
-  job_title?: string | null
-  department?: string | null
-  company_phone?: string | null
-  mobile_phone?: string | null
+interface OcrStartBffResponse {
+  task_id: string
+  status: OcrTaskStatus
 }
 
 interface OcrPollBffResponse {
   task_id: string
-  task_type: string | null
   status: OcrTaskStatus
-  progress: unknown | null
-  created_at: string | null
-  started_at: string | null
-  completed_at: string | null
   mode: OcrMode
+  image_url: string
   result: OcrTaskAiResult | null
   error: string | null
 }
@@ -37,6 +33,7 @@ interface AiProxyRequestOptions {
   search: string
   method: string
   body?: ForwardRequestBody
+  sessionUserId?: number | string | null
 }
 
 function jsonError(status: number, message: string): NextResponse {
@@ -59,17 +56,16 @@ function toAiApiPath(apiPath: string): string {
   return apiPath.slice('/ai'.length) || '/'
 }
 
-function rewriteAiApiPathForKnownRoutes(apiPath: string, method: string): string {
-  if (method === 'POST' && apiPath === '/ocr/start') {
-    return '/ocr/analyze'
-  }
-
-  return apiPath
+function isOcrStartRoute(apiPath: string, method: string): boolean {
+  return method === 'POST' && apiPath === '/ocr/start'
 }
 
-function extractOcrTaskId(apiPath: string): string | null {
+function extractOcrTaskId(apiPath: string, method: string): string | null {
+  if (method !== 'GET') return null
+
   const matched = /^\/ocr\/([^/]+)$/.exec(apiPath)
   if (!matched?.[1] || matched[1] === 'start') return null
+
   return matched[1]
 }
 
@@ -84,6 +80,7 @@ function pickUnknown(
 ): unknown {
   for (const candidate of candidates) {
     if (!candidate) continue
+
     for (const key of keys) {
       if (key in candidate) {
         return candidate[key]
@@ -100,16 +97,7 @@ function pickNullableString(
 ): string | null {
   const value = pickUnknown(candidates, keys)
   if (value == null) return null
-  if (typeof value !== 'string') return null
-  return value
-}
-
-function pickNullableUnknown(
-  candidates: Array<JsonRecord | null>,
-  keys: string[]
-): unknown | null {
-  const value = pickUnknown(candidates, keys)
-  return value === undefined ? null : value
+  return typeof value === 'string' ? value : null
 }
 
 function toOcrTaskStatus(value: unknown): OcrTaskStatus {
@@ -132,13 +120,18 @@ function toOcrTaskStatus(value: unknown): OcrTaskStatus {
   return 'pending'
 }
 
-function toOcrMode(value: unknown): OcrMode {
-  return typeof value === 'string' && value.toUpperCase() === 'SELF'
-    ? 'SELF'
-    : 'OTHER'
+function toOcrMode(value: unknown): OcrMode | null {
+  if (typeof value !== 'string') return null
+
+  const normalized = value.toUpperCase()
+  if (normalized === 'SELF' || normalized === 'OTHER') {
+    return normalized
+  }
+
+  return null
 }
 
-function toOcrTaskAiResult(payload: JsonRecord): OcrTaskAiResult | null {
+function toOcrTaskAiResult(payload: JsonRecord): OcrTaskAiResult {
   const nestedResult = asRecord(payload.result)
   const nestedData = asRecord(payload.data)
   const candidates = [nestedResult, nestedData, payload]
@@ -160,10 +153,7 @@ function toOcrTaskAiResult(payload: JsonRecord): OcrTaskAiResult | null {
       'company_phone',
       'companyPhone',
     ]),
-    mobile_phone: pickNullableString(candidates, [
-      'mobile_phone',
-      'mobilePhone',
-    ]),
+    mobile_phone: pickNullableString(candidates, ['mobile_phone', 'mobilePhone']),
   }
 }
 
@@ -176,12 +166,124 @@ async function parseJsonRecord(response: Response): Promise<JsonRecord | null> {
   }
 }
 
-async function handleAiOcrPoll(
+function parseBodyJson(body: ForwardRequestBody | undefined): JsonRecord | null {
+  if (typeof body !== 'string') return null
+
+  try {
+    const parsed = JSON.parse(body)
+    return asRecord(parsed)
+  } catch {
+    return null
+  }
+}
+
+function toPollResponse(record: {
+  task_id: string
+  status: OcrTaskStatus
+  mode: OcrMode
+  image_url: string
+  result: OcrTaskAiResult | null
+  error: string | null
+}): OcrPollBffResponse {
+  return {
+    task_id: record.task_id,
+    status: record.status,
+    mode: record.mode,
+    image_url: record.image_url,
+    result: record.result,
+    error: record.error,
+  }
+}
+
+async function handleOcrStart(
+  request: NextRequest,
+  search: string,
+  body: ForwardRequestBody | undefined,
+  sessionUserId: number | string | null
+): Promise<NextResponse> {
+  const requestPayload = parseBodyJson(body)
+  if (!requestPayload) {
+    return jsonError(400, 'Invalid OCR start request body.')
+  }
+
+  const mode = toOcrMode(requestPayload.mode)
+  const imageUrlValue =
+    (typeof requestPayload.image_url === 'string' && requestPayload.image_url) ||
+    (typeof requestPayload.imageUrl === 'string' && requestPayload.imageUrl) ||
+    null
+
+  if (!mode || !imageUrlValue) {
+    return jsonError(400, 'mode and image_url are required.')
+  }
+
+  const upstreamPayload = JSON.stringify({
+    ...requestPayload,
+    mode,
+    image_url: imageUrlValue,
+  })
+
+  const startUpstream = await forwardToAi({
+    apiPath: '/ocr/analyze',
+    search,
+    method: 'POST',
+    body: upstreamPayload,
+    requestHeaders: request.headers,
+  })
+
+  if (!startUpstream.ok) {
+    return toProxyResponse(startUpstream)
+  }
+
+  const startPayload = await parseJsonRecord(startUpstream)
+  if (!startPayload) {
+    return jsonError(502, 'Invalid AI OCR start response.')
+  }
+
+  const startData = asRecord(startPayload.data)
+  const candidates = [startData, startPayload]
+  const taskId = pickNullableString(candidates, ['task_id', 'taskId'])
+
+  if (!taskId) {
+    return jsonError(502, 'task_id is missing in AI OCR start response.')
+  }
+
+  const status = toOcrTaskStatus(pickUnknown(candidates, ['status']))
+  const now = new Date().toISOString()
+
+  await createOcrJob({
+    task_id: taskId,
+    mode,
+    image_url: imageUrlValue,
+    status,
+    userId: sessionUserId ?? null,
+    result: null,
+    error: null,
+    created_at: now,
+    updated_at: now,
+  })
+
+  const response: OcrStartBffResponse = {
+    task_id: taskId,
+    status,
+  }
+
+  return NextResponse.json(response, { status: 200 })
+}
+
+async function handleOcrPoll(
   request: NextRequest,
   taskId: string
 ): Promise<NextResponse> {
-  const encodedTaskId = encodeURIComponent(taskId)
+  const job = await getOcrJob(taskId)
+  if (!job) {
+    return jsonError(404, 'OCR task not found.')
+  }
 
+  if (job.status === 'completed' || job.status === 'failed') {
+    return NextResponse.json(toPollResponse(job), { status: 200 })
+  }
+
+  const encodedTaskId = encodeURIComponent(taskId)
   const statusUpstream = await forwardToAi({
     apiPath: `/tasks/${encodedTaskId}`,
     search: '',
@@ -200,45 +302,22 @@ async function handleAiOcrPoll(
 
   const statusData = asRecord(statusPayload.data)
   const statusCandidates = [statusData, statusPayload]
-  const taskIdFromStatus = pickNullableString(statusCandidates, [
-    'task_id',
-    'taskId',
-  ])
-  const taskType = pickNullableString(statusCandidates, [
-    'task_type',
-    'taskType',
-  ])
   const status = toOcrTaskStatus(pickUnknown(statusCandidates, ['status']))
-  const progress = pickNullableUnknown(statusCandidates, ['progress'])
-  const createdAt = pickNullableString(statusCandidates, [
-    'created_at',
-    'createdAt',
-  ])
-  const startedAt = pickNullableString(statusCandidates, [
-    'started_at',
-    'startedAt',
-  ])
-  const completedAt = pickNullableString(statusCandidates, [
-    'completed_at',
-    'completedAt',
-  ])
-  const mode = toOcrMode(pickUnknown(statusCandidates, ['mode']))
   const error = pickNullableString(statusCandidates, ['error', 'message'])
 
   if (status !== 'completed') {
-    const pollResponse: OcrPollBffResponse = {
-      task_id: taskIdFromStatus || taskId,
-      task_type: taskType,
-      status,
-      progress,
-      created_at: createdAt,
-      started_at: startedAt,
-      completed_at: completedAt,
-      mode,
-      result: null,
-      error,
-    }
-    return NextResponse.json(pollResponse, { status: 200 })
+    const nextError = status === 'failed' ? error ?? 'OCR 처리에 실패했습니다.' : null
+    const updated =
+      (await updateOcrJob(taskId, {
+        status,
+        error: nextError,
+      })) ?? {
+        ...job,
+        status,
+        error: nextError,
+      }
+
+    return NextResponse.json(toPollResponse(updated), { status: 200 })
   }
 
   const resultUpstream = await forwardToAi({
@@ -257,20 +336,20 @@ async function handleAiOcrPoll(
     return jsonError(502, 'Invalid AI task result response.')
   }
 
-  const pollResponse: OcrPollBffResponse = {
-    task_id: taskIdFromStatus || taskId,
-    task_type: taskType,
-    status: 'completed',
-    progress,
-    created_at: createdAt,
-    started_at: startedAt,
-    completed_at: completedAt,
-    mode,
-    result: toOcrTaskAiResult(resultPayload),
-    error,
-  }
+  const result = toOcrTaskAiResult(resultPayload)
+  const updated =
+    (await updateOcrJob(taskId, {
+      status: 'completed',
+      result,
+      error: null,
+    })) ?? {
+      ...job,
+      status: 'completed' as const,
+      result,
+      error: null,
+    }
 
-  return NextResponse.json(pollResponse, { status: 200 })
+  return NextResponse.json(toPollResponse(updated), { status: 200 })
 }
 
 export async function proxyAiRequest({
@@ -279,18 +358,22 @@ export async function proxyAiRequest({
   search,
   method,
   body,
+  sessionUserId,
 }: AiProxyRequestOptions): Promise<NextResponse> {
   const aiApiPath = toAiApiPath(apiPath)
-  const ocrTaskId = method === 'GET' ? extractOcrTaskId(aiApiPath) : null
 
   try {
-    if (ocrTaskId && aiApiPath.startsWith('/ocr/')) {
-      return await handleAiOcrPoll(request, ocrTaskId)
+    if (isOcrStartRoute(aiApiPath, method)) {
+      return await handleOcrStart(request, search, body, sessionUserId ?? null)
     }
 
-    const rewrittenApiPath = rewriteAiApiPathForKnownRoutes(aiApiPath, method)
+    const ocrTaskId = extractOcrTaskId(aiApiPath, method)
+    if (ocrTaskId && aiApiPath.startsWith('/ocr/')) {
+      return await handleOcrPoll(request, ocrTaskId)
+    }
+
     const upstream = await forwardToAi({
-      apiPath: rewrittenApiPath,
+      apiPath: aiApiPath,
       search,
       method,
       body,
