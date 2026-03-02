@@ -22,10 +22,18 @@ UNIT_NAME="container-${CONTAINER_NAME}.service"
 HEALTH_CHECK_URL="${HEALTH_CHECK_URL:-http://127.0.0.1:3000/}"
 CONTAINER_PORT="${CONTAINER_PORT:-3000}"
 HOST_PORT="${HOST_PORT:-3000}"
+PODMAN_NETWORK="${PODMAN_NETWORK:-podman}"
+REDIS_URL="${REDIS_URL:-}"
 
 : "${RELEASE_ID:?RELEASE_ID is required}"
 : "${APP_STAGE:?APP_STAGE is required}"
 : "${IMAGE_URI:?IMAGE_URI is required}"
+: "${REDIS_URL:?REDIS_URL is required}"
+
+NETWORK_ARGS=()
+if [[ "${APP_STAGE}" == "dev" || "${APP_STAGE}" == "development" ]]; then
+  NETWORK_ARGS=(--network "${PODMAN_NETWORK}")
+fi
 
 for cmd in podman aws curl runuser systemctl; do
   if ! command -v "${cmd}" >/dev/null 2>&1; then
@@ -80,7 +88,9 @@ as_ubuntu systemctl --user disable --now "${UNIT_NAME}" >/dev/null 2>&1 || true
 as_ubuntu podman create \
   --name "${CONTAINER_NAME}" \
   --replace \
+  "${NETWORK_ARGS[@]}" \
   -p "${HOST_PORT}:${CONTAINER_PORT}" \
+  -e "REDIS_URL=${REDIS_URL}" \
   "${IMAGE_URI}"
 
 as_ubuntu bash -lc "mkdir -p '${UBUNTU_HOME}/.config/systemd/user' && cd '${UBUNTU_HOME}/.config/systemd/user' && podman generate systemd --new --name '${CONTAINER_NAME}' --files --restart-policy always"
@@ -116,7 +126,9 @@ if [[ -n "${PREV_IMAGE_URI}" ]]; then
   as_ubuntu podman create \
     --name "${CONTAINER_NAME}" \
     --replace \
+    "${NETWORK_ARGS[@]}" \
     -p "${HOST_PORT}:${CONTAINER_PORT}" \
+    -e "REDIS_URL=${REDIS_URL}" \
     "${PREV_IMAGE_URI}"
 
   as_ubuntu bash -lc "cd '${UBUNTU_HOME}/.config/systemd/user' && podman generate systemd --new --name '${CONTAINER_NAME}' --files --restart-policy always"
