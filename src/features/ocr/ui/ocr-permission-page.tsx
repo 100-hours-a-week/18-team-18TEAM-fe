@@ -273,10 +273,10 @@ function OcrPermissionPage() {
       <div className="bg-background flex min-h-screen flex-col">
         <Header showClose onClose={handleClose} />
 
-        <main className="flex flex-1 flex-col items-center px-6 pt-8">
+        <main className="flex flex-1 flex-col items-center px-6 pt-16">
           <div className="relative w-full max-w-[328px]">
             {(status === 'preview' || status === 'submitting') &&
-            capturedImageUrl ? (
+              capturedImageUrl ? (
               <img
                 src={capturedImageUrl}
                 alt="촬영한 명함"
@@ -301,7 +301,7 @@ function OcrPermissionPage() {
                 인식 진행 또는 다시 촬영을 선택해 주세요
               </p>
 
-              <div className="mt-8 flex w-full max-w-[328px] gap-3">
+              <div className="mt-8 flex w-full max-w-[328px] flex-col gap-3">
                 <Button
                   variant="outline"
                   fullWidth
