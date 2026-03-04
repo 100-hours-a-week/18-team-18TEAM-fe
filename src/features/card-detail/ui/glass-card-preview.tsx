@@ -158,7 +158,7 @@ function GlassCardPreview({
                             className={cn(
                               'flex size-7 shrink-0 items-center justify-center rounded-full border transition-colors',
                               isActive
-                                ? 'border-black bg-black text-[#BFAE9F] animate-pulse'
+                                ? 'animate-pulse border-black bg-black text-[#BFAE9F]'
                                 : 'border-black/20 bg-black/10 text-black/70'
                             )}
                           >
@@ -170,7 +170,7 @@ function GlassCardPreview({
                                 className={cn(
                                   'absolute top-1/2 left-0 -translate-y-1/2 text-black/75 opacity-0',
                                   isTransferSegment &&
-                                  'animate-ai-file-transfer opacity-100'
+                                    'animate-ai-file-transfer opacity-100'
                                 )}
                               >
                                 <FileTextIcon className="size-3.5" />
@@ -190,13 +190,14 @@ function GlassCardPreview({
                   <p className="font-inter text-[16px] leading-snug font-medium text-black">
                     AI 직무 분석 및 요약을 준비 중
                     <span className="ml-1 inline-flex items-center gap-1 align-middle">
-                      <span className="bg-black/75 inline-block size-1.5 rounded-full animate-bounce [animation-delay:0ms]" />
-                      <span className="bg-black/75 inline-block size-1.5 rounded-full animate-bounce [animation-delay:120ms]" />
-                      <span className="bg-black/75 inline-block size-1.5 rounded-full animate-bounce [animation-delay:240ms]" />
+                      <span className="inline-block size-1.5 animate-bounce rounded-full bg-black/75 [animation-delay:0ms]" />
+                      <span className="inline-block size-1.5 animate-bounce rounded-full bg-black/75 [animation-delay:120ms]" />
+                      <span className="inline-block size-1.5 animate-bounce rounded-full bg-black/75 [animation-delay:240ms]" />
                     </span>
                   </p>
                   <p className="font-inter text-[12px] leading-snug font-normal whitespace-pre-line text-black/80">
-                    반영까지 다소 시간이 걸릴 수 있으며,{"\n"} 경력 정보가 추가되거나 수정되면 분석이 진행됩니다.
+                    반영까지 다소 시간이 걸릴 수 있으며,{'\n'} 경력 정보가
+                    추가되거나 수정되면 분석이 진행됩니다.
                   </p>
                 </div>
               )

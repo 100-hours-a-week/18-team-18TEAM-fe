@@ -37,7 +37,8 @@ function EmptyCardPlaceholder({
   const hasSearchKeyword = Boolean(searchKeyword?.trim())
 
   const resolvedTitle =
-    title || (hasSearchKeyword ? '검색 결과가 없습니다' : '보유한 명함이 없습니다')
+    title ||
+    (hasSearchKeyword ? '검색 결과가 없습니다' : '보유한 명함이 없습니다')
   const resolvedDescription =
     description ||
     (hasSearchKeyword

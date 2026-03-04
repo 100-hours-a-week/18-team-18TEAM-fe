@@ -26,7 +26,8 @@ export default function HomePage() {
   const [fabOpen, setFabOpen] = React.useState(false)
   const [keyword, setKeyword] = React.useState('')
   const [isSearchInputFocused, setIsSearchInputFocused] = React.useState(false)
-  const [isSearchLimitFeedback, setIsSearchLimitFeedback] = React.useState(false)
+  const [isSearchLimitFeedback, setIsSearchLimitFeedback] =
+    React.useState(false)
   const [isOcrModeDialogOpen, setIsOcrModeDialogOpen] = React.useState(false)
   const searchLimitFeedbackTimeoutRef = React.useRef<ReturnType<
     typeof setTimeout
@@ -102,7 +103,9 @@ export default function HomePage() {
     }
   }, [])
 
-  const handleSearchKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+  const handleSearchKeyDown = (
+    event: React.KeyboardEvent<HTMLInputElement>
+  ) => {
     if (event.nativeEvent.isComposing) return
     if (event.ctrlKey || event.metaKey || event.altKey) return
     if (event.key.length !== 1) return
@@ -178,7 +181,7 @@ export default function HomePage() {
           onBlur={() => setIsSearchInputFocused(false)}
           className={cn(
             isSearchLimitFeedback &&
-            'animate-search-limit-shake [&_input]:!border-destructive [&_input]:bg-destructive/5 [&_input]:focus:!border-destructive [&_input]:focus:!ring-destructive/30 [&_svg]:text-destructive'
+              'animate-search-limit-shake [&_input]:!border-destructive [&_input]:bg-destructive/5 [&_input]:focus:!border-destructive [&_input]:focus:!ring-destructive/30 [&_svg]:text-destructive'
           )}
         />
         {isSearchInputFocused && (

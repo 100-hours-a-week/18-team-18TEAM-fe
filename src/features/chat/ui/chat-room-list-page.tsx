@@ -16,7 +16,8 @@ function ChatRoomListPage() {
   const router = useRouter()
   const [keyword, setKeyword] = React.useState('')
   const [isSearchInputFocused, setIsSearchInputFocused] = React.useState(false)
-  const [isSearchLimitFeedback, setIsSearchLimitFeedback] = React.useState(false)
+  const [isSearchLimitFeedback, setIsSearchLimitFeedback] =
+    React.useState(false)
   const searchLimitFeedbackTimeoutRef = React.useRef<ReturnType<
     typeof setTimeout
   > | null>(null)
@@ -65,7 +66,9 @@ function ChatRoomListPage() {
     }
   }, [])
 
-  const handleSearchKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+  const handleSearchKeyDown = (
+    event: React.KeyboardEvent<HTMLInputElement>
+  ) => {
     if (event.nativeEvent.isComposing) return
     if (event.ctrlKey || event.metaKey || event.altKey) return
     if (event.key.length !== 1) return
@@ -176,9 +179,7 @@ function ChatRoomListPage() {
           <div className="px-4 py-6">
             <EmptyState
               title={
-                keyword.trim()
-                  ? '검색 결과가 없습니다.'
-                  : '채팅방이 없습니다'
+                keyword.trim() ? '검색 결과가 없습니다.' : '채팅방이 없습니다'
               }
               description={
                 keyword.trim()
