@@ -4,7 +4,7 @@ import { isAiPath, proxyAiRequest } from '@/server/bff/ai-router'
 import {
   buildSessionFingerprint,
   extractTokenPairFromBody,
-  refreshSessionViaSpring,
+  refreshSessionWithSingleFlight,
 } from '@/server/bff/auth-flow'
 import {
   isInternalOnlyPath,
@@ -77,6 +77,18 @@ async function toProxyResponse(upstream: Response): Promise<NextResponse> {
   })
 }
 
+async function slideSession(
+  sessionId: string,
+  response: NextResponse
+): Promise<void> {
+  try {
+    await touchSession(sessionId)
+    issueSessionCookie(response, sessionId)
+  } catch {
+    // 응답 성공을 깨지 않기 위해 sliding 갱신 실패는 무시한다.
+  }
+}
+
 async function resolveApiPath(context: RouteContext): Promise<string> {
   const params = await Promise.resolve(context.params)
   return `/${params.path.join('/')}`
@@ -117,11 +129,7 @@ async function handleAiProxy(
   })
 
   if (response.ok) {
-    try {
-      await touchSession(sessionId)
-    } catch {
-      // 응답 성공을 깨지 않기 위해 TTL 갱신 실패는 무시한다.
-    }
+    await slideSession(sessionId, response)
   }
 
   return response
@@ -302,7 +310,10 @@ async function handleProxyRequest(
       return unauthorized
     }
 
-    const refreshed = await refreshSessionViaSpring(sessionId, activeSession)
+    const refreshed = await refreshSessionWithSingleFlight(
+      sessionId,
+      activeSession
+    )
     if (!refreshed) {
       await deleteSession(sessionId)
       const unauthorized = await toProxyResponse(upstream)
@@ -329,11 +340,7 @@ async function handleProxyRequest(
   }
 
   if (sessionId && upstream.ok) {
-    try {
-      await touchSession(sessionId)
-    } catch {
-      // 응답 성공을 깨지 않기 위해 TTL 갱신 실패는 무시한다.
-    }
+    await slideSession(sessionId, response)
   }
 
   return response
