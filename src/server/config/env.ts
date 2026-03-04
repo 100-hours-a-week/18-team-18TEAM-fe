@@ -8,6 +8,9 @@ export interface ServerEnv {
   sessionTtlSeconds: number
   maxSessionLifetime: number
   minRotationInterval: number
+  refreshSingleFlightLockMs: number
+  refreshSingleFlightWaitMs: number
+  refreshSingleFlightPollMs: number
 }
 
 const DEFAULT_REDIS_NAMESPACE = 'caro:local'
@@ -19,6 +22,9 @@ const DEFAULT_MAX_SESSION_LIFETIME = 7 * 24 * 60 * 60 // 7d
 
 // rotation
 const DEFAULT_MIN_ROTATION_INTERVAL = 5 // seconds
+const DEFAULT_REFRESH_SINGLE_FLIGHT_LOCK_MS = 8000
+const DEFAULT_REFRESH_SINGLE_FLIGHT_WAIT_MS = 10000
+const DEFAULT_REFRESH_SINGLE_FLIGHT_POLL_MS = 100
 
 function readBoolean(value: string | undefined, fallback: boolean): boolean {
   if (!value) return fallback
@@ -71,6 +77,19 @@ export function getServerEnv(): ServerEnv {
     minRotationInterval: readPositiveInt(
       process.env.MIN_ROTATION_INTERVAL,
       DEFAULT_MIN_ROTATION_INTERVAL
+    ),
+
+    refreshSingleFlightLockMs: readPositiveInt(
+      process.env.REFRESH_SINGLE_FLIGHT_LOCK_MS,
+      DEFAULT_REFRESH_SINGLE_FLIGHT_LOCK_MS
+    ),
+    refreshSingleFlightWaitMs: readPositiveInt(
+      process.env.REFRESH_SINGLE_FLIGHT_WAIT_MS,
+      DEFAULT_REFRESH_SINGLE_FLIGHT_WAIT_MS
+    ),
+    refreshSingleFlightPollMs: readPositiveInt(
+      process.env.REFRESH_SINGLE_FLIGHT_POLL_MS,
+      DEFAULT_REFRESH_SINGLE_FLIGHT_POLL_MS
     ),
   }
 }

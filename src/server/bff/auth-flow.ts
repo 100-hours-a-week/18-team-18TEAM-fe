@@ -1,8 +1,13 @@
-import { createHash } from 'node:crypto'
+import { createHash, randomUUID } from 'node:crypto'
 import type { NextRequest } from 'next/server'
 import { forwardToSpring } from '@/server/bff/spring-client'
+import { getServerEnv } from '@/server/config/env'
+import {
+  redisReleaseLockIfOwner,
+  redisSetNxPx,
+} from '@/server/redis/client'
 import type { SessionRecord } from '@/server/session/store'
-import { updateSessionTokens } from '@/server/session/store'
+import { getSession, updateSessionTokens } from '@/server/session/store'
 
 interface TokenPair {
   accessToken: string
@@ -57,6 +62,28 @@ function toSha256(value: string | null): string | undefined {
   return createHash('sha256').update(value).digest('hex')
 }
 
+function buildRefreshLockKey(sessionId: string): string {
+  const { redisNamespace } = getServerEnv()
+  return `${redisNamespace}:refresh-lock:${sessionId}`
+}
+
+function hasSessionRotated(
+  staleSession: SessionRecord,
+  latestSession: SessionRecord
+): boolean {
+  return (
+    staleSession.accessToken !== latestSession.accessToken ||
+    staleSession.refreshToken !== latestSession.refreshToken ||
+    staleSession.lastRotatedAt !== latestSession.lastRotatedAt
+  )
+}
+
+function sleep(ms: number): Promise<void> {
+  return new Promise((resolve) => {
+    setTimeout(resolve, ms)
+  })
+}
+
 export function buildSessionFingerprint(
   request: NextRequest
 ): Pick<SessionRecord, 'userAgentHash' | 'ipHash'> {
@@ -101,4 +128,59 @@ export async function refreshSessionViaSpring(
     nextTokenPair.accessToken,
     nextTokenPair.refreshToken
   )
+}
+
+export async function refreshSessionWithSingleFlight(
+  sessionId: string,
+  staleSession: SessionRecord
+): Promise<SessionRecord | null> {
+  const env = getServerEnv()
+  const lockKey = buildRefreshLockKey(sessionId)
+  const deadline = Date.now() + env.refreshSingleFlightWaitMs
+
+  while (Date.now() < deadline) {
+    const latestSession = await getSession(sessionId)
+    if (!latestSession) return null
+
+    if (hasSessionRotated(staleSession, latestSession)) {
+      return latestSession
+    }
+
+    const lockOwner = randomUUID()
+    const acquired = await redisSetNxPx(
+      lockKey,
+      lockOwner,
+      env.refreshSingleFlightLockMs
+    )
+
+    if (acquired) {
+      try {
+        const currentSession = await getSession(sessionId)
+        if (!currentSession) return null
+
+        if (hasSessionRotated(staleSession, currentSession)) {
+          return currentSession
+        }
+
+        return refreshSessionViaSpring(sessionId, currentSession)
+      } finally {
+        try {
+          await redisReleaseLockIfOwner(lockKey, lockOwner)
+        } catch {
+          // 락 해제 실패는 다음 요청에서 TTL 만료로 복구된다.
+        }
+      }
+    }
+
+    await sleep(env.refreshSingleFlightPollMs)
+  }
+
+  const latestSession = await getSession(sessionId)
+  if (!latestSession) return null
+
+  if (hasSessionRotated(staleSession, latestSession)) {
+    return latestSession
+  }
+
+  return null
 }

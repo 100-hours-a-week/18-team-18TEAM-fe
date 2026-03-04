@@ -4,7 +4,7 @@ import { isAiPath, proxyAiRequest } from '@/server/bff/ai-router'
 import {
   buildSessionFingerprint,
   extractTokenPairFromBody,
-  refreshSessionViaSpring,
+  refreshSessionWithSingleFlight,
 } from '@/server/bff/auth-flow'
 import {
   isInternalOnlyPath,
@@ -302,7 +302,10 @@ async function handleProxyRequest(
       return unauthorized
     }
 
-    const refreshed = await refreshSessionViaSpring(sessionId, activeSession)
+    const refreshed = await refreshSessionWithSingleFlight(
+      sessionId,
+      activeSession
+    )
     if (!refreshed) {
       await deleteSession(sessionId)
       const unauthorized = await toProxyResponse(upstream)
