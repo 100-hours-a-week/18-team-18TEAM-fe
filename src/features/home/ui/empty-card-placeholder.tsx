@@ -1,7 +1,7 @@
 'use client'
 
 import * as React from 'react'
-import { QrCodeIcon, FolderOpenIcon } from 'lucide-react'
+import { QrCodeIcon, FolderOpenIcon, SearchXIcon } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import {
   Empty,
@@ -20,18 +20,29 @@ interface EmptyCardPlaceholderProps extends React.HTMLAttributes<HTMLDivElement>
   onAdd?: () => void
   title?: string
   description?: string
+  searchKeyword?: string
 }
 
 function EmptyCardPlaceholder({
   onCreate,
   onImport,
   onAdd,
-  title = '보유한 명함이 없습니다',
-  description = '명함을 공유받고 명함 관리를 시작해 보세요.',
+  title,
+  description,
+  searchKeyword,
   className,
   ...props
 }: EmptyCardPlaceholderProps) {
   const handleCreate = onCreate || onAdd
+  const hasSearchKeyword = Boolean(searchKeyword?.trim())
+
+  const resolvedTitle =
+    title || (hasSearchKeyword ? '검색 결과가 없습니다' : '보유한 명함이 없습니다')
+  const resolvedDescription =
+    description ||
+    (hasSearchKeyword
+      ? '다른 이름이나 회사명으로 다시 검색해 보세요.'
+      : '명함을 공유받고 명함 관리를 시작해 보세요.')
 
   return (
     <Empty
@@ -44,14 +55,25 @@ function EmptyCardPlaceholder({
       {...props}
     >
       <EmptyHeader className="gap-3">
-        <EmptyMedia variant="icon" className="bg-muted text-muted-foreground">
-          <FolderOpenIcon className="size-6" />
+        <EmptyMedia
+          variant="icon"
+          className={
+            hasSearchKeyword
+              ? 'bg-destructive/10 text-destructive'
+              : 'bg-muted text-muted-foreground'
+          }
+        >
+          {hasSearchKeyword ? (
+            <SearchXIcon className="size-6" />
+          ) : (
+            <FolderOpenIcon className="size-6" />
+          )}
         </EmptyMedia>
         <EmptyTitle className="text-foreground text-base font-semibold">
-          {title}
+          {resolvedTitle}
         </EmptyTitle>
         <EmptyDescription className="text-muted-foreground text-sm">
-          {description}
+          {resolvedDescription}
         </EmptyDescription>
       </EmptyHeader>
 

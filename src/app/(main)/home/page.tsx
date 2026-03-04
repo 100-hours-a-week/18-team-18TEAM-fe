@@ -18,11 +18,19 @@ import { useWallets, useDeleteWalletCard } from '@/features/home/api'
 import { useRouter } from 'next/navigation'
 import { IconButton, toast } from '@/shared'
 import { ocrFlowAtom, type OcrMode } from '@/features/ocr'
+import { cn } from '@/lib/utils'
+
+const SEARCH_MAX_LENGTH = 100
 
 export default function HomePage() {
   const [fabOpen, setFabOpen] = React.useState(false)
   const [keyword, setKeyword] = React.useState('')
+  const [isSearchInputFocused, setIsSearchInputFocused] = React.useState(false)
+  const [isSearchLimitFeedback, setIsSearchLimitFeedback] = React.useState(false)
   const [isOcrModeDialogOpen, setIsOcrModeDialogOpen] = React.useState(false)
+  const searchLimitFeedbackTimeoutRef = React.useRef<ReturnType<
+    typeof setTimeout
+  > | null>(null)
   const [, setOcrFlow] = useAtom(ocrFlowAtom)
   const router = useRouter()
 
@@ -68,7 +76,60 @@ export default function HomePage() {
   }
 
   const handleSearch = (value: string) => {
-    setKeyword(value)
+    setKeyword(value.slice(0, SEARCH_MAX_LENGTH))
+  }
+
+  const triggerSearchLimitFeedback = React.useCallback(() => {
+    setIsSearchLimitFeedback(false)
+    requestAnimationFrame(() => {
+      setIsSearchLimitFeedback(true)
+    })
+
+    if (searchLimitFeedbackTimeoutRef.current) {
+      clearTimeout(searchLimitFeedbackTimeoutRef.current)
+    }
+
+    searchLimitFeedbackTimeoutRef.current = setTimeout(() => {
+      setIsSearchLimitFeedback(false)
+    }, 320)
+  }, [])
+
+  React.useEffect(() => {
+    return () => {
+      if (searchLimitFeedbackTimeoutRef.current) {
+        clearTimeout(searchLimitFeedbackTimeoutRef.current)
+      }
+    }
+  }, [])
+
+  const handleSearchKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.nativeEvent.isComposing) return
+    if (event.ctrlKey || event.metaKey || event.altKey) return
+    if (event.key.length !== 1) return
+
+    const input = event.currentTarget
+    const selectionStart = input.selectionStart ?? 0
+    const selectionEnd = input.selectionEnd ?? selectionStart
+    const nextLength = keyword.length - (selectionEnd - selectionStart) + 1
+
+    if (nextLength > SEARCH_MAX_LENGTH) {
+      triggerSearchLimitFeedback()
+    }
+  }
+
+  const handleSearchPaste = (event: React.ClipboardEvent<HTMLInputElement>) => {
+    const pastedText = event.clipboardData.getData('text')
+    if (!pastedText) return
+
+    const input = event.currentTarget
+    const selectionStart = input.selectionStart ?? 0
+    const selectionEnd = input.selectionEnd ?? selectionStart
+    const nextLength =
+      keyword.length - (selectionEnd - selectionStart) + pastedText.length
+
+    if (nextLength > SEARCH_MAX_LENGTH) {
+      triggerSearchLimitFeedback()
+    }
   }
 
   const handleCardPress = (cardId: number, userId: number | null) => {
@@ -107,10 +168,29 @@ export default function HomePage() {
       {/* 검색창 */}
       <div className="px-6 py-4">
         <SearchInput
-          placeholder="검색어를 입력하세요."
+          placeholder={`검색어를 입력하세요(최대 ${SEARCH_MAX_LENGTH}자)`}
+          maxLength={SEARCH_MAX_LENGTH}
           value={keyword}
           onChange={(e) => handleSearch(e.target.value)}
+          onKeyDown={handleSearchKeyDown}
+          onPaste={handleSearchPaste}
+          onFocus={() => setIsSearchInputFocused(true)}
+          onBlur={() => setIsSearchInputFocused(false)}
+          className={cn(
+            isSearchLimitFeedback &&
+              'animate-search-limit-shake [&_input]:!border-destructive [&_input]:bg-destructive/5 [&_input]:focus:!border-destructive [&_input]:focus:!ring-destructive/30 [&_svg]:text-destructive'
+          )}
         />
+        {isSearchInputFocused && (
+          <p
+            className={cn(
+              'text-muted-foreground mt-1 text-right text-[11px]',
+              isSearchLimitFeedback && 'text-destructive'
+            )}
+          >
+            {keyword.length}/{SEARCH_MAX_LENGTH}자
+          </p>
+        )}
       </div>
 
       {/* 명함 목록 */}
@@ -123,6 +203,7 @@ export default function HomePage() {
           <EmptyCardPlaceholder
             onCreate={handleAddPaperCard}
             onImport={handleScanQR}
+            searchKeyword={keyword}
           />
         ) : (
           <BusinessCardList
