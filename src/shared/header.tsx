@@ -8,6 +8,7 @@ import { DropdownMenu, type MenuItem } from './dropdown-menu'
 
 interface HeaderProps extends React.HTMLAttributes<HTMLElement> {
   title?: string
+  titleAlign?: 'left' | 'center'
   showClose?: boolean
   /** @deprecated Use menuItems prop instead */
   showMenu?: boolean
@@ -21,6 +22,7 @@ interface HeaderProps extends React.HTMLAttributes<HTMLElement> {
 
 function Header({
   title,
+  titleAlign = 'left',
   showClose = false,
   showMenu = false,
   onClose,
@@ -33,6 +35,7 @@ function Header({
 }: HeaderProps) {
   const showMenuButton = menuItems && menuItems.length > 0
   const showLegacyMenu = showMenu && !showMenuButton
+  const isCenteredTitle = Boolean(title) && titleAlign === 'center'
 
   return (
     <header
@@ -55,10 +58,16 @@ function Header({
           </IconButton>
         )}
         {leftContent}
-        {title && (
+        {title && !isCenteredTitle && (
           <h1 className="text-foreground text-lg font-semibold">{title}</h1>
         )}
       </div>
+
+      {title && isCenteredTitle && (
+        <h1 className="text-foreground pointer-events-none absolute left-1/2 max-w-[60%] -translate-x-1/2 truncate text-center text-lg font-semibold">
+          {title}
+        </h1>
+      )}
 
       <div className="flex items-center gap-2">
         {rightContent}
