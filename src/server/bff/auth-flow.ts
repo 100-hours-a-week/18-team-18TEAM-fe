@@ -159,7 +159,11 @@ export async function refreshSessionWithSingleFlight(
           return currentSession
         }
 
-        return refreshSessionViaSpring(sessionId, currentSession)
+        const refreshedSession = await refreshSessionViaSpring(
+          sessionId,
+          currentSession
+        )
+        return refreshedSession
       } finally {
         try {
           await redisReleaseLockIfOwner(lockKey, lockOwner)
