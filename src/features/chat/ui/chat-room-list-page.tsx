@@ -81,8 +81,16 @@ function ChatRoomListPage() {
         ) : filteredRooms.length === 0 ? (
           <div className="px-4 py-6">
             <EmptyState
-              title="채팅방이 없습니다"
-              description="새 대화를 시작하면 채팅방이 생성됩니다."
+              title={
+                keyword.trim()
+                  ? '검색 결과가 없습니다.'
+                  : '채팅방이 없습니다'
+              }
+              description={
+                keyword.trim()
+                  ? '이름을 다시 검색해보세요.'
+                  : '새 대화를 시작하면 채팅방이 생성됩니다.'
+              }
             />
           </div>
         ) : (
