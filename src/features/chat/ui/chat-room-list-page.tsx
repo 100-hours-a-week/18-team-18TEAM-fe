@@ -6,12 +6,20 @@ import { SearchIcon, RefreshCcwIcon } from 'lucide-react'
 import { useInView } from 'react-intersection-observer'
 import { Header, Button, EmptyState } from '@/shared'
 import { Input } from '@/components/ui/input'
+import { cn } from '@/lib/utils'
 import { useChatRooms } from '../api'
 import { ChatRoomListItem } from './chat-room-list-item'
+
+const SEARCH_MAX_LENGTH = 50
 
 function ChatRoomListPage() {
   const router = useRouter()
   const [keyword, setKeyword] = React.useState('')
+  const [isSearchInputFocused, setIsSearchInputFocused] = React.useState(false)
+  const [isSearchLimitFeedback, setIsSearchLimitFeedback] = React.useState(false)
+  const searchLimitFeedbackTimeoutRef = React.useRef<ReturnType<
+    typeof setTimeout
+  > | null>(null)
   const { ref, inView } = useInView({ rootMargin: '200px' })
 
   const {
@@ -30,6 +38,63 @@ function ChatRoomListPage() {
     }
   }, [inView, hasNextPage, isFetchingNextPage, fetchNextPage])
 
+  const handleKeywordChange = (value: string) => {
+    setKeyword(value.slice(0, SEARCH_MAX_LENGTH))
+  }
+
+  const triggerSearchLimitFeedback = React.useCallback(() => {
+    setIsSearchLimitFeedback(false)
+    requestAnimationFrame(() => {
+      setIsSearchLimitFeedback(true)
+    })
+
+    if (searchLimitFeedbackTimeoutRef.current) {
+      clearTimeout(searchLimitFeedbackTimeoutRef.current)
+    }
+
+    searchLimitFeedbackTimeoutRef.current = setTimeout(() => {
+      setIsSearchLimitFeedback(false)
+    }, 320)
+  }, [])
+
+  React.useEffect(() => {
+    return () => {
+      if (searchLimitFeedbackTimeoutRef.current) {
+        clearTimeout(searchLimitFeedbackTimeoutRef.current)
+      }
+    }
+  }, [])
+
+  const handleSearchKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.nativeEvent.isComposing) return
+    if (event.ctrlKey || event.metaKey || event.altKey) return
+    if (event.key.length !== 1) return
+
+    const input = event.currentTarget
+    const selectionStart = input.selectionStart ?? 0
+    const selectionEnd = input.selectionEnd ?? selectionStart
+    const nextLength = keyword.length - (selectionEnd - selectionStart) + 1
+
+    if (nextLength > SEARCH_MAX_LENGTH) {
+      triggerSearchLimitFeedback()
+    }
+  }
+
+  const handleSearchPaste = (event: React.ClipboardEvent<HTMLInputElement>) => {
+    const pastedText = event.clipboardData.getData('text')
+    if (!pastedText) return
+
+    const input = event.currentTarget
+    const selectionStart = input.selectionStart ?? 0
+    const selectionEnd = input.selectionEnd ?? selectionStart
+    const nextLength =
+      keyword.length - (selectionEnd - selectionStart) + pastedText.length
+
+    if (nextLength > SEARCH_MAX_LENGTH) {
+      triggerSearchLimitFeedback()
+    }
+  }
+
   const filteredRooms = React.useMemo(() => {
     const normalized = keyword.trim().toLowerCase()
     if (!normalized) return rooms
@@ -46,16 +111,45 @@ function ChatRoomListPage() {
 
       <div className="pt-14">
         <div className="border-border border-b px-4 py-3">
-          <label className="relative block">
-            <SearchIcon className="text-muted-foreground absolute top-1/2 left-3 size-4 -translate-y-1/2" />
+          <label
+            className={cn(
+              'relative block',
+              isSearchLimitFeedback && 'animate-search-limit-shake'
+            )}
+          >
+            <SearchIcon
+              className={cn(
+                'text-muted-foreground absolute top-1/2 left-3 size-4 -translate-y-1/2',
+                isSearchLimitFeedback && 'text-destructive'
+              )}
+            />
             <Input
               value={keyword}
-              onChange={(event) => setKeyword(event.target.value)}
+              onChange={(event) => handleKeywordChange(event.target.value)}
+              onKeyDown={handleSearchKeyDown}
+              onPaste={handleSearchPaste}
+              onFocus={() => setIsSearchInputFocused(true)}
+              onBlur={() => setIsSearchInputFocused(false)}
+              maxLength={SEARCH_MAX_LENGTH}
               placeholder="이름 검색"
-              className="h-10 rounded-full pl-9"
+              className={cn(
+                'h-10 rounded-full pl-9',
+                isSearchLimitFeedback &&
+                  '!border-destructive bg-destructive/5 focus-visible:!border-destructive focus-visible:!ring-destructive/30'
+              )}
               disabled={isLoading || isError}
             />
           </label>
+          {isSearchInputFocused && (
+            <p
+              className={cn(
+                'text-muted-foreground mt-1 text-right text-[11px]',
+                isSearchLimitFeedback && 'text-destructive'
+              )}
+            >
+              {keyword.length}/{SEARCH_MAX_LENGTH}자
+            </p>
+          )}
         </div>
 
         {isLoading ? (

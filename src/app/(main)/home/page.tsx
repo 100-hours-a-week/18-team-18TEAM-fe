@@ -168,7 +168,7 @@ export default function HomePage() {
       {/* 검색창 */}
       <div className="px-6 py-4">
         <SearchInput
-          placeholder={`검색어를 입력하세요(최대 ${SEARCH_MAX_LENGTH}자)`}
+          placeholder={`검색어를 입력하세요.`}
           maxLength={SEARCH_MAX_LENGTH}
           value={keyword}
           onChange={(e) => handleSearch(e.target.value)}
@@ -178,7 +178,7 @@ export default function HomePage() {
           onBlur={() => setIsSearchInputFocused(false)}
           className={cn(
             isSearchLimitFeedback &&
-              'animate-search-limit-shake [&_input]:!border-destructive [&_input]:bg-destructive/5 [&_input]:focus:!border-destructive [&_input]:focus:!ring-destructive/30 [&_svg]:text-destructive'
+            'animate-search-limit-shake [&_input]:!border-destructive [&_input]:bg-destructive/5 [&_input]:focus:!border-destructive [&_input]:focus:!ring-destructive/30 [&_svg]:text-destructive'
           )}
         />
         {isSearchInputFocused && (
