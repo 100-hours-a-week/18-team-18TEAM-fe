@@ -191,27 +191,30 @@ function ChatRoomPage({ roomId }: ChatRoomPageProps) {
     <div className="bg-background min-h-screen">
       <Header
         title={room?.participant.name || '채팅'}
+        titleAlign="center"
         showClose
         onClose={() => router.replace('/chat')}
         rightContent={
-          room && (
-            <span className="text-muted-foreground text-xs">
-              {room.participant.isOnline ? '온라인' : '오프라인'}
-            </span>
-          )
+          <span className="inline-flex items-center gap-1.5 text-xs">
+            <span
+              className={`block size-2 rounded-full ${isConnected ? 'bg-green-500' : 'bg-gray-400'
+                }`}
+            />
+          </span>
         }
       />
 
       <div className="flex min-h-screen flex-col pt-14">
-        <div className="border-border border-b px-4 py-2">
+        {/* <div className="border-border border-b px-4 py-2">
           <p className="text-muted-foreground truncate text-xs">
             {participantLabel || '상대 프로필 정보 없음'}
           </p>
-        </div>
+        </div> */}
 
         <div
           ref={scrollContainerRef}
-          className="flex-1 overflow-y-auto px-4 py-4"
+          className="flex-1 overflow-y-auto overscroll-contain px-4 py-4 pb-22"
+        // className="flex-1 overflow-y-auto px-4 py-4 pb-22"
         >
           {isLoading ? (
             <div className="flex h-full flex-col items-center justify-center gap-3">
@@ -246,7 +249,7 @@ function ChatRoomPage({ roomId }: ChatRoomPageProps) {
         </div>
 
         {!isConnected && (
-          <p className="text-muted-foreground px-4 pb-1 text-xs">
+          <p className="text-muted-foreground fixed bottom-20 left-1/2 z-40 w-full max-w-[430px] -translate-x-1/2 px-4 text-xs">
             채팅 서버에 연결 중입니다...
           </p>
         )}
