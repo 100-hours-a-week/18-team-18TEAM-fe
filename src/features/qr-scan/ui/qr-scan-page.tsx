@@ -170,7 +170,7 @@ function QrScanPage() {
       <div className="bg-background flex min-h-screen flex-col">
         <Header showClose onClose={handleClose} />
 
-        <main className="flex flex-1 flex-col items-center px-6 pt-8">
+        <main className="flex flex-1 flex-col items-center px-6 pt-16">
           {/* 카메라 뷰 */}
           <div className="relative w-full max-w-[328px]">
             <video
