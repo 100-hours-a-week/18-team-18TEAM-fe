@@ -197,8 +197,9 @@ function ChatRoomPage({ roomId }: ChatRoomPageProps) {
         rightContent={
           <span className="inline-flex items-center gap-1.5 text-xs">
             <span
-              className={`block size-2 rounded-full ${isConnected ? 'bg-green-500' : 'bg-gray-400'
-                }`}
+              className={`block size-2 rounded-full ${
+                isConnected ? 'bg-green-500' : 'bg-gray-400'
+              }`}
             />
           </span>
         }
@@ -214,7 +215,7 @@ function ChatRoomPage({ roomId }: ChatRoomPageProps) {
         <div
           ref={scrollContainerRef}
           className="flex-1 overflow-y-auto overscroll-contain px-4 py-4 pb-22"
-        // className="flex-1 overflow-y-auto px-4 py-4 pb-22"
+          // className="flex-1 overflow-y-auto px-4 py-4 pb-22"
         >
           {isLoading ? (
             <div className="flex h-full flex-col items-center justify-center gap-3">
