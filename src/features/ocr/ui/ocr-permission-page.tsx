@@ -276,7 +276,7 @@ function OcrPermissionPage() {
         <main className="flex flex-1 flex-col items-center px-6 pt-16">
           <div className="relative w-full max-w-[328px]">
             {(status === 'preview' || status === 'submitting') &&
-              capturedImageUrl ? (
+            capturedImageUrl ? (
               <img
                 src={capturedImageUrl}
                 alt="촬영한 명함"
