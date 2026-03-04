@@ -1,13 +1,14 @@
 'use client'
 
 import * as React from 'react'
-import { Button } from '@/shared'
+import { Button, type ButtonVariant } from '@/shared'
 
 interface QrScanFailureProps {
   onRetry?: () => void
   title?: string
   descriptionLines?: [string, string] | string[]
   retryLabel?: string
+  retryButtonVariant?: ButtonVariant
 }
 
 function QrScanFailure({
@@ -15,6 +16,7 @@ function QrScanFailure({
   title = 'Oops....',
   descriptionLines = ['QR 스캔에 실패하셨습니다.', '다시 시도해주세요.'],
   retryLabel = '다시 QR 인식하기',
+  retryButtonVariant = 'outline',
 }: QrScanFailureProps) {
   const [firstLine = '', secondLine = ''] = descriptionLines
 
@@ -34,9 +36,9 @@ function QrScanFailure({
 
       {/* 다시 QR 인식하기 버튼 */}
       <Button
-        variant="secondary"
+        variant={retryButtonVariant}
         fullWidth
-        className="mt-[105px] max-w-[334px] rounded-[10px] bg-[#ECECEC] text-[12px] font-medium tracking-[-0.24px]"
+        className="mt-[105px] max-w-[334px] rounded-[10px] text-[12px] font-medium tracking-[-0.24px]"
         onClick={onRetry}
       >
         {retryLabel}

@@ -238,6 +238,7 @@ function OcrPermissionPage() {
           '다시 시도해주세요.',
         ]}
         retryLabel="다시 시도하기"
+        retryButtonVariant="outline"
         onRetry={handleFailureRetry}
       />
     )
