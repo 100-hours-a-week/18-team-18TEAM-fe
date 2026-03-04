@@ -51,7 +51,7 @@ function ChatRoomListPage() {
             <Input
               value={keyword}
               onChange={(event) => setKeyword(event.target.value)}
-              placeholder="이름 또는 메시지 검색"
+              placeholder="이름 검색"
               className="h-10 rounded-full pl-9"
               disabled={isLoading || isError}
             />

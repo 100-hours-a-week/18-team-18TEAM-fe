@@ -34,7 +34,10 @@ function ChatComposer({
 
   return (
     <form
-      className={cn('border-border bg-background border-t p-3', className)}
+      className={cn(
+        'border-border bg-background fixed bottom-0 left-1/2 z-50 w-full max-w-[430px] -translate-x-1/2 border-t p-3',
+        className
+      )}
       onSubmit={handleSubmit}
       {...props}
     >
