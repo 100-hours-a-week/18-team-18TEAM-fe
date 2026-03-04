@@ -2,10 +2,7 @@ import { createHash, randomUUID } from 'node:crypto'
 import type { NextRequest } from 'next/server'
 import { forwardToSpring } from '@/server/bff/spring-client'
 import { getServerEnv } from '@/server/config/env'
-import {
-  redisReleaseLockIfOwner,
-  redisSetNxPx,
-} from '@/server/redis/client'
+import { redisReleaseLockIfOwner, redisSetNxPx } from '@/server/redis/client'
 import type { SessionRecord } from '@/server/session/store'
 import { getSession, updateSessionTokens } from '@/server/session/store'
 
