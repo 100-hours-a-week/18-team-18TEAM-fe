@@ -219,3 +219,58 @@
 .animate-slide-up {
   animation: slide-up 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
+
+/* Search input limit feedback animation */
+@keyframes search-limit-shake {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+
+  20% {
+    transform: translateX(-4px);
+  }
+
+  40% {
+    transform: translateX(4px);
+  }
+
+  60% {
+    transform: translateX(-3px);
+  }
+
+  80% {
+    transform: translateX(3px);
+  }
+}
+
+.animate-search-limit-shake {
+  animation: search-limit-shake 320ms ease-in-out;
+}
+
+/* AI phase file transfer animation */
+@keyframes ai-file-transfer {
+  0% {
+    left: 0%;
+    opacity: 0;
+    transform: translate(-35%, -50%) scale(0.9);
+  }
+
+  14% {
+    opacity: 1;
+  }
+
+  86% {
+    opacity: 1;
+  }
+
+  100% {
+    left: 100%;
+    opacity: 0;
+    transform: translate(-65%, -50%) scale(0.96);
+  }
+}
+
+.animate-ai-file-transfer {
+  animation: ai-file-transfer 1200ms linear 1;
+}
