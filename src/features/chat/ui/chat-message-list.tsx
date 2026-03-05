@@ -46,7 +46,7 @@ function ChatMessageList({
             >
               <div
                 className={cn(
-                  'rounded-2xl px-3.5 py-2.5 text-sm leading-5 break-words',
+                  'rounded-2xl px-3.5 py-2.5 text-sm leading-5 break-words whitespace-pre-wrap',
                   isSent
                     ? 'bg-primary text-primary-foreground rounded-br-md'
                     : 'bg-muted text-foreground rounded-bl-md'
