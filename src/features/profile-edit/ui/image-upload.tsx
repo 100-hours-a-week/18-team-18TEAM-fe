@@ -65,12 +65,21 @@ function ImageUpload({
     inputRef.current?.click()
   }
 
-  const handleRemove = () => {
+  const handleRemove = async () => {
     if (isUploading) return
-    inputRef.current && (inputRef.current.value = '')
-    onChange?.(undefined)
-    setPendingFile(null)
-    setPendingHash(null)
+    setIsUploading(true)
+    try {
+      await onSave?.(null)
+      inputRef.current && (inputRef.current.value = '')
+      onChange?.(undefined)
+      setPendingFile(null)
+      setPendingHash(null)
+      toast.success('프로필 이미지가 삭제되었습니다.')
+    } catch {
+      toast.error('이미지 삭제에 실패했습니다.')
+    } finally {
+      setIsUploading(false)
+    }
   }
 
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -131,23 +140,7 @@ function ImageUpload({
       return
     }
 
-    // 2. 이미지 삭제 (기본 이미지)인 경우 → PATCH만 (key = null)
-    if (!value || value === '') {
-      setIsUploading(true)
-      try {
-        await onSave?.(null)
-        toast.success('프로필 이미지가 삭제되었습니다.')
-        onSuccess?.() // 성공 시에만 페이지 이동
-      } catch {
-        toast.error('이미지 삭제에 실패했습니다.')
-        // 실패 시 페이지 이동 X
-      } finally {
-        setIsUploading(false)
-      }
-      return
-    }
-
-    // 3. 새 이미지인 경우 → S3 업로드 + PATCH
+    // 2. 새 이미지인 경우 → S3 업로드 + PATCH
     if (!pendingFile) return
     setIsUploading(true)
     try {
@@ -165,11 +158,11 @@ function ImageUpload({
     }
   }
 
-  // 저장 버튼 활성화 조건: 원본과 다르고, (삭제했거나 새 파일이 있는 경우)
+  // 저장 버튼 활성화 조건: 새 파일이 있고, 원본과 다른 경우
   const canSave =
     !isUploading &&
+    !!pendingFile &&
     value !== originalValue &&
-    ((!value && originalValue) || pendingFile) &&
     !(pendingHash && originalHash && pendingHash === originalHash)
 
   return (
