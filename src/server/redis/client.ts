@@ -45,3 +45,32 @@ export async function redisExpire(
 export async function redisDel(key: string): Promise<number> {
   return getRedisClient().del(key)
 }
+
+const RELEASE_LOCK_IF_OWNER_SCRIPT = `
+if redis.call("get", KEYS[1]) == ARGV[1] then
+  return redis.call("del", KEYS[1])
+end
+return 0
+`
+
+export async function redisSetNxPx(
+  key: string,
+  value: string,
+  ttlMs: number
+): Promise<boolean> {
+  const result = await getRedisClient().set(key, value, 'PX', ttlMs, 'NX')
+  return result === 'OK'
+}
+
+export async function redisReleaseLockIfOwner(
+  key: string,
+  owner: string
+): Promise<boolean> {
+  const result = await getRedisClient().eval(
+    RELEASE_LOCK_IF_OWNER_SCRIPT,
+    1,
+    key,
+    owner
+  )
+  return Number(result) === 1
+}
