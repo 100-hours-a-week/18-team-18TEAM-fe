@@ -1,3 +1,21 @@
+## [1.5.0](https://github.com/100-hours-a-week/18-team-18TEAM-fe/compare/v1.4.1...v1.5.0) (2026-03-05)
+
+### Features
+
+* AI 직무 요약 애니메이션 추가 및 텍스트 수정 ([a2a9268](https://github.com/100-hours-a-week/18-team-18TEAM-fe/commit/a2a926886087f471c8f3e495a32dc2186030b7ce))
+* sliding 갱신 추가 ([c99ce7f](https://github.com/100-hours-a-week/18-team-18TEAM-fe/commit/c99ce7f3f23aac28ba12d57719b0062f51c105b7))
+* 검색어 입력창 애니메이션 추가 및 입력 제한 UX 개선 ([9ea457a](https://github.com/100-hours-a-week/18-team-18TEAM-fe/commit/9ea457aed870142b92fb5ffae10d12444b30a7b0))
+* 채팅 검색어 입력창 애니메이션 및 UX 개선 ([7dce02d](https://github.com/100-hours-a-week/18-team-18TEAM-fe/commit/7dce02db2c34f30e36736d44f5fdd7d3f3768288))
+* 채팅 입력창 하단 고정 ([423f331](https://github.com/100-hours-a-week/18-team-18TEAM-fe/commit/423f33105de91c47e331e3bd5c3b46cdf894ebd4))
+* 채팅창 줄바꿈 입력 구현 ([665ed2c](https://github.com/100-hours-a-week/18-team-18TEAM-fe/commit/665ed2ce52d2feb2c58e4071c19ee99c6c5f7a33))
+
+### Bug Fixes
+
+* lock 해제 타이밍 수정 ([304c2a1](https://github.com/100-hours-a-week/18-team-18TEAM-fe/commit/304c2a11ce83bbb639b6316317a4ab232d83265a))
+* OCR 촬영 결과 페이지 UI 수정 ([7d861db](https://github.com/100-hours-a-week/18-team-18TEAM-fe/commit/7d861db340c3266d8a16301aa10738cfc257c333))
+* 실패 페이지에서의 버튼 색상 수정 ([2090a61](https://github.com/100-hours-a-week/18-team-18TEAM-fe/commit/2090a61f95d9c535143ffd6c8885c92d04cc4266))
+* 채팅 검색 안내 텍스트 수정 ([8758190](https://github.com/100-hours-a-week/18-team-18TEAM-fe/commit/87581901de05dcb0849ca8d12e4b3cb3265d717d))
+
 ## [1.4.1](https://github.com/100-hours-a-week/18-team-18TEAM-fe/compare/v1.4.0...v1.4.1) (2026-03-02)
 
 ### Bug Fixes
