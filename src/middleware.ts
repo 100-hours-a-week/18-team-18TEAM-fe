@@ -7,6 +7,7 @@ const PUBLIC_ROUTES = [
   '/result',
   '/invitation',
   '/health',
+  '/monitoring',
 ]
 const LOCAL_HOSTS = ['localhost', '127.0.0.1']
 const SESSION_COOKIE_NAME = 'sessionId'
