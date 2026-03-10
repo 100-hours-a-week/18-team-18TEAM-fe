@@ -1,6 +1,8 @@
 import * as Sentry from '@sentry/nextjs'
 
-type RouteHandler<TArgs extends unknown[], TResult> = (...args: TArgs) => TResult
+type RouteHandler<TArgs extends unknown[], TResult> = (
+  ...args: TArgs
+) => TResult
 
 type RouteHandlerOptions = {
   method: string
