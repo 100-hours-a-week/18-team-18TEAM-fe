@@ -32,6 +32,7 @@ import {
   touchSession,
   type SessionRecord,
 } from '@/server/session/store'
+import { withSentryRouteHandler } from '@/server/monitoring/sentry-route-handler'
 
 export const runtime = 'nodejs'
 
@@ -346,22 +347,42 @@ async function handleProxyRequest(
   return response
 }
 
-export async function GET(request: NextRequest, context: RouteContext) {
-  return handleProxyRequest(request, context)
-}
+export const GET = withSentryRouteHandler(
+  {
+    method: 'GET',
+    route: '/bff/[...path]',
+  },
+  handleProxyRequest
+)
 
-export async function POST(request: NextRequest, context: RouteContext) {
-  return handleProxyRequest(request, context)
-}
+export const POST = withSentryRouteHandler(
+  {
+    method: 'POST',
+    route: '/bff/[...path]',
+  },
+  handleProxyRequest
+)
 
-export async function PUT(request: NextRequest, context: RouteContext) {
-  return handleProxyRequest(request, context)
-}
+export const PUT = withSentryRouteHandler(
+  {
+    method: 'PUT',
+    route: '/bff/[...path]',
+  },
+  handleProxyRequest
+)
 
-export async function PATCH(request: NextRequest, context: RouteContext) {
-  return handleProxyRequest(request, context)
-}
+export const PATCH = withSentryRouteHandler(
+  {
+    method: 'PATCH',
+    route: '/bff/[...path]',
+  },
+  handleProxyRequest
+)
 
-export async function DELETE(request: NextRequest, context: RouteContext) {
-  return handleProxyRequest(request, context)
-}
+export const DELETE = withSentryRouteHandler(
+  {
+    method: 'DELETE',
+    route: '/bff/[...path]',
+  },
+  handleProxyRequest
+)
