@@ -1,14 +1,13 @@
 'use client'
 
 import * as React from 'react'
+import { UserIcon } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { Avatar } from '@/shared'
 
-interface MyCardButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  avatarSrc?: string | null
-}
+type MyCardButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement>
 
-function MyCardButton({ avatarSrc, className, ...props }: MyCardButtonProps) {
+function MyCardButton({ className, ...props }: MyCardButtonProps) {
   return (
     <button
       type="button"
@@ -20,7 +19,7 @@ function MyCardButton({ avatarSrc, className, ...props }: MyCardButtonProps) {
       aria-label="내 명함 보기"
       {...props}
     >
-      <Avatar src={avatarSrc} size="default" />
+      <Avatar size="default" fallback={<UserIcon className="size-1/2" />} />
     </button>
   )
 }
