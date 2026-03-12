@@ -17,7 +17,11 @@ import { OcrModeDialog } from './ocr-mode-dialog'
 
 const SEARCH_MAX_LENGTH = 100
 
-function HomeContent() {
+interface HomeContentProps {
+  fabNavActions?: React.ReactNode
+}
+
+function HomeContent({ fabNavActions }: HomeContentProps) {
   const [fabOpen, setFabOpen] = React.useState(false)
   const [keyword, setKeyword] = React.useState('')
   const [isSearchInputFocused, setIsSearchInputFocused] = React.useState(false)
@@ -36,10 +40,6 @@ function HomeContent() {
 
   const cards =
     data?.pages.flatMap((page) => page.data ?? []).filter(Boolean) ?? []
-
-  const handleShareCard = () => {
-    router.push('/share')
-  }
 
   const handleScanQR = () => {
     router.push('/scan')
@@ -115,9 +115,7 @@ function HomeContent() {
     }
   }
 
-  const handleSearchPaste = (
-    event: React.ClipboardEvent<HTMLInputElement>
-  ) => {
+  const handleSearchPaste = (event: React.ClipboardEvent<HTMLInputElement>) => {
     const pastedText = event.clipboardData.getData('text')
     if (!pastedText) return
 
@@ -213,8 +211,7 @@ function HomeContent() {
       <FABMenu
         open={fabOpen}
         onClose={() => setFabOpen(false)}
-        onShareCard={handleShareCard}
-        onScanQR={handleScanQR}
+        navActions={fabNavActions}
         onScanOCR={handleScanOCR}
       />
 
@@ -228,3 +225,4 @@ function HomeContent() {
 }
 
 export { HomeContent }
+export type { HomeContentProps }
