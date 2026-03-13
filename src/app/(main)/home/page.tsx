@@ -1,3 +1,4 @@
+import { Suspense } from 'react'
 import { dehydrate, HydrationBoundary } from '@tanstack/react-query'
 import { QrCodeIcon, ShareIcon } from 'lucide-react'
 import { redirect } from 'next/navigation'
@@ -31,7 +32,15 @@ function HomeFabNavActions() {
   )
 }
 
-export default async function HomePage() {
+function HomeContentFallback() {
+  return (
+    <div className="flex flex-1 items-center justify-center px-6 py-10">
+      <p className="text-muted-foreground">명함 목록을 불러오는 중...</p>
+    </div>
+  )
+}
+
+async function HomeContentSection() {
   const queryClient = makeQueryClient()
   let dehydratedState
 
@@ -47,11 +56,19 @@ export default async function HomePage() {
   }
 
   return (
+    <HydrationBoundary state={dehydratedState}>
+      <HomeContent fabNavActions={<HomeFabNavActions />} />
+    </HydrationBoundary>
+  )
+}
+
+export default function HomePage() {
+  return (
     <div className="flex min-h-dvh flex-col">
       <HomeHeader />
-      <HydrationBoundary state={dehydratedState}>
-        <HomeContent fabNavActions={<HomeFabNavActions />} />
-      </HydrationBoundary>
+      <Suspense fallback={<HomeContentFallback />}>
+        <HomeContentSection />
+      </Suspense>
     </div>
   )
 }
