@@ -1,6 +1,7 @@
 'use client'
 
 import * as React from 'react'
+import dynamic from 'next/dynamic'
 import { useRouter } from 'next/navigation'
 import { useAtom } from 'jotai'
 import { cn } from '@/lib/utils'
@@ -12,8 +13,22 @@ import { BusinessCardList } from './business-card-list'
 import { BusinessCardItem } from './business-card-item'
 import { EmptyCardPlaceholder } from './empty-card-placeholder'
 import { FAB } from './fab'
-import { FABMenu } from './fab-menu'
-import { OcrModeDialog } from './ocr-mode-dialog'
+
+const LazyFABMenu = dynamic(
+  () => import('./fab-menu').then((module) => module.FABMenu),
+  {
+    ssr: false,
+    loading: () => null,
+  }
+)
+
+const LazyOcrModeDialog = dynamic(
+  () => import('./ocr-mode-dialog').then((module) => module.OcrModeDialog),
+  {
+    ssr: false,
+    loading: () => null,
+  }
+)
 
 const SEARCH_MAX_LENGTH = 100
 
@@ -208,18 +223,22 @@ function HomeContent({ fabNavActions }: HomeContentProps) {
 
       {/* FAB */}
       <FAB open={fabOpen} onClick={() => setFabOpen(!fabOpen)} />
-      <FABMenu
-        open={fabOpen}
-        onClose={() => setFabOpen(false)}
-        navActions={fabNavActions}
-        onScanOCR={handleScanOCR}
-      />
+      {fabOpen ? (
+        <LazyFABMenu
+          open={fabOpen}
+          onClose={() => setFabOpen(false)}
+          navActions={fabNavActions}
+          onScanOCR={handleScanOCR}
+        />
+      ) : null}
 
-      <OcrModeDialog
-        open={isOcrModeDialogOpen}
-        onOpenChange={setIsOcrModeDialogOpen}
-        onSelectMode={handleSelectOcrMode}
-      />
+      {isOcrModeDialogOpen ? (
+        <LazyOcrModeDialog
+          open={isOcrModeDialogOpen}
+          onOpenChange={setIsOcrModeDialogOpen}
+          onSelectMode={handleSelectOcrMode}
+        />
+      ) : null}
     </>
   )
 }
