@@ -1,3 +1,15 @@
+## [1.6.0](https://github.com/100-hours-a-week/18-team-18TEAM-fe/compare/v1.5.0...v1.6.0) (2026-03-13)
+
+### Features
+
+* Sentry 적용 ([9980f3a](https://github.com/100-hours-a-week/18-team-18TEAM-fe/commit/9980f3a40f2798cd1d369946bf48d28d11cf835d))
+* 공통 route handler 적용 ([3c8be3c](https://github.com/100-hours-a-week/18-team-18TEAM-fe/commit/3c8be3c708efea52690d8b3ed3fb715189e5efed))
+* 서버 prefetch 구현 ([f0c59f2](https://github.com/100-hours-a-week/18-team-18TEAM-fe/commit/f0c59f22aa9daa10f319852a6420fafdde77f8c8))
+
+### Bug Fixes
+
+* 아바타아이콘 변경 ([53c6395](https://github.com/100-hours-a-week/18-team-18TEAM-fe/commit/53c6395a77d18d80c3abd921e85b55d5c2d5a691))
+
 ## [1.5.0](https://github.com/100-hours-a-week/18-team-18TEAM-fe/compare/v1.4.1...v1.5.0) (2026-03-05)
 
 ### Features
