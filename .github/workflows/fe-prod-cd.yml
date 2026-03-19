@@ -15,7 +15,7 @@ concurrency:
 
 jobs:
   deploy:
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-24.04-arm
     timeout-minutes: 20
 
     env:
@@ -109,7 +109,14 @@ jobs:
           IMAGE_TAG="prod-${VERSION}-${GITHUB_SHA::7}"
           IMAGE_URI="${ECR_REGISTRY}/${ECR_REPOSITORY}:${IMAGE_TAG}"
 
-          buildah bud --layers -f Containerfile -t "${IMAGE_URI}" .
+          buildah bud --layers --arch arm64 -f Containerfile -t "${IMAGE_URI}" .
+
+          IMAGE_ARCH="$(buildah inspect --type image --format '{{.Docker.Architecture}}' "${IMAGE_URI}")"
+          if [[ "${IMAGE_ARCH}" != "arm64" ]]; then
+            echo "Expected arm64 image, got ${IMAGE_ARCH}" >&2
+            exit 1
+          fi
+
           buildah push "${IMAGE_URI}"
 
           echo "IMAGE_URI=${IMAGE_URI}" >> "$GITHUB_ENV"
