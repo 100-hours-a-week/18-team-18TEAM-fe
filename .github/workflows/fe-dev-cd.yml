@@ -4,7 +4,7 @@ on:
   push:
     branches: ["develop"]
 
-permissions:
+permissions: 
   contents: write
   issues: write
   pull-requests: write
