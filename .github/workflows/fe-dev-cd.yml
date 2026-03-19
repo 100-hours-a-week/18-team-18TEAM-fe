@@ -25,6 +25,8 @@ jobs:
     env:
       APP_NAME: "BizKit-FE"
       APP_STAGE: dev
+      CLOUD_REPO: "100-hours-a-week/18-team-18TEAM-cloud"
+      CLOUD_REPO_REF: "main"
 
     steps:
       - name: Checkout
@@ -114,76 +116,44 @@ jobs:
           echo "IMAGE_URI=${IMAGE_URI}" >> "$GITHUB_ENV"
           echo "IMAGE_TAG=${IMAGE_TAG}" >> "$GITHUB_ENV"
 
-      - name: Build and Upload CodeDeploy bundle (FE container)
+      - name: Checkout cloud manifests repository
         shell: bash
         run: |
           set -euo pipefail
+          rm -rf ../cloud-repo
+          git clone \
+            --branch "${CLOUD_REPO_REF}" \
+            "https://x-access-token:${{ secrets.RELEASE_TOKEN }}@github.com/${CLOUD_REPO}.git" \
+            ../cloud-repo
 
-          VERSION="${{ steps.ver.outputs.value }}"
-          BUCKET="${{ secrets.S3_BUCKET }}"
-
-          if [[ -z "${VERSION}" ]]; then
-            echo "VERSION is empty" >&2
-            exit 1
-          fi
-          if [[ -z "${IMAGE_URI:-}" ]]; then
-            echo "IMAGE_URI is empty" >&2
-            exit 1
-          fi
-
-          rm -rf bundle
-          mkdir -p bundle/deploy
-
-          cp deploy/appspec-container.yml bundle/appspec.yml
-          cp deploy/start-container.sh bundle/deploy/start-container.sh
-          cp deploy/deploy-fe-container.sh bundle/deploy/deploy-fe-container.sh
-          cp deploy/stop-container.sh bundle/deploy/stop-container.sh
-          cp deploy/validate-container.sh bundle/deploy/validate-container.sh
-
-          cat > bundle/deploy/env.sh <<EOF_ENV
-          RELEASE_ID='${{ steps.ver.outputs.value }}'
-          APP_STAGE='${{ env.APP_STAGE }}'
-          IMAGE_URI='${{ env.IMAGE_URI }}'
-          EOF_ENV
-
-          # Runtime envs for container start (secret format: KEY='value' per line)
-          cat << 'EOF_RUNTIME' > bundle/deploy/runtime.env
-          ${{ secrets.FE_RUNTIME_ENV_DEV }}
-          EOF_RUNTIME
-
-          chmod 600 bundle/deploy/env.sh
-          chmod 600 bundle/deploy/runtime.env
-          echo "[debug] runtime env keys in bundle/deploy/runtime.env"
-          grep -E "^[A-Za-z_][A-Za-z0-9_]*=" bundle/deploy/runtime.env | cut -d= -f1 || true
-          grep -q "^REDIS_URL=" bundle/deploy/runtime.env || { echo "REDIS_URL is missing in FE_RUNTIME_ENV_DEV" >&2; exit 1; }
-
-          (cd bundle && zip -r ../bundle.zip .)
-          unzip -l bundle.zip
-
-          BUNDLE_KEY="${{ secrets.S3_PREFIX }}/${APP_STAGE}/codedeploy/fe/${VERSION}/bundle-${{ github.run_id }}.zip"
-          aws s3 cp bundle.zip "s3://$BUCKET/$BUNDLE_KEY"
-
-          echo "BUCKET=$BUCKET" >> "$GITHUB_ENV"
-          echo "BUNDLE_KEY=$BUNDLE_KEY" >> "$GITHUB_ENV"
-
-      - name: Create CodeDeploy deployment & wait
+      - name: Update FE manifest in cloud repo
         shell: bash
         run: |
           set -euo pipefail
+          export CLOUD_REPO_DIR="${GITHUB_WORKSPACE}/../cloud-repo"
+          export IMAGE_URI="${IMAGE_URI}"
+          export GIT_SHA="${GITHUB_SHA}"
+          export DEPLOYED_AT="$(date -u +%Y-%m-%dT%H:%M:%SZ)"
+          export DEPLOYED_BY="${GITHUB_ACTOR}"
 
-          APP="${{ secrets.CODEDEPLOY_APP_FE_DEV }}"
-          DG="${{ secrets.CODEDEPLOY_DG_FE_DEV }}"
+          node scripts/update-cloud-fe-manifest.mjs
 
-          DEPLOY_ID="$(aws deploy create-deployment \
-            --application-name "$APP" \
-            --deployment-group-name "$DG" \
-            --s3-location bucket="$BUCKET",key="$BUNDLE_KEY",bundleType=zip \
-            --file-exists-behavior OVERWRITE \
-            --query "deploymentId" --output text)"
+      - name: Commit and push cloud repo change
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd ../cloud-repo
 
-          echo "deploymentId=$DEPLOY_ID"
-          aws deploy wait deployment-successful --deployment-id "$DEPLOY_ID"
-          echo "CodeDeploy SUCCESS"
+          if git diff --quiet; then
+            echo "No manifest changes detected."
+            exit 0
+          fi
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add k8s/apps/fe
+          git commit -m "chore(gitops): update fe dev image to ${IMAGE_TAG}"
+          git push origin "${CLOUD_REPO_REF}"
 
       - name: Notify Discord on failure
         if: failure()

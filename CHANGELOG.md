@@ -1,3 +1,111 @@
+## [1.6.0](https://github.com/100-hours-a-week/18-team-18TEAM-fe/compare/v1.5.0...v1.6.0) (2026-03-13)
+
+### Features
+
+* Sentry 적용 ([9980f3a](https://github.com/100-hours-a-week/18-team-18TEAM-fe/commit/9980f3a40f2798cd1d369946bf48d28d11cf835d))
+* 공통 route handler 적용 ([3c8be3c](https://github.com/100-hours-a-week/18-team-18TEAM-fe/commit/3c8be3c708efea52690d8b3ed3fb715189e5efed))
+* 서버 prefetch 구현 ([f0c59f2](https://github.com/100-hours-a-week/18-team-18TEAM-fe/commit/f0c59f22aa9daa10f319852a6420fafdde77f8c8))
+
+### Bug Fixes
+
+* 아바타아이콘 변경 ([53c6395](https://github.com/100-hours-a-week/18-team-18TEAM-fe/commit/53c6395a77d18d80c3abd921e85b55d5c2d5a691))
+
+## [1.5.0](https://github.com/100-hours-a-week/18-team-18TEAM-fe/compare/v1.4.1...v1.5.0) (2026-03-05)
+
+### Features
+
+* AI 직무 요약 애니메이션 추가 및 텍스트 수정 ([a2a9268](https://github.com/100-hours-a-week/18-team-18TEAM-fe/commit/a2a926886087f471c8f3e495a32dc2186030b7ce))
+* sliding 갱신 추가 ([c99ce7f](https://github.com/100-hours-a-week/18-team-18TEAM-fe/commit/c99ce7f3f23aac28ba12d57719b0062f51c105b7))
+* 검색어 입력창 애니메이션 추가 및 입력 제한 UX 개선 ([9ea457a](https://github.com/100-hours-a-week/18-team-18TEAM-fe/commit/9ea457aed870142b92fb5ffae10d12444b30a7b0))
+* 채팅 검색어 입력창 애니메이션 및 UX 개선 ([7dce02d](https://github.com/100-hours-a-week/18-team-18TEAM-fe/commit/7dce02db2c34f30e36736d44f5fdd7d3f3768288))
+* 채팅 입력창 하단 고정 ([423f331](https://github.com/100-hours-a-week/18-team-18TEAM-fe/commit/423f33105de91c47e331e3bd5c3b46cdf894ebd4))
+* 채팅창 줄바꿈 입력 구현 ([665ed2c](https://github.com/100-hours-a-week/18-team-18TEAM-fe/commit/665ed2ce52d2feb2c58e4071c19ee99c6c5f7a33))
+
+### Bug Fixes
+
+* lock 해제 타이밍 수정 ([304c2a1](https://github.com/100-hours-a-week/18-team-18TEAM-fe/commit/304c2a11ce83bbb639b6316317a4ab232d83265a))
+* OCR 촬영 결과 페이지 UI 수정 ([7d861db](https://github.com/100-hours-a-week/18-team-18TEAM-fe/commit/7d861db340c3266d8a16301aa10738cfc257c333))
+* 실패 페이지에서의 버튼 색상 수정 ([2090a61](https://github.com/100-hours-a-week/18-team-18TEAM-fe/commit/2090a61f95d9c535143ffd6c8885c92d04cc4266))
+* 채팅 검색 안내 텍스트 수정 ([8758190](https://github.com/100-hours-a-week/18-team-18TEAM-fe/commit/87581901de05dcb0849ca8d12e4b3cb3265d717d))
+
+## [1.4.1](https://github.com/100-hours-a-week/18-team-18TEAM-fe/compare/v1.4.0...v1.4.1) (2026-03-02)
+
+### Bug Fixes
+
+* amd 기반으로 변경 ([76fa6c1](https://github.com/100-hours-a-week/18-team-18TEAM-fe/commit/76fa6c19509c1d9acfc6695cdf4db88e1937f602))
+
+## [1.4.0](https://github.com/100-hours-a-week/18-team-18TEAM-fe/compare/v1.3.0...v1.4.0) (2026-03-02)
+
+### Features
+
+* AI BFF 프록시 라우터 구현 ([549f99e](https://github.com/100-hours-a-week/18-team-18TEAM-fe/commit/549f99e08505b411cf651fdc035c2e78520c41bb))
+* BFF 적용으로 헬스체크 추가 ([b8ae623](https://github.com/100-hours-a-week/18-team-18TEAM-fe/commit/b8ae623c0da73e0769e990b828b4fdb4f71ec264))
+* BFF 프록시 레이어를 위한 인증 흐름과 route 정책 구현 (Close [#101](https://github.com/100-hours-a-week/18-team-18TEAM-fe/issues/101)) ([972b491](https://github.com/100-hours-a-week/18-team-18TEAM-fe/commit/972b491a175f3c7badd16715f3f7eec0c87dbb79))
+* BFF를 위한 Redis 구조 설정 (Close [#99](https://github.com/100-hours-a-week/18-team-18TEAM-fe/issues/99)) ([e814d22](https://github.com/100-hours-a-week/18-team-18TEAM-fe/commit/e814d227b36f9c73def02e98e2d2c0522f7fe445))
+* container prod에 적용 ([bc87c0c](https://github.com/100-hours-a-week/18-team-18TEAM-fe/commit/bc87c0c252fa322883f4be6f477805d8f508077e))
+* containerfile 생성 ([ebf4160](https://github.com/100-hours-a-week/18-team-18TEAM-fe/commit/ebf4160bada79b59dbcb4c78e826edcecd6b684d))
+* container화 ci/cd 반영 ([6830807](https://github.com/100-hours-a-week/18-team-18TEAM-fe/commit/683080752a7fb785ec76433a04b20a76be923214))
+* endpoint 변경 및 프로바이더 수정 ([b8b388b](https://github.com/100-hours-a-week/18-team-18TEAM-fe/commit/b8b388b8795e2773f9ea04fdf71f557eae106657))
+* OCR API 실제 연동 및 Mock 제거 ([ea8c504](https://github.com/100-hours-a-week/18-team-18TEAM-fe/commit/ea8c504073c5e480d8c0f1121b271d7073ce0267))
+* OCR mock model, API 초기 구조 추가 ([768c627](https://github.com/100-hours-a-week/18-team-18TEAM-fe/commit/768c6279b6ae2e29db826bdd88be04a658cdd949))
+* OCR start/poll 프록시 사용 ([cbbd1e3](https://github.com/100-hours-a-week/18-team-18TEAM-fe/commit/cbbd1e35de32c28af8d1b22840d8014b9712e6ab))
+* OCR 도메인 타입 정의 ([353b68f](https://github.com/100-hours-a-week/18-team-18TEAM-fe/commit/353b68fabf2c103e650e882750e35d61b003ac31))
+* OCR 라우트 그룹 및 페이지 연결 ([eceb302](https://github.com/100-hours-a-week/18-team-18TEAM-fe/commit/eceb30280782aaf1a288ac1c97f62fdb2db32492))
+* OCR 작업 저장공간 추가 ([8445e71](https://github.com/100-hours-a-week/18-team-18TEAM-fe/commit/8445e71b86c979de46bc822f5f460a32d5e070e5))
+* OCR 촬영, 결과확인, 실패 페이지 구현 ([80bbc79](https://github.com/100-hours-a-week/18-team-18TEAM-fe/commit/80bbc79cf34d28703882a95e3547fad68163e53f))
+* OCR 타입 설정 및 저장 로직 구현 ([1371d35](https://github.com/100-hours-a-week/18-team-18TEAM-fe/commit/1371d35cb0a141ec369bd7fd217c21ac21d7b82d))
+* STOMP 클라이언트와 구독 프로바이더 구현 ([3bc69b8](https://github.com/100-hours-a-week/18-team-18TEAM-fe/commit/3bc69b81b1e5e4c03a80ae27daeae73fceb6ea0f))
+* TSID사용으로 정밀도 손실 방지 방안 구현 ([874c2f9](https://github.com/100-hours-a-week/18-team-18TEAM-fe/commit/874c2f90b485d5399d8a0ee3cf97a45e2d4f8ccb))
+* 레이아웃 연결 ([10bb682](https://github.com/100-hours-a-week/18-team-18TEAM-fe/commit/10bb682835b19158d1655d5905be75e308f36946))
+* 레이아웃 프로바이더 적용 ([155b85b](https://github.com/100-hours-a-week/18-team-18TEAM-fe/commit/155b85b1638976ee6c01b14c792864fa9f441bcc))
+* 방 생성 이후 부분 패치를 위한 캐시 적용 ([07662b8](https://github.com/100-hours-a-week/18-team-18TEAM-fe/commit/07662b85877c204a0c507f45a4b251e48155a29b))
+* 비회원 전용 명함 상세 페이지 구현 ([5646d01](https://github.com/100-hours-a-week/18-team-18TEAM-fe/commit/5646d014b67accfb20cf09b9d73b2beba8b26d81))
+* 서버 측 세션 관리 및 CSRF 보호 기능 구현 (Close [#100](https://github.com/100-hours-a-week/18-team-18TEAM-fe/issues/100)) ([fb350d4](https://github.com/100-hours-a-week/18-team-18TEAM-fe/commit/fb350d480fadde0988ba0b8dced1d22267a7b152))
+* 스로틀링 적용 ([b2e7d37](https://github.com/100-hours-a-week/18-team-18TEAM-fe/commit/b2e7d37432e6a107c896b450540ec18a7883636f))
+* 실시간 읽음 이벤트 타입 정의 ([8e51f41](https://github.com/100-hours-a-week/18-team-18TEAM-fe/commit/8e51f416c72741a07dec79aede6fbd9fc5c995b3))
+* 인피니티 구현 및 부분 패치 구현 ([f4fcdb1](https://github.com/100-hours-a-week/18-team-18TEAM-fe/commit/f4fcdb19bdfc18d860aed9b545b5de1ac32676d8))
+* 채팅 UI 컴포넌트(및 feature 단위 page 컴포넌트) 구현 ([48b01da](https://github.com/100-hours-a-week/18-team-18TEAM-fe/commit/48b01dabb1820029c876f44e6e4d7c7023bc5c61))
+* 채팅 WebSocket 이벤트 기반 React Query 캐시 동기화 로직 구현 ([c8736f8](https://github.com/100-hours-a-week/18-team-18TEAM-fe/commit/c8736f80178217f2693c4f505d47178fd7c3a2e9))
+* 채팅 WebSocket 이벤트 및 인증 타입 정의 ([14086f6](https://github.com/100-hours-a-week/18-team-18TEAM-fe/commit/14086f68b3b96dcf156fd1b07f63bb950143d561))
+* 채팅 도메인 모델 및 목 데이터 추가 ([4ea6f8f](https://github.com/100-hours-a-week/18-team-18TEAM-fe/commit/4ea6f8f74163ef12bee5f2fdc73c20dd3443816d))
+* 채팅 메세지 응답 스키마 전환 ([1bde52b](https://github.com/100-hours-a-week/18-team-18TEAM-fe/commit/1bde52b3cacdd7075430c461c39f37eea9e2aa19))
+* 채팅방 목록을 실제 API 기반 무한 스크롤로 전환 ([19d7e45](https://github.com/100-hours-a-week/18-team-18TEAM-fe/commit/19d7e4595edc5658e29ab8ff67ebb1ea21e11d4c))
+* 채팅방 생성 API 연결 ([a5faac3](https://github.com/100-hours-a-week/18-team-18TEAM-fe/commit/a5faac37144fcdaed5a1f0d90a48dcf6fb7132c3))
+* 채팅방 페이지를 실제 메시지 API 기반으로 전환 ([0b36370](https://github.com/100-hours-a-week/18-team-18TEAM-fe/commit/0b3637094f17f944be438d1d3d1eeacab64fda92))
+* 채팅방 화면과 연동 ([9cbe0ff](https://github.com/100-hours-a-week/18-team-18TEAM-fe/commit/9cbe0ffaa2b7fce471b5b96ce70298a79ef4b504))
+* 채팅방/메시지 API 명세 추가 ([b7a5000](https://github.com/100-hours-a-week/18-team-18TEAM-fe/commit/b7a5000e6557c14cbd82bf1ab9c6cedbecdfa6d2))
+* 채팅창 역방향 무한스크롤 구현 (Close [#118](https://github.com/100-hours-a-week/18-team-18TEAM-fe/issues/118)) ([78e938b](https://github.com/100-hours-a-week/18-team-18TEAM-fe/commit/78e938ba71d4f8bfcb51cefed71f1b6445d587d3))
+* 컴포넌트 활용하여 페이지 채팅방 목록, 채팅방 페이지 구현 ([6175aea](https://github.com/100-hours-a-week/18-team-18TEAM-fe/commit/6175aea7c9b0a52eec0b45e18c9cc8ad72cd10ee))
+* 쿼리 캐시 확장 ([39bcc21](https://github.com/100-hours-a-week/18-team-18TEAM-fe/commit/39bcc21228ae37d4ca9854d6a1b810e797d187a4))
+* 홈 FAB와 연결 및 진입 모달 연결 ([ba9cab2](https://github.com/100-hours-a-week/18-team-18TEAM-fe/commit/ba9cab24fc94cdab7ab53d7ae491b0b47c85d03c))
+
+### Bug Fixes
+
+* BFF 도입으로 인한 api 경로 충돌 해결 (Close [#104](https://github.com/100-hours-a-week/18-team-18TEAM-fe/issues/104)) ([312409f](https://github.com/100-hours-a-week/18-team-18TEAM-fe/commit/312409f333b8a09e1d499e268abec5af098f21d4))
+* container 이미지 변경 ([7f12c9c](https://github.com/100-hours-a-week/18-team-18TEAM-fe/commit/7f12c9c35adb99e2f22dba0b59324f812779b733))
+* env 빌두/런타임 변경 ([818f688](https://github.com/100-hours-a-week/18-team-18TEAM-fe/commit/818f68875014e7d9ba320ef78480e481c0ffe3fa))
+* grant nextjs ownership for .next runtime cache ([50d8d0a](https://github.com/100-hours-a-week/18-team-18TEAM-fe/commit/50d8d0a217ed3aed145a86b6eca60733801e6dad))
+* image option error ([0b662ef](https://github.com/100-hours-a-week/18-team-18TEAM-fe/commit/0b662ef761a8128e292d90709043838a79b541b7))
+* my-card Suspense 추가 및 bff route params 타입 정정 ([ed2eb7e](https://github.com/100-hours-a-week/18-team-18TEAM-fe/commit/ed2eb7edd1b4b08587e78078bc9fa6034e564e86))
+* OLS 헤더 문제 해결 ([bc24688](https://github.com/100-hours-a-week/18-team-18TEAM-fe/commit/bc24688c7562ab065ad4e7551740060e5069c6a6))
+* release id 수정 ([1fa11c2](https://github.com/100-hours-a-week/18-team-18TEAM-fe/commit/1fa11c201d6a50cf84bbac45d360e51ed2aa9ee6))
+* release id 추가 ([2a25c2c](https://github.com/100-hours-a-week/18-team-18TEAM-fe/commit/2a25c2c8afaf10fe03d631f80a0985d09d016106))
+* 빌드 환경 고정 ([1cf4369](https://github.com/100-hours-a-week/18-team-18TEAM-fe/commit/1cf43694ebf01351aad5e18b0803fe2051ba87a3))
+* 헤더 정리로 디코딩 문제 해결 (Close [#98](https://github.com/100-hours-a-week/18-team-18TEAM-fe/issues/98)) ([28b8814](https://github.com/100-hours-a-week/18-team-18TEAM-fe/commit/28b88144db4190f13da2f2ee5afd94e73f247aee))
+* 환경 변수 주입 스크립트 수정 ([30daea1](https://github.com/100-hours-a-week/18-team-18TEAM-fe/commit/30daea170f6a1b4700962f2919c3bc53ae53e789))
+
+## [1.3.0](https://github.com/100-hours-a-week/18-team-18TEAM-fe/compare/v1.2.1...v1.3.0) (2026-02-08)
+
+### Features
+
+* develop 프리릴리즈와 main 정식 릴리즈 파이프라인 분리 ([a55adb0](https://github.com/100-hours-a-week/18-team-18TEAM-fe/commit/a55adb070ac329c4d189bee4185302d93ba136b7))
+
+## [1.2.1](https://github.com/100-hours-a-week/18-team-18TEAM-fe/compare/v1.2.0...v1.2.1) (2026-02-07)
+
+### Bug Fixes
+
+* 상대 명함 조회 api 연결 수정 (Close [#88](https://github.com/100-hours-a-week/18-team-18TEAM-fe/issues/88)) ([8dc402d](https://github.com/100-hours-a-week/18-team-18TEAM-fe/commit/8dc402d745ecb02aa14eecdf125699ac4286beef))
+
 ## [1.2.1-dev.1](https://github.com/100-hours-a-week/18-team-18TEAM-fe/compare/v1.2.0...v1.2.1-dev.1) (2026-02-05)
 
 ### Bug Fixes
