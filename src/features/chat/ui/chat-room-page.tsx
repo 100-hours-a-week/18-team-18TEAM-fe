@@ -23,13 +23,23 @@ interface ChatRoomPageProps {
   roomId: string
 }
 
+interface HistoryFetchSnapshot {
+  scrollTop: number
+  scrollHeight: number
+}
+
 function ChatRoomPage({ roomId }: ChatRoomPageProps) {
   const router = useRouter()
   const queryClient = useQueryClient()
   const messageEndRef = React.useRef<HTMLDivElement | null>(null)
   const scrollContainerRef = React.useRef<HTMLDivElement>(null)
   const isInitialScrollRef = React.useRef(true)
-  const prevFirstMessageIdRef = React.useRef<string | undefined>(undefined)
+  const historyFetchSnapshotRef =
+    React.useRef<HistoryFetchSnapshot | null>(null)
+  const historyFetchPendingRef = React.useRef(false)
+  const prevIsFetchingNextPageRef = React.useRef(false)
+  const prevLastMessageIdRef = React.useRef<string | undefined>(undefined)
+  const skipAutoScrollOnceRef = React.useRef(false)
   const { ref, inView } = useInView({ rootMargin: '200px' })
 
   const [draft, setDraft] = React.useState('')
@@ -96,29 +106,70 @@ function ChatRoomPage({ roomId }: ChatRoomPageProps) {
 
   React.useEffect(() => {
     if (inView && hasNextPage && !isFetchingNextPage) {
+      const container = scrollContainerRef.current
+      if (container) {
+        historyFetchSnapshotRef.current = {
+          scrollTop: container.scrollTop,
+          scrollHeight: container.scrollHeight,
+        }
+        historyFetchPendingRef.current = true
+      } else {
+        historyFetchSnapshotRef.current = null
+        historyFetchPendingRef.current = false
+      }
       void fetchNextPage()
     }
   }, [inView, hasNextPage, isFetchingNextPage, fetchNextPage])
 
+  React.useLayoutEffect(() => {
+    const didFinishHistoryFetch =
+      prevIsFetchingNextPageRef.current && !isFetchingNextPage
+    prevIsFetchingNextPageRef.current = isFetchingNextPage
+
+    if (!didFinishHistoryFetch || !historyFetchPendingRef.current) {
+      return
+    }
+
+    const container = scrollContainerRef.current
+    const snapshot = historyFetchSnapshotRef.current
+
+    historyFetchPendingRef.current = false
+    historyFetchSnapshotRef.current = null
+    skipAutoScrollOnceRef.current = true
+
+    if (!container || !snapshot) return
+
+    const heightDelta = container.scrollHeight - snapshot.scrollHeight
+    container.scrollTop =
+      heightDelta > 0 ? snapshot.scrollTop + heightDelta : snapshot.scrollTop
+  }, [isFetchingNextPage, messages])
+
   React.useEffect(() => {
     if (!messages.length) return
 
-    const firstId = messages[0]?.id
-    const prevFirstId = prevFirstMessageIdRef.current
-    prevFirstMessageIdRef.current = firstId
+    const lastId = messages[messages.length - 1]?.id
 
     // Case A: 최초 진입 → 맨 아래로 즉시 스크롤
     if (isInitialScrollRef.current && !isLoading) {
+      prevLastMessageIdRef.current = lastId
       messageEndRef.current?.scrollIntoView({ behavior: 'instant' })
       isInitialScrollRef.current = false
       return
     }
 
-    // Case B: 히스토리 로드 (첫 메시지 ID가 바뀜 = 위에 새 메시지 prepend)
-    // → 브라우저 overflow-anchor가 위치를 유지하므로 아무것도 하지 않음
-    if (prevFirstId !== undefined && firstId !== prevFirstId) return
+    if (skipAutoScrollOnceRef.current) {
+      skipAutoScrollOnceRef.current = false
+      prevLastMessageIdRef.current = lastId
+      return
+    }
 
-    // Case C: 새 WebSocket 메시지 (마지막에 append) → 아래 근방이면 자동 스크롤
+    const prevLastId = prevLastMessageIdRef.current
+    prevLastMessageIdRef.current = lastId
+
+    // 마지막 메시지 ID가 바뀐 경우만 신규 append로 간주한다.
+    if (!lastId || !prevLastId || lastId === prevLastId) return
+
+    // 새 WebSocket 메시지 (마지막에 append) → 아래 근방이면 자동 스크롤
     const container = scrollContainerRef.current
     if (!container) return
     const isNearBottom =
@@ -214,8 +265,7 @@ function ChatRoomPage({ roomId }: ChatRoomPageProps) {
 
         <div
           ref={scrollContainerRef}
-          className="flex-1 overflow-y-auto overscroll-contain px-4 py-4 pb-22"
-          // className="flex-1 overflow-y-auto px-4 py-4 pb-22"
+          className="flex-1 overflow-y-auto px-4 py-4 pb-22"
         >
           {isLoading ? (
             <div className="flex h-full flex-col items-center justify-center gap-3">
