@@ -110,11 +110,15 @@ function readRedisConfig(): RedisConfig {
   const redisPassword = readTrimmedString(process.env.REDIS_PASSWORD)
 
   if (!redisSentinelNodes) {
-    throw new Error('REDIS_SENTINEL_NODES is required for prod BFF session storage.')
+    throw new Error(
+      'REDIS_SENTINEL_NODES is required for prod BFF session storage.'
+    )
   }
 
   if (!redisMasterName) {
-    throw new Error('REDIS_MASTER_NAME is required for prod BFF session storage.')
+    throw new Error(
+      'REDIS_MASTER_NAME is required for prod BFF session storage.'
+    )
   }
 
   if (!redisPassword) {
