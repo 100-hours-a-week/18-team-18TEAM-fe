@@ -7,13 +7,24 @@ declare global {
 }
 
 function createRedisClient(): Redis {
-  const { redisUrl } = getServerEnv()
-
-  return new Redis(redisUrl, {
+  const env = getServerEnv()
+  const commonOptions = {
     maxRetriesPerRequest: 1,
     enableReadyCheck: true,
     lazyConnect: false,
-  })
+  }
+
+  if (env.redisMode === 'sentinel') {
+    return new Redis({
+      ...commonOptions,
+      sentinels: env.redisSentinelNodes,
+      name: env.redisMasterName,
+      password: env.redisPassword,
+      db: 0,
+    })
+  }
+
+  return new Redis(env.redisUrl, commonOptions)
 }
 
 export function getRedisClient(): Redis {
